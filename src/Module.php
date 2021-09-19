@@ -23,8 +23,6 @@ class Module
         $moduleRouteListener->attach($eventManager);
 
         $this->createTranslations($e);
-
-
     }
 
     public function getConfig()

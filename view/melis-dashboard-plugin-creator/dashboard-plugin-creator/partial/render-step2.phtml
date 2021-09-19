@@ -1,0 +1,57 @@
+<div class="col-xs-12 col-md-3">
+    <div class="product-text-tab-container">
+        <ul class="nav-tabs product-text-tab">    
+            <?php                 
+                $ctr = 0;
+                foreach ($this->data['languages'] As $key => $val){ ?>
+                <li class="<?php echo ($ctr++) ?: 'active'?>">
+                    <a class="clearfix" data-toggle="tab" href="#toolcreator-text-transaltions-<?php echo $val['lang_locale']?>" aria-expanded="false">
+                        <?php echo $val['lang_label']?>
+                    </a>
+                </li>
+            <?php } ?>
+                
+        </ul>
+    </div>
+</div>
+<div class="col-xs-12 col-md-9">
+    <div class="tab-content">      
+        <?php $ctr = 0; foreach ($this->stepForm['languageForm'] As $key => $form):?>
+            <div id="toolcreator-text-transaltions-<?php echo $key ?>" class="tab-pane <?php echo ($ctr++) ? '': 'active'?>">
+                <?php                  
+                    $form->prepare();
+                    $form->setAttribute('id', $form->getAttribute('id').'-'.$key);
+                    $form->setAttribute('id', $key.'-'.$form->getAttribute('id'));
+
+                    echo $this->form()->openTag($form);
+                    echo $this->melisFieldCollection($form);
+                    echo $this->form()->closeTag();
+                ?>
+            </div>
+        <?php endforeach;?>
+    </div>
+</div>
+
+<div class="col-xs-12 col-md-12">
+        <?php
+            $form = $this->stepForm['form2'];
+            echo $this->form()->openTag($form);
+            echo $this->melisFieldCollection($form);
+            echo $this->form()->closeTag();
+        ?>
+  
+        <?php 
+            if(!empty($this->data['thumbnail'])){?>
+                <div class="plugin_thumbnail_div">
+                        <img src="<?= $this->data['thumbnail']?>" class = "plugin_thumbnail">
+                </div>
+        <?php    }
+        ?>        
+</div>
+
+
+
+
+
+
+   

@@ -1,0 +1,181 @@
+<?php
+    for($i=1; $i<=count($this->data['steps'])-2; $i++){         
+        $step = $this->data['steps']['melisdashboardplugincreator_step'.$i]; 
+        $sessionData = $this->data['dpcSessionData']['step_'.$i];  
+        $curStep = $i;    
+    ?>
+    <div class="melis-dpc-summary-item">
+        <!-- Step Header -->
+        <h4>
+            <i class="fa <?php echo $step['icon'] ?>"></i>
+            <?php echo $this->translate($step['name']) ?>
+        </h4>
+
+        <!-- Step Content -->
+        <div class="melis-dpc-summary-item-content">
+
+            <?php if($curStep == 1){ ?>
+                
+                <div class="table-responsive">
+                    <table class="table table-striped table-primary table-bordered">
+                        <thead>
+                            <tr>
+                                <th><?php echo $this->translate('tr_melisdashboardplugincreator_dpc_plugin_name') ?></th>
+                                <th><?php echo $this->translate('tr_melisdashboardplugincreator_dpc_plugin_type') ?></th>
+                                
+                                <?php 
+                                    if($sessionData['dpc_plugin_type'] == 'multi'){ ?>
+                                         <th><?php echo $this->translate('tr_melisdashboardplugincreator_tab_count') ?></th>
+                                <?php    }
+                                ?>
+                               
+                                <th><?php echo $this->translate('tr_melisdashboardplugincreator_dpc_plugin_destination') ?></th>
+
+                                <?php 
+                                    if($sessionData['dpc_plugin_destination'] == 'new_module'){ ?>
+                                         <th><?php echo ucwords($this->translate('tr_melisdashboardplugincreator_dpc_new_module_name')) ?></th>
+                                <?php    }else{ ?>
+                                        <th><?php echo ucwords($this->translate('tr_melisdashboardplugincreator_destination_existing_opt')). ' Name ' ?></th>
+                               <?php }
+                                ?>                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><?php echo $sessionData['dpc_plugin_name'] ?></td>
+                                <td><?=$sessionData['dpc_plugin_type'] == 'multi'?$this->translate('tr_melisdashboardplugincreator_multi_tab'):$this->translate('tr_melisdashboardplugincreator_single_tab') ?></td>
+                                <?php 
+                                        if($sessionData['dpc_plugin_type'] == 'multi'){ ?>
+                                             <td><?php echo $sessionData['dpc_tab_count'] ?></td>
+                                    <?php    }
+                                    ?>
+                                
+                                <td><?php echo ucwords(str_replace("_", ' ', $sessionData['dpc_plugin_destination'])) ?></td>
+
+                                  <?php 
+                                        if($sessionData['dpc_plugin_destination'] == 'new_module'){ ?>
+                                            <td><?php echo $sessionData['dpc_new_module_name'] ?></td>
+                                    <?php    }else{ ?>
+                                           <td><?php echo $sessionData['dpc_existing_module_name'] ?></td>
+                                   <?php }
+                                    ?>
+                            </tr>
+                        </tbody>                        
+                    </table>
+                </div>
+            <?php } elseif ($curStep == 2) { ?>
+                <div class="table-responsive">
+                    <table class="table table-striped table-primary">
+                        <thead>
+                            <tr>
+                                <th><?php $this->translate('tr_melistoolcreator_texts_title') ?></th>
+                                <?php
+                                foreach ($this->data['languages'] As $lang){
+                                    echo '<th>' . $lang['lang_name'] . '</th>';                                    
+                                }
+                                ?>                            
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $cols = array('dpc_plugin_title', 'dpc_plugin_desc');
+
+                                foreach ($cols As $col){
+                                    echo '<tr>';
+                                    echo '<td><b>' . $this->translate('tr_melisdashboardplugincreator_' . $col) . '</b></td>';
+
+                                    foreach ($this->data['languages'] As $lang){
+                                        $langTrans = '';
+                                        
+                                        if(!empty($sessionData[$lang['lang_locale']])){                                   
+                                            if(!empty($sessionData[$lang['lang_locale']][$col])){
+                                                $langTrans = $sessionData[$lang['lang_locale']][$col];
+                                            }                                    
+                                        }
+                                        echo '<td>' . $langTrans . '</td>';
+                                    }
+
+                                    echo '</tr>';
+                                }
+                                ?>
+                        </tbody>
+                        
+                    </table>
+
+                    <h6><b><?=$this->translate('tr_melisdashboardplugincreator_upload_thumbnail' )?></b></h6>
+                    <?php 
+                        if(!empty($sessionData['plugin_thumbnail'])){?>
+                             <div class="me-p-image">
+                                    <img src="<?= $sessionData['plugin_thumbnail']?>" class = "plugin_thumbnail">
+                            </div>
+                    <?php    }
+                    ?>
+                </div> 
+            <?php } elseif ($curStep == '3') { ?>
+                <div class="table-responsive">
+                    <table class="table table-striped table-primary">
+                        <thead>
+                            <tr>
+                                <th><?php $this->translate('tr_melistoolcreator_texts_title') ?></th>
+                                <?php
+                                foreach ($this->data['languages'] As $lang){                                    
+                                    echo '<th>' . $lang['lang_name'] . '</th>';                                    
+                                }
+                                ?>   
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php                                            
+                            echo '<tr>';
+                            echo '<td><b>' . $this->translate('tr_melisdashboardplugincreator_dpc_plugin_title') . '</b></td>';
+
+                            foreach($this->data['languages'] As $lang){
+                                $langTrans = '';
+
+                                if (!empty($sessionData[$lang['lang_locale']])){
+                                    if (!empty($sessionData[$lang['lang_locale']]['dpc_plugin_title'])){
+                                        $langTrans = $sessionData[$lang['lang_locale']]['dpc_plugin_title'];
+                                    }
+                                }
+                                echo '<td>' . $langTrans . '</td>';
+                            }
+                                echo '</tr>';                        
+                            ?>
+                        </tbody>
+                        
+                    </table>
+         
+                    <table class="table table-striped table-primary">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th><?=$this->translate('tr_melisdashboardplugincreator_desc_step_4_icon')?></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Plugin</td>                                       
+                                <td><i class='fa <?=$sessionData['icon_form']['dpc_plugin_icon']?> fa-lg'></i></i></td>
+                            </tr>
+
+                            <?php if(!empty($this->data['dpcSessionData']['step_1']['dpc_tab_count'])){   
+                                for($i=1; $i<=$this->data['dpcSessionData']['step_1']['dpc_tab_count']; $i++){ ?>
+                                    <tr>
+                                        <td><?=$this->translate('tr_melisdashboardplugincreator_desc_step_4_dashboard_tab').' '.$i?></td>
+                                        <td> <i class="fa <?=$this->data['tabIconOptions'][$sessionData['icon_form']['dpc_plugin_tab_icon_'.$i]]?> fa-lg"></i></td>
+                                    </tr>
+                            <?php    }
+                             } ?>
+                        </tbody>
+                        
+                  
+                    </table> 
+                </div>
+            <?php }  ?>
+        </div>
+    </div>
+    <hr>  
+<?php } ?>
+
+

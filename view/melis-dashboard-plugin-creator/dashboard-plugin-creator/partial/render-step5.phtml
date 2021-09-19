@@ -1,0 +1,38 @@
+<div class="col-xs-12 col-md-9">
+    <div class="tab-content">             
+        <div class="row">
+            <div class="col-md-12">                               
+              <?php 
+                    $form = $this->stepForm;
+                    echo $this->form()->openTag($form);  
+
+                    //get the activate plugin field
+                    $dpcActivatePluginField = $form->get('dpc_activate_plugin'); 
+
+                    $form->prepare();       
+                    echo $this->form()->openTag($form);  
+                    ?>
+
+                    <div class="melis-dpc-final-content">
+                        <p>
+                            <i class="fa fa-check-square-o text-success fa-lg"></i>                            
+                            <input type="checkbox" name="<?=$dpcActivatePluginField->getAttribute('name')?>" value="1" checked class = "<?=$dpcActivatePluginField->getAttribute('class')?>"> <?=$dpcActivatePluginField->getOption('label')?> 
+                        </p>
+                    </div>
+                <?php    
+
+                echo $this->form()->closeTag(); 
+                ?>                     
+            </div>
+        </div>
+        <p><?=$this->translate('tr_melisdashboardplugincreator_activate_plugin_note')?></p>           
+    </div>
+</div>
+
+
+
+
+
+
+
+   

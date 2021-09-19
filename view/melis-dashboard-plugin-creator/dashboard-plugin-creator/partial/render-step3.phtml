@@ -1,0 +1,125 @@
+<div class="col-xs-12 col-md-3">
+    <div class="product-text-tab-container">
+        <ul class="nav-tabs product-text-tab">    
+            <?php   
+                $ctr = 0; 
+                foreach ($this->data['languages'] As $key => $val) { ?>
+                <li class="<?php echo ($ctr++) ?: 'active'?>">
+                    <a class="clearfix" data-toggle="tab" href="#toolcreator-text-transaltions-<?php echo $val['lang_locale']?>" aria-expanded="false">
+                        <?php echo $val['lang_label']?>
+                    </a>
+                </li>
+               <?php } ?>
+        </ul>
+    </div>
+</div>
+<div class="col-xs-12 col-md-9">
+    <div class="tab-content">
+      
+        <?php $ctr = 0; foreach ($this->stepForm['languageForm'] As $key => $form):?>
+            <div id="toolcreator-text-transaltions-<?php echo $key ?>" class="tab-pane <?php echo ($ctr++) ? '': 'active'?>">
+                <?php                  
+                    $form->prepare();
+                    $form->setAttribute('id', $form->getAttribute('id').'-'.$key);
+                    $form->setAttribute('id', $key.'-'.$form->getAttribute('id'));
+
+                    echo $this->form()->openTag($form);
+                    echo $this->melisFieldCollection($form);
+                    echo $this->form()->closeTag();
+                ?>
+            </div>
+        <?php endforeach;?>
+    </div>
+</div>
+
+<div class="col-xs-12 col-md-12">  
+    <?php
+        $form = $this->stepForm['form2'];     
+         
+        $pluginIconField = $form->get('dpc_plugin_icon');
+        $pluginIconOptions = $pluginIconField->getValueOptions();
+
+        $form->prepare();       
+        echo $this->form()->openTag($form);
+        ?>
+
+        <!-- render plugin icon field -->
+       <div class="form-group"> 
+            <?php $required = '';
+            if(!empty($pluginIconField->getAttribute('required'))){
+                $required = '<sup>*</sup>';
+            }                 
+            ?>
+
+            <label  class="d-flex flex-row justify-content-between" for = "<?=$key?>">
+                <div class = "label-text"><?=$pluginIconField->getLabel().$required?></div>
+                <div class = "slider-open-tooltip">
+                      <i class="fa fa-info-circle fa-lg float-right tip-info" data-toggle="tooltip" data-placement="left" title="" data-original-title="<?= $this->translate($pluginIconField->getOptions()['tooltip'])?>"></i>
+                </div>
+            </label>                             
+                
+            <div class = "row">
+            <?php foreach($pluginIconOptions as $optKey => $optVal){ 
+                $id = $pluginIconField->getAttribute('name').'_'.str_replace(' ', '_', $optVal);                             
+                ?>
+                    <div class="col-md-0">
+                        <label class="melis-radio-box" for="<?=$id?>">                            
+                            <input class = "<?=$pluginIconField->getAttribute('class')?>" type="radio" value="<?=$optKey?>" name="<?=$pluginIconField->getAttribute('name')?>" id="<?=$id?>" required="required"  <?=$pluginIconField->getValue()==$optKey?"checked":""?>/> 
+                            <span class="melis-radio-box-circle"></span> 
+                            <span class="fa <?=$optVal?> fa-lg"></span>                            
+                        </label>                                            
+                    </div>                           
+            <?php    }                               
+            ?>
+            </div>   
+        </div>  
+
+        <?php 
+            if($this->data['tabCount']){?>
+                <div class="form-group">           
+                    <label  class="d-flex flex-row justify-content-between" id = 'dashboard_tab_icon_field_title'>
+                        <div class = "label-text"><?=$this->translate('tr_melisdashboardplugincreator_dashboard_tab_icon')?><sup>*</sup></div>
+                        <div class = "slider-open-tooltip">
+                              <i class="fa fa-info-circle fa-lg float-right tip-info" data-toggle="tooltip" data-placement="left" title="" data-original-title="<?= $this->translate('tr_melisdashboardplugincreator_dashboard_tab_icon tooltip')?>"></i>
+                        </div>
+                    </label>             
+                </div>  
+
+                <?php 
+                    for($i=1; $i<=$this->data['tabCount'];$i++){ 
+                        $pluginTabIconField = $form->get('dpc_plugin_tab_icon_'.$i);
+                        $pluginTabIconOptions = $pluginTabIconField->getValueOptions();                                   
+                    ?>        
+                        <div class="form-group">           
+                           <label  class="d-flex flex-row justify-content-between" for = "<?=$key?>">
+                                <div class = "label-text"><?=$pluginTabIconField->getLabel()?></div>                                
+                            </label>           
+                         
+                            <div class = "row">
+                                <?php foreach($pluginTabIconOptions as $optKey => $optVal){  
+                                    $id = $pluginTabIconField->getAttribute('name').'_'.str_replace(' ', '_', $optKey);                  
+                                    ?>
+                                        <div class="col-md-0">
+                                            <label class="melis-radio-box" for="<?=$id?>"> 
+                                                <input class = "<?=$pluginTabIconField->getAttribute('class')?>" type="radio" value="<?=$optKey?>" name="<?=$pluginTabIconField->getAttribute('name')?>" id="<?=$id?>" required="required"  <?=$pluginTabIconField->getValue()==$optKey?"checked":""?>/>
+                                                <span class="melis-radio-box-circle"></span> 
+                                                <span class="fa <?=$optVal?> fa-lg"></span>                                
+                                            </label>
+                                        </div>                           
+                            <?php    }                               
+                            ?>
+                            </div>   
+                        </div> 
+                <?php    }
+                ?>  
+        <?php    }
+
+        ?>            
+</div>
+
+
+
+
+
+
+   

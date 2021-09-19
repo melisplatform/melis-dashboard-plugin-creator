@@ -1,0 +1,108 @@
+<div class="col-md-12"> 
+    <?php
+        $form = $this->stepForm;
+
+        //get the value options   
+        $pluginTypeField = $form->get('dpc_plugin_type');
+        $pluginTypeValue = $pluginTypeField->getValue();
+        $pluginTypeOptions = $pluginTypeField->getValueOptions();
+        
+        $pluginDestinationField = $form->get('dpc_plugin_destination');
+        $pluginDestinationValue = $pluginDestinationField->getValue();
+        $pluginDestinationOptions = $pluginDestinationField->getValueOptions();
+        
+        //get the tab count field
+        $tabCountField = $form->get('dpc_tab_count');   
+
+        //get the existing module field options   
+        $existingModuleField = $form->get('dpc_existing_module_name');
+        $existingModuleOptions = $existingModuleField->getValueOptions();
+    
+        $form->prepare();       
+        echo $this->form()->openTag($form);
+    
+        foreach($form->getElements() As $key => $val){ ?>               
+            <div class="form-group" <?=(empty($val->getValue()) && ($key=='dpc_new_module_name' || $key=='dpc_existing_module_name' || $key=='dpc_tab_count'))?'style="display:none"':''?>>    
+                    
+                <?php $required = '';
+                if(!empty($val->getAttribute('required'))){
+                    $required = '<sup>*</sup>';
+                }                 
+                ?>
+
+                <label class="d-flex flex-row justify-content-between" for = "<?=$key?>">
+                    <div class = "label-text"><?=$val->getLabel().$required?></div>
+                    <div class = "slider-open-tooltip">
+                          <i class="fa fa-info-circle fa-lg float-right tip-info" data-toggle="tooltip" data-placement="left" title="" data-original-title="<?= $this->translate($val->getOptions()['tooltip'])?>"></i>
+                    </div>
+                </label>                             
+
+                <?php 
+                    if($key == 'dpc_plugin_name' ){?>                      
+                        <div class = "form-group input-group">
+                            <input class = "<?=$val->getAttribute('class')?>" type = "text" id = "<?=$key?>" name = "<?=$key?>" required="required" value="<?=$val->getValue()?>">
+                        </div>
+                <?php }else if($key == 'dpc_plugin_type'){ ?>                  
+                    <div class = "row">
+                    <?php foreach($pluginTypeOptions as $optKey => $optVal){  
+                        $class = $this->data['lang_locale']=='en_EN'?($optKey=='multi'?'col-md-1':'col-md-2'):($optKey=='multi'?'col-md-2 multi_fr':'col-md-2');
+
+                        ?>
+                            <div class="<?=$class?>">
+                                <label class="melis-radio-box" for="<?=$optKey.str_replace(' ', '_', $optVal)?>">   
+                                    <input class = "<?=$val->getAttribute('class')?>" type="radio" value="<?=$optKey?>" name="<?=$key?>" id="<?= $optKey.str_replace(' ', '_', $optVal) ?>" required="required"  <?=$pluginTypeValue==$optKey?"checked":""?>/><?=$optVal?>
+                                    <span class="melis-radio-box-circle"></span>
+                                </label>
+                            </div>
+
+                            <?php 
+                                if($optKey == 'multi'){ ?>      
+                                    <div id = 'tab_count_div' <?=empty($tabCountField->getValue())?"style = 'display: none;'":""?>>
+                                        <div class="d-flex justify-content-between col-md-7" >
+                                            <label class="padding-right-5"><?=$this->translate('tr_melisdashboardplugincreator_with')?></label>
+                                            <input class="<?=$tabCountField->getAttribute('class')?> tab-count-input" type = "text" id = "<?=$tabCountField->getAttribute('id')?>" name = "<?=$tabCountField->getAttribute('name')?>" required="required" value="<?=$tabCountField->getValue()?>" >
+                                             <label class="padding-left-5"><?=$this->translate('tr_melisdashboardplugincreator_tabs')?></label>
+                                        </div>    
+                                    </div>     
+                            <?php    }
+                            ?>
+                    <?php    }                               
+                ?>
+                     </div>
+             <?php   }else if($key == 'dpc_plugin_destination'){ ?>
+                        <div class = "row">
+                            <?php foreach($pluginDestinationOptions as $optKey => $optVal){ ?>
+                                <div class="col-md-2">
+                                    <label class="melis-radio-box" for="<?=$optKey.str_replace(' ', '_', $optVal)?>">   
+                                        <input class = "<?=$val->getAttribute('class')?>" type="radio" value="<?=$optKey?>" name="<?=$key?>" id="<?= $optKey.str_replace(' ', '_', $optVal) ?>" required="required"  <?=$pluginDestinationValue==$optKey?"checked":""?> /><?=$optVal?>
+                                        <span class="melis-radio-box-circle"></span>
+                                    </label>
+                                </div>
+                        <?php  }                               
+                        ?>
+                        </div>
+            <?php }else if($key == 'dpc_new_module_name'){ ?>     
+                        <div class = "form-group input-group">
+                            <input class = "<?=$val->getAttribute('class')?>" type = "text" id = "<?=$key?>" name = "<?=$key?>" required="required" value="<?=$val->getValue()?>">
+                        </div>
+            <?php }else if ($key == 'dpc_existing_module_name'){ ?>
+                        <div class = "form-group input-group">
+                            <select id="<?=$key?>" name="<?=$key?>" required="required" class = "<?=$val->getAttribute('class')?>">
+                                <option value=""><?=$this->translate($existingModuleField->getOptions()['empty_option'])?></option>
+                                <?php 
+                                    if($existingModuleOptions){
+                                        foreach($existingModuleOptions as $module){ ?>
+                                            <option value="<?=$module?>" <?=$existingModuleField->getValue()==$module?"selected":""?>><?=$module?></option>
+                                    <?php  }
+                                    }
+                                ?>
+                            </select>
+                        </div>                        
+           <?php } ?>  
+
+            </div>
+    <?php }//end first foreach 
+
+    echo $this->form()->closeTag();
+?>
+</div>

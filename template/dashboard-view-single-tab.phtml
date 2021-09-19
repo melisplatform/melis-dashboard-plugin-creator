@@ -1,0 +1,13 @@
+<?php if ($this->toolIsAccessible): ?>
+	
+	<!-- Single Tab Start-->
+	<div class="widget widget-activity">
+	  	<!-- Plugin content here -->
+	</div>
+	<!-- Single Tab End-->
+
+<?php else: ?>
+    <div class="no-rights-container">
+        <span><?= $this->translate('tr_melisdashboardplugin_plugin_no_rights'); ?></span>
+    </div>
+<?php endif; ?>
