@@ -59,8 +59,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         
         //perform the steps in generating the dashboard plugin
         $isSuccessful = $this->performGeneration($moduleDir);   
-        //$isSuccessful = 0;
-       
+          
         if($isSuccessful){    
             //remove temp thumbnail directory of the current session    
             $tempPath = pathinfo($this->getTempThumbnail(), PATHINFO_DIRNAME);            
@@ -224,25 +223,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
         //update the view file name 
         $dashboardPluginControllerContent = str_replace('plugin-name', $this->convertToViewName($this->pluginName), $dashboardPluginControllerContent);
-
-        //set the tab count
-        $tabCount = !empty($this->dpcSteps['step_1']['dpc_tab_count'])?$this->dpcSteps['step_1']['dpc_tab_count']:0;
-        $dashboardPluginControllerContent = str_replace('#pluginTabCount', $tabCount, $dashboardPluginControllerContent);
- 
-        if($tabCount){            
-            for($i=1;$i<=$tabCount;$i++){
-                $tabIconArr[$i] = $this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i];
-            }
-
-            $tabIcons = "\r\n";
-            foreach ($tabIconArr As $key => $tab){  
-                $tabIcons .= "\t\t\t\t\t\t".$key." => '". $tab."',\r\n".($key==count($tabIconArr)?"\t\t\t\t\t":"");
-            } 
-        };
-  
-        //set the tab icons    
-        $dashboardPluginControllerContent = str_replace('#pluginTabIcons', $tabIcons, $dashboardPluginControllerContent);
-
+        
         $res = $this->generateFile($this->moduleName.$this->pluginName.'Plugin.php', $targetDir, $dashboardPluginControllerContent);
         return $res;
     }
@@ -399,8 +380,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
                     //unset translation for the dashboard plugin
                     unset($translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu title']);
                     unset($translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu description']);
-                    unset($translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).' title']);
-                    unset($translationArr['tr_PluginSection_'.strtolower($this->moduleName)]);
+                    unset($translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).' title']);                    
                 }                
             }     
 

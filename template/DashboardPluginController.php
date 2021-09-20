@@ -30,17 +30,11 @@ class ModuleTplPluginNamePlugin extends MelisCoreDashboardTemplatingPlugin
         $path = explode('\\', __CLASS__);
         $className = array_pop($path);
         $isAccessible = $dashboardPluginsService->canAccess($className);
-        
-        //set the plugin tabs
-        $tabCount = #pluginTabCount;
-        $tabIconArr = [#pluginTabIcons];
-
+         
         $view = new ViewModel();
         $view->setTemplate('moduleTplViewFolderName/dashboard-plugins/plugin-name');               
         $view->toolIsAccessible = $isAccessible;
-        $view->tabCount = $tabCount;
-        $view->tabIcons = $tabIconArr;
-        
+                
         return $view;
     }   
  
