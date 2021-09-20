@@ -3,7 +3,7 @@ $(function(){
     PluginName_init();
 });
 
-
+/*init function*/
 function PluginName_init(){
    
 }
