@@ -226,22 +226,24 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                     dump('existingModules');
                     dump($existingModules);
 
-                    $dashboardPluginCreatorSrv = $this->getServiceManager()->get('MelisToolCreatorService');
-                    $newModuleName = $dashboardPluginCreatorSrv->generateModuleNameCase($postValues['step-form']['dpc_new_module_name']);
+                    // $dashboardPluginCreatorSrv = $this->getServiceManager()->get('MelisToolCreatorService');
+                    // $newModuleName = $dashboardPluginCreatorSrv->generateModuleNameCase($postValues['step-form']['dpc_new_module_name']);
 
-                    //set error if the entered module name has duplicate
-                    if(in_array(trim($newModuleName), $existingModules)){
-                        dump('module has duplicate');
+                    // dump('new module name '.$newModuleName);
+                    
+                    // //set error if the entered module name has duplicate
+                    // if(in_array(trim($newModuleName), $existingModules)){
+                    //     dump('module has duplicate');
                       
-                        // Adding error message to module input
-                        $translator = $this->getServiceManager()->get('translator');
-                        $stepForm->get('dpc_new_module_name')->setMessages([
-                            'ModuleExist' => sprintf($translator->translate('tr_melisdashboardplugincreator_err_module_exist'), $postValues['step-form']['dpc_new_module_name'])
-                        ]);
+                    //     // Adding error message to module input
+                    //     $translator = $this->getServiceManager()->get('translator');
+                    //     $stepForm->get('dpc_new_module_name')->setMessages([
+                    //         'ModuleExist' => sprintf($translator->translate('tr_melisdashboardplugincreator_err_module_exist'), $postValues['step-form']['dpc_new_module_name'])
+                    //     ]);
 
-                        //adding a variable to viewmodel to flag an error
-                        $errorMessages = $stepForm->getMessages();
-                    }
+                    //     //adding a variable to viewmodel to flag an error
+                    //     $errorMessages = $stepForm->getMessages();
+                    // }
                 }
 
                 //validate plugin name if it already exists for the selected existing module
