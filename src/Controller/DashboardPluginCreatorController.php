@@ -162,10 +162,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         $stepForm = null; 
       
         //validate form if Next button is triggered
-        if($validate){ 
-
-            dump('validate, inside process step 1');
-
+        if($validate){  
             $request = $this->getRequest();
             $postValues = get_object_vars($request->getPost()); 
             
@@ -213,8 +210,6 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             //if current step is valid, save form data to session and get the view of the next step 
             if($stepForm->isValid()) { 
 
-                dump('form is valid');
-
                 //validate new module name entered for duplicates
                 if(!empty($postValues['step-form']['dpc_new_module_name'])){
                     /**
@@ -223,65 +218,54 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                     $modulesSvc = $this->getServiceManager()->get('ModulesService');
                     $existingModules = array_merge($modulesSvc->getModulePlugins(), \MelisCore\MelisModuleManager::getModules());
 
-                    dump('existingModules');
-                    dump($existingModules);
+                    $dashboardPluginCreatorSrv = $this->getServiceManager()->get('MelisDashboardPluginCreatorService');
+                    $newModuleName = $dashboardPluginCreatorSrv->generateModuleNameCase($postValues['step-form']['dpc_new_module_name']);
 
-                    // $dashboardPluginCreatorSrv = $this->getServiceManager()->get('MelisToolCreatorService');
-                    // $newModuleName = $dashboardPluginCreatorSrv->generateModuleNameCase($postValues['step-form']['dpc_new_module_name']);
-
-                    // dump('new module name '.$newModuleName);
-                    
-                    // //set error if the entered module name has duplicate
-                    // if(in_array(trim($newModuleName), $existingModules)){
-                    //     dump('module has duplicate');
+                    //set error if the entered module name has duplicate
+                    if(in_array(trim($newModuleName), $existingModules)){
                       
-                    //     // Adding error message to module input
-                    //     $translator = $this->getServiceManager()->get('translator');
-                    //     $stepForm->get('dpc_new_module_name')->setMessages([
-                    //         'ModuleExist' => sprintf($translator->translate('tr_melisdashboardplugincreator_err_module_exist'), $postValues['step-form']['dpc_new_module_name'])
-                    //     ]);
+                        // Adding error message to module input
+                        $translator = $this->getServiceManager()->get('translator');
+                        $stepForm->get('dpc_new_module_name')->setMessages([
+                            'ModuleExist' => sprintf($translator->translate('tr_melisdashboardplugincreator_err_module_exist'), $postValues['step-form']['dpc_new_module_name'])
+                        ]);
 
-                    //     //adding a variable to viewmodel to flag an error
-                    //     $errorMessages = $stepForm->getMessages();
-                    // }
+                        //adding a variable to viewmodel to flag an error
+                        $errorMessages = $stepForm->getMessages();
+                    }
                 }
 
                 //validate plugin name if it already exists for the selected existing module
-                // if(!empty($postValues['step-form']['dpc_existing_module_name'])){                
-                //     $existingModuleName = $postValues['step-form']['dpc_existing_module_name'];
-                //     $modulePlugins = $this->getModuleExistingPlugins($existingModuleName);
+                if(!empty($postValues['step-form']['dpc_existing_module_name'])){                
+                    $existingModuleName = $postValues['step-form']['dpc_existing_module_name'];
+                    $modulePlugins = $this->getModuleExistingPlugins($existingModuleName);
 
-                //     if($modulePlugins && $modulePlugins[$existingModuleName]['pluginId']){
+                    if($modulePlugins && $modulePlugins[$existingModuleName]['pluginId']){
 
-                //         $dashboardPluginCreatorSrv = $this->getServiceManager()->get('MelisToolCreatorService');
-                //         $newPluginName = $dashboardPluginCreatorSrv->generateModuleNameCase($postValues['step-form']['dpc_plugin_name']);
+                        $dashboardPluginCreatorSrv = $this->getServiceManager()->get('MelisDashboardPluginCreatorService');
+                        $newPluginName = $dashboardPluginCreatorSrv->generateModuleNameCase($postValues['step-form']['dpc_plugin_name']);
 
-                //         if(in_array(trim($newPluginName), $modulePlugins[$existingModuleName]['pluginId'])) {
-                //             //Adding error message to module input
-                //             $translator = $this->getServiceManager()->get('translator');
-                //             $stepForm->get('dpc_plugin_name')->setMessages([
-                //                 'PluginExist' => sprintf($translator->translate('tr_melisdashboardplugincreator_err_plugin_name_exist'), $postValues['step-form']['dpc_plugin_name'])
-                //             ]);
+                        if(in_array(trim($newPluginName), $modulePlugins[$existingModuleName]['pluginId'])) {
+                            //Adding error message to module input
+                            $translator = $this->getServiceManager()->get('translator');
+                            $stepForm->get('dpc_plugin_name')->setMessages([
+                                'PluginExist' => sprintf($translator->translate('tr_melisdashboardplugincreator_err_plugin_name_exist'), $postValues['step-form']['dpc_plugin_name'])
+                            ]);
 
-                //             //adding a variable to viewmodel to flag an error
-                //            $errorMessages = $stepForm->getMessages();
-                //         }
-                //     }                    
-                // }
+                            //adding a variable to viewmodel to flag an error
+                           $errorMessages = $stepForm->getMessages();
+                        }
+                    }                    
+                }
 
                 //if current step form is valid, save form data to session and get the next step's form 
                 if(empty($errorMessages)){
-
-                    dump('error messages empty');
-
                     //save to session   
                     $container['melis-dashboardplugincreator']['step_1'] = $stepForm->getData(); 
                                                   
                     //get next step's form and data
                     list($stepForm,$data) = $this->getStepFormAndData($nextStep);
-                } else{
-                    dump('form has errors');
-                }     
+                }       
 
             }else{     
                 $errorMessages = $stepForm->getMessages();               
@@ -306,7 +290,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             list($stepForm, $data) = $this->getStepFormAndData($nextStep);          
         }
     
-
+       
         $viewStep->stepForm = $stepForm;//the form to be displayed
         $viewStep->errors = $errorMessages;
         $viewStep->data = $data;
@@ -341,7 +325,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         $melisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');   
 
         //validate form if Next button is triggered
-        if($validate){  
+        if($validate){         
             $request = $this->getRequest();
             $postValues = get_object_vars($request->getPost()); 
             $uploadedFile = $request->getFiles()->toArray();
@@ -609,8 +593,6 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                 break;
 
             case 2:  
-
-                dump('get step form step 2 data');
                 list($stepFormArr, $data['languages']) = $this->getLanguageForms($curStep);            
                 
                 //get the 2nd form
