@@ -269,6 +269,9 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
                 //if current step form is valid, save form data to session and get the next step's form 
                 if(empty($errorMessages)){
+
+                    dump('error messages empty');
+
                     //save to session   
                     $container['melis-dashboardplugincreator']['step_1'] = $stepForm->getData(); 
                                                   
@@ -602,6 +605,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                 break;
 
             case 2:  
+
+                dump('get step form step 2 data');
                 list($stepFormArr, $data['languages']) = $this->getLanguageForms($curStep);            
                 
                 //get the 2nd form
