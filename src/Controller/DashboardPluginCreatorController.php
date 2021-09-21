@@ -245,27 +245,27 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                 }
 
                 //validate plugin name if it already exists for the selected existing module
-                if(!empty($postValues['step-form']['dpc_existing_module_name'])){                
-                    $existingModuleName = $postValues['step-form']['dpc_existing_module_name'];
-                    $modulePlugins = $this->getModuleExistingPlugins($existingModuleName);
+                // if(!empty($postValues['step-form']['dpc_existing_module_name'])){                
+                //     $existingModuleName = $postValues['step-form']['dpc_existing_module_name'];
+                //     $modulePlugins = $this->getModuleExistingPlugins($existingModuleName);
 
-                    if($modulePlugins && $modulePlugins[$existingModuleName]['pluginId']){
+                //     if($modulePlugins && $modulePlugins[$existingModuleName]['pluginId']){
 
-                        $dashboardPluginCreatorSrv = $this->getServiceManager()->get('MelisToolCreatorService');
-                        $newPluginName = $dashboardPluginCreatorSrv->generateModuleNameCase($postValues['step-form']['dpc_plugin_name']);
+                //         $dashboardPluginCreatorSrv = $this->getServiceManager()->get('MelisToolCreatorService');
+                //         $newPluginName = $dashboardPluginCreatorSrv->generateModuleNameCase($postValues['step-form']['dpc_plugin_name']);
 
-                        if(in_array(trim($newPluginName), $modulePlugins[$existingModuleName]['pluginId'])) {
-                            //Adding error message to module input
-                            $translator = $this->getServiceManager()->get('translator');
-                            $stepForm->get('dpc_plugin_name')->setMessages([
-                                'PluginExist' => sprintf($translator->translate('tr_melisdashboardplugincreator_err_plugin_name_exist'), $postValues['step-form']['dpc_plugin_name'])
-                            ]);
+                //         if(in_array(trim($newPluginName), $modulePlugins[$existingModuleName]['pluginId'])) {
+                //             //Adding error message to module input
+                //             $translator = $this->getServiceManager()->get('translator');
+                //             $stepForm->get('dpc_plugin_name')->setMessages([
+                //                 'PluginExist' => sprintf($translator->translate('tr_melisdashboardplugincreator_err_plugin_name_exist'), $postValues['step-form']['dpc_plugin_name'])
+                //             ]);
 
-                            //adding a variable to viewmodel to flag an error
-                           $errorMessages = $stepForm->getMessages();
-                        }
-                    }                    
-                }
+                //             //adding a variable to viewmodel to flag an error
+                //            $errorMessages = $stepForm->getMessages();
+                //         }
+                //     }                    
+                // }
 
                 //if current step form is valid, save form data to session and get the next step's form 
                 if(empty($errorMessages)){
@@ -277,7 +277,9 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                                                   
                     //get next step's form and data
                     list($stepForm,$data) = $this->getStepFormAndData($nextStep);
-                }       
+                } else{
+                    dump('form has errors');
+                }     
 
             }else{     
                 $errorMessages = $stepForm->getMessages();               
