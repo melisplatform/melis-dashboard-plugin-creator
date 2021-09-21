@@ -948,9 +948,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             ]);           
 
             if(!empty($uploadedFile['name'])){ 
-                //test this
-                chmod($melisModule->getModulePath($moduleName,true).'/public/', 0777);      
-
+               
                 if($this->createFolder($thumbnailTempPath)){           
                     $adapter = new Http();     
                     $validator = [$imageValidator];                    
