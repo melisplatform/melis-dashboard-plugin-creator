@@ -190,7 +190,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $targetDir = $moduleDir.'/config/dashboard-plugins';
 
         // get the config template
-        $dashboardPluginConfigContent = $this->getTemplateContent('/DashboardPlugin.Config.php');
+        $dashboardPluginConfigContent = $this->getTemplateContent('/DashboardPlugin.config.php');
 
         //set the plugin icon
         $dashboardPluginConfigContent = str_replace('PluginIcon',$this->dpcSteps['step_3']['icon_form']['dpc_plugin_icon'], $dashboardPluginConfigContent);
