@@ -223,11 +223,15 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                     $modulesSvc = $this->getServiceManager()->get('ModulesService');
                     $existingModules = array_merge($modulesSvc->getModulePlugins(), \MelisCore\MelisModuleManager::getModules());
 
+                    dump('existingModules');
+                    dump($existingModules);
+
                     $dashboardPluginCreatorSrv = $this->getServiceManager()->get('MelisToolCreatorService');
                     $newModuleName = $dashboardPluginCreatorSrv->generateModuleNameCase($postValues['step-form']['dpc_new_module_name']);
 
                     //set error if the entered module name has duplicate
                     if(in_array(trim($newModuleName), $existingModules)){
+                        dump('module has duplicate');
                       
                         // Adding error message to module input
                         $translator = $this->getServiceManager()->get('translator');
@@ -295,7 +299,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             list($stepForm, $data) = $this->getStepFormAndData($nextStep);          
         }
     
-       
+
         $viewStep->stepForm = $stepForm;//the form to be displayed
         $viewStep->errors = $errorMessages;
         $viewStep->data = $data;
