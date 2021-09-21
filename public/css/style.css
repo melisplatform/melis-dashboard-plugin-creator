@@ -1,8 +1,3 @@
-.melis-dashboard-plugin-creator-steps-tbl-cols .tcf-fa-checkbox{
-    cursor: pointer;
-    width: 25px;
-}
-
 .melis-dashboard-plugin-creator-steps li {
     display: block;
     height: 40px;
@@ -64,50 +59,6 @@
     padding-left: 30px;
 }
 
-
-.melis-dashboard-plugin-creator .steps-content{
-    padding: 5px;
-}
-
-.melis-dashboard-plugin-creator .btn-steps:hover{
-    background: #e61c23;
-    color: #fff;
-}
-
-.melis-dashboard-plugin-creator-steps-table-list{
-    max-height: 500px;
-    overflow: auto;
-}
-
-.melis-dashboard-plugin-creator-steps-content form .text-danger li{
-    list-style-type: none;
-}
-
-.melis-dashboard-plugin-creator-steps-content .melis-dashboard-plugin-creator-steps-table-list li .fa{
-    margin-right: 15px;
-}
-
-.melis-dashboard-plugin-creator-steps-content .melis-dashboard-plugin-creator-steps-table-list li{
-    cursor: pointer;
-}
-
-.melis-dashboard-plugin-creator-steps-content .melis-dashboard-plugin-creator-steps-table-list li:hover{
-    background: #f1f1f1;
-}
-
-.melis-dpc-summary-item{
-    margin-bottom: 20px;
-}
-
-.melis-dpc-summary-item-content{
-    padding-left: 40px;
-}
-
-.melis-dpc-final-content .fa{
-    width: 20px;
-    cursor: pointer;
-}
-
 .melis-dashboard-plugin-creator-steps li span {
     padding: 0px 8px 0 40px;
     padding-left: 10px;
@@ -130,10 +81,28 @@
     left: -1px;
 }
 
-.melis-dashboard-plugin-creator-steps-primary-db-table-columns .table-responsive,
-.melis-dashboard-plugin-creator-steps-language-db-table-columns .table-responsive {
-    display: block !important;
+.melis-dashboard-plugin-creator .steps-content{
+    padding: 5px;
 }
+
+.melis-dashboard-plugin-creator .btn-steps:hover{
+    background: #e61c23;
+    color: #fff;
+}
+
+.melis-dpc-summary-item{
+    margin-bottom: 20px;
+}
+
+.melis-dpc-summary-item-content{
+    padding-left: 40px;
+}
+
+.melis-dpc-final-content .fa{
+    width: 20px;
+    cursor: pointer;
+}
+
 
 /*Plugin thumbnail*/
 .melis-dashboard-plugin-creator-steps-content .plugin_thumbnail{
@@ -146,7 +115,6 @@
     margin-bottom: 10px;
 }
 
-
 .melis-dashboard-plugin-creator-steps-content .padding-left-5{
     padding-left:5px;
 }
@@ -155,14 +123,12 @@
     padding-right:5px;
 }
 
-
 .melis-dashboard-plugin-creator-steps-content .tab-count-input{
    margin-top:-16px;
 }
 
-
-.melis-dashboard-plugin-creator-steps-content .multi_fr{
-   max-width:10%!important;
+.melis-dashboard-plugin-creator-steps-content .multi{
+   max-width:12%!important;
 }
 
 

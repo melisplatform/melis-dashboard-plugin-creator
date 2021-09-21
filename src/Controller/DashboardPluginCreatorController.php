@@ -35,7 +35,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         $container = new Container('dashboardplugincreator');
         $container['melis-dashboardplugincreator'] = [];
 
-        //generate new session id, this will be used in creating a temp folder for plugin thumbnails
+        //generate new session id, this will be used in creating a temp folder path for plugin thumbnails
         $container->getManager()->regenerateId();
 
         return $view;
@@ -175,6 +175,20 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             if(!empty($postValues['step-form']['dpc_plugin_type'])){
                 if($postValues['step-form']['dpc_plugin_type'] == 'single'){
                     $stepForm->getInputFilter()->remove('dpc_tab_count');
+                }else{
+                    //if plugin type is multi and tab count is empty, remove the between validator
+                    if(empty($postValues['step-form']['dpc_tab_count'])){              
+                        $newValidatorChain = new \Laminas\Validator\ValidatorChain;
+                        foreach($stepForm->getInputFilter()->get('dpc_tab_count')->getValidatorChain()->getValidators() 
+                                  as $validator){                            
+                            if (!($validator['instance'] instanceof \Laminas\Validator\Between)) {
+                                $newValidatorChain->addValidator($validator['instance'],
+                                                                 true);
+                            }
+                        }
+
+                        $stepForm->getInputFilter()->get('dpc_tab_count')->setValidatorChain($newValidatorChain);
+                    }
                 }
             }else{
                 $stepForm->getInputFilter()->remove('dpc_tab_count');
@@ -191,7 +205,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                 $stepForm->getInputFilter()->remove('dpc_new_module_name');
                 $stepForm->getInputFilter()->remove('dpc_existing_module_name');
             }            
-                          
+  
+
             //if current step is valid, save form data to session and get the view of the next step 
             if($stepForm->isValid()) { 
 
@@ -214,7 +229,6 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                         $stepForm->get('dpc_new_module_name')->setMessages([
                             'ModuleExist' => sprintf($translator->translate('tr_melisdashboardplugincreator_err_module_exist'), $postValues['step-form']['dpc_new_module_name'])
                         ]);
-
 
                         //adding a variable to viewmodel to flag an error
                         $errorMessages = $stepForm->getMessages();
@@ -276,13 +290,10 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             list($stepForm, $data) = $this->getStepFormAndData($nextStep);          
         }
     
-        // $viewStep->id = 'melisdashboardplugincreator_step'.$nextStep;   
-        // $viewStep->curStep = $nextStep;
-        // $viewStep->nextStep = $nextStep + 1;    
+       
         $viewStep->stepForm = $stepForm;//the form to be displayed
         $viewStep->errors = $errorMessages;
         $viewStep->data = $data;
-
         return $viewStep;
     }
     
@@ -380,13 +391,10 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             list($stepForm, $data) = $this->getStepFormAndData($nextStep); 
         }
 
-        // $viewStep->id = 'melisdashboardplugincreator_step'.$nextStep;
-        // $viewStep->curStep = $nextStep;
-        // $viewStep->nextStep = $nextStep + 1;
+
         $viewStep->stepForm = $stepForm;//the form to be displayed
         $viewStep->errors = $errors;
         $viewStep->data = $data;
-
         return $viewStep;
     }
     
@@ -453,13 +461,9 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             list($stepForm, $data) = $this->getStepFormAndData($nextStep); 
         }
 
-        // $viewStep->id = 'melisdashboardplugincreator_step'.$nextStep;
-        // $viewStep->curStep = $nextStep;
-        // $viewStep->nextStep = $nextStep + 1;
         $viewStep->stepForm = $stepForm;//the form to be displayed
         $viewStep->errors = $errors;
         $viewStep->data = $data;
-
         return $viewStep;
     }
 
@@ -476,12 +480,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
         list($stepForm, $data) = $this->getStepFormAndData($nextStep); 
 
-        // $viewStep->id = 'melisdashboardplugincreator_step'.$nextStep;
-        // $viewStep->curStep = $nextStep;
-        // $viewStep->nextStep = $nextStep + 1;
         $viewStep->stepForm = $stepForm;//the form to be displayed       
         $viewStep->data = $data;
-
         return $viewStep;
     }
 
@@ -549,18 +549,9 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             }    
         }
            
-        list($stepForm, $data) = $this->getStepFormAndData($nextStep);          
-            
-        // $viewStep->id = 'melisdashboardplugincreator_step'.$nextStep;   
-        // $viewStep->curStep = $nextStep;
-
-        // if($nextStep){
-        //     $viewStep->nextStep = $nextStep + 1; 
-        // }
-          
+        list($stepForm, $data) = $this->getStepFormAndData($nextStep);              
         $viewStep->stepForm = $stepForm;//the form to be displayed       
         $viewStep->data = $data;
-
         return $viewStep;            
     }
 

@@ -65,7 +65,7 @@ return [
                         ],
                         [
                             'spec' => [
-                                'type' => 'Number',
+                                'type' => 'MelisText',
                                 'name' => 'dpc_tab_count',
                                 'options' => [
                                     'label' => 'tr_melisdashboardplugincreator_tab_count',
@@ -213,7 +213,8 @@ return [
                                     'name' => 'Between',
                                     'options' => [
                                         'messages' => [
-                                            \Laminas\Validator\Between::NOT_BETWEEN => 'tr_melisdashboardplugincreator_value_must_be_between_2_to_25'
+                                            \Laminas\Validator\Between::NOT_BETWEEN => 'tr_melisdashboardplugincreator_value_must_be_between_2_to_25',
+                                            'valueNotNumeric' => 'tr_melisdashboardplugincreator_value_must_be_between_2_to_25',
                                         ],
                                         'min' => 2,
                                         'max' => 25                                  

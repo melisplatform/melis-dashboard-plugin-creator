@@ -50,8 +50,7 @@ $(function(){
             mainFormData.append('validate',true);          
         }         
         
-        //uncomment this after testing
-        //$("#id_melisdashboardplugincreator_steps").append(loader);
+        $("#id_melisdashboardplugincreator_steps").append(loader);
 
         $.ajax({
             type: 'POST',

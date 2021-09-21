@@ -44,9 +44,8 @@
                         </div>
                 <?php }else if($key == 'dpc_plugin_type'){ ?>                  
                     <div class = "row">
-                    <?php foreach($pluginTypeOptions as $optKey => $optVal){  
-                        $class = $this->data['lang_locale']=='en_EN'?($optKey=='multi'?'col-md-1':'col-md-2'):($optKey=='multi'?'col-md-2 multi_fr':'col-md-2');
-
+                    <?php foreach($pluginTypeOptions as $optKey => $optVal){ 
+                        $class = $optKey=='multi'?'col-md-2 multi':'col-md-2';
                         ?>
                             <div class="<?=$class?>">
                                 <label class="melis-radio-box" for="<?=$optKey.str_replace(' ', '_', $optVal)?>">   
