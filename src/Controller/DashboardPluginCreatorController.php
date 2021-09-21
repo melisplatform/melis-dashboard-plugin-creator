@@ -162,7 +162,10 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         $stepForm = null; 
       
         //validate form if Next button is triggered
-        if($validate){  
+        if($validate){ 
+
+            dump('validate, inside process step 1');
+
             $request = $this->getRequest();
             $postValues = get_object_vars($request->getPost()); 
             
@@ -209,6 +212,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
             //if current step is valid, save form data to session and get the view of the next step 
             if($stepForm->isValid()) { 
+
+                dump('form is valid');
 
                 //validate new module name entered for duplicates
                 if(!empty($postValues['step-form']['dpc_new_module_name'])){
@@ -325,7 +330,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         $melisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');   
 
         //validate form if Next button is triggered
-        if($validate){         
+        if($validate){  
             $request = $this->getRequest();
             $postValues = get_object_vars($request->getPost()); 
             $uploadedFile = $request->getFiles()->toArray();
