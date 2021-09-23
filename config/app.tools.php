@@ -521,15 +521,13 @@ return [
                                     'tooltip' => 'tr_melisdashboardplugincreator_plugin_icon tooltip',
                                     'value_options' => [
                                         'fa-bar-chart-o' => 'fa-bar-chart-o',
-                                        'fa-calendar' => 'fa-calendar',
-                                        'fa-inbox' => 'fa-inbox',                                       
+                                        'fa-calendar' => 'fa-calendar',                                                                       
                                         'fa-warning' => 'fa-warning',
                                         'fa-table' => 'fa-table',
                                         'fa-cog' => 'fa-cog',
                                         'fa-comment' => 'fa-comment',   
                                         'fa-chain' => 'fa-chain',    
-                                        'fa-map-marker' => 'fa-map-marker',
-                                        'fa-money' => 'fa-money',
+                                        'fa-map-marker' => 'fa-map-marker',                                       
                                         'fa-trash-o' => 'fa-trash-o',
                                         'fa-filter' => 'fa-filter',
                                         'fa-search' => 'fa-search',
@@ -537,6 +535,10 @@ return [
                                         'fa-tag' => 'fa-tag',
                                         'fa-bookmark' => 'fa-bookmark',
                                         'fa-group' => 'fa-group',
+                                        'fa-bell' => 'fa-bell',
+                                        'fa-clock-o' => 'fa-clock-o',
+                                        'fa-wrench' => 'fa-wrench',
+                                        'fa-ban' => 'fa-ban'
                                     ],    
                                 ],
                                 'attributes' => [

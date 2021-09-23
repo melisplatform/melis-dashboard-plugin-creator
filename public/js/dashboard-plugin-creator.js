@@ -118,6 +118,7 @@ $(function(){
             $("#tab_count_div").show();           
         }else{
             $("#tab_count_div").hide();
+            $("#dpc_tab_count").val('');
         }
     });
 
@@ -125,9 +126,11 @@ $(function(){
     $body.on("change", "#dashboard-plugin-creator-step-1 input[name='dpc_plugin_destination']", function() {    
         if($('input:radio[name=dpc_plugin_destination]:checked').val() == "new_module"){
             $("#dpc_new_module_name").parents('.form-group').show();
-            $("#dpc_existing_module_name").parents('.form-group').hide();           
+            $("#dpc_existing_module_name").parents('.form-group').hide();   
+            $("#dpc_existing_module_name option").prop("selected", false);        
         }else{
             $("#dpc_new_module_name").parents('.form-group').hide();
+            $("#dpc_new_module_name").val('');
             $("#dpc_existing_module_name").parents('.form-group').show();    
         }
     });

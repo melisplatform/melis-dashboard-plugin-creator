@@ -236,7 +236,9 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                 }
 
                 //validate plugin name if it already exists for the selected existing module
-                if(!empty($postValues['step-form']['dpc_existing_module_name'])){                
+                if(!empty($postValues['step-form']['dpc_existing_module_name'])){  
+                    //dump('not empty existing module name '.$postValues['step-form']['dpc_existing_module_name']);
+
                     $existingModuleName = $postValues['step-form']['dpc_existing_module_name'];
                     $modulePlugins = $this->getModuleExistingPlugins($existingModuleName);
 

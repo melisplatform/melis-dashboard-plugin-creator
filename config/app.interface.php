@@ -29,7 +29,7 @@ return [
                 'build' => [
                     // configuration to override "use_build_assets" configuration, if you want to use the normal assets for this module.
                     //change this to false after testing
-                    'disable_bundle' => true,
+                    'disable_bundle' => false,
                     // lists of assets that will be loaded in the layout
                     'css' => [
                         '/MelisDashboardPluginCreator/build/css/bundle.css',
@@ -64,15 +64,13 @@ return [
                 ],      
                 'dashboardTabIcons' => [
                     'charts'  => 'fa-bar-chart-o',
-                    'calendar'  => 'fa-calendar',
-                    'inbox'  => 'fa-inbox',                   
+                    'calendar'  => 'fa-calendar',                                     
                     'warning_sign'  => 'fa-warning',
                     'table'  => 'fa-table',
                     'cogwheel' => 'fa-cog',
                     'chat'  => 'fa-comment',           
                     'link'  => 'fa-chain',                                       
-                    'google_maps'  => 'fa-map-marker',                    
-                    'money' =>  'fa-money',
+                    'google_maps'  => 'fa-map-marker',  
                     'bin' => 'fa-trash-o',
                     'filter' => 'fa-filter',
                     'search' => 'fa-search',
@@ -80,6 +78,10 @@ return [
                     'tag' => 'fa-tag',
                     'bookmark' => 'fa-bookmark',
                     'group' => 'fa-group',
+                    'bell' => 'fa-bell',
+                    'clock' => 'fa-clock-o',
+                    'wrench' => 'fa-wrench',
+                    'ban' => 'fa-ban'
                 ]
 
             ],

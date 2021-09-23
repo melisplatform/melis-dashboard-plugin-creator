@@ -43,7 +43,14 @@
         <?php 
             if(!empty($this->data['thumbnail'])){?>
                 <div class="plugin_thumbnail_div">
-                        <img src="<?= $this->data['thumbnail']?>" class = "plugin_thumbnail">
+                    <img src="<?= $this->data['thumbnail']?>" class = "plugin_thumbnail">
+                    <div class="hover-details">
+                        <div class="me-p-btn-cont">
+                            <a class="viewImageDocument" href="<?= $this->data['thumbnail']?>" target="_blank">
+                                <i class="fa fa-eye"></i>
+                            </a>                                                             
+                        </div>
+                    </div>
                 </div>
         <?php    }
         ?>        
