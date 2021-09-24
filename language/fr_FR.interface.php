@@ -79,6 +79,7 @@
 		'tr_melisdashboardplugincreator_plugin_icon tooltip' => 'Sélectionnez l\'icone du plugin',
 		'tr_melisdashboardplugincreator_dashboard_tab_icon' => 'Icones des onglets du plugin',
 		'tr_melisdashboardplugincreator_dashboard_tab_icon tooltip' => 'Sélectionnez les icones de chaque onglet',  
+		'tr_melisdashboardplugincreator_dashboard_tab_label' => 'Onglet du plugin',
 
 		 //Step4 Form
 		'tr_melisdashboardplugincreator_title_step_4' => 'Résumé',

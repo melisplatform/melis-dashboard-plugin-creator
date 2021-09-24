@@ -133,5 +133,6 @@
    max-width:12%!important;
 }
 
-
-
+.grid-stack-item-content .clear{
+    margin: 85px;
+}

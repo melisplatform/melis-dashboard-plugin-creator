@@ -691,7 +691,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             //add dashboard tab icon elements to form
             for($i=1; $i<=$tabCount; $i++){
                 $element = new \Laminas\Form\Element\Radio('dpc_plugin_tab_icon_'.$i);
-                $element->setLabel('Tab '.$i);
+                $element->setLabel($translator->translate('tr_melisdashboardplugincreator_dashboard_tab_label').' '.$i);
                 $element->setValueOptions($dashboardTabIconOptions); 
                 $element->setAttributes([
                     'class' => 'form-control',

@@ -78,7 +78,8 @@
         'tr_melisdashboardplugincreator_plugin_icon' => 'Plugin icon',
         'tr_melisdashboardplugincreator_plugin_icon tooltip' => 'Select the plugin icon',
         'tr_melisdashboardplugincreator_dashboard_tab_icon' => 'Plugin\'s tabs\' icons',
-        'tr_melisdashboardplugincreator_dashboard_tab_icon tooltip' => 'Select the icon for each tab',  
+        'tr_melisdashboardplugincreator_dashboard_tab_icon tooltip' => 'Select the icon for each tab',
+        'tr_melisdashboardplugincreator_dashboard_tab_label' => 'Plugin Tab',  
        
          //Step4 Form
         'tr_melisdashboardplugincreator_title_step_4' => 'Summary',

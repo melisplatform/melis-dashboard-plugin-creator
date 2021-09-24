@@ -245,23 +245,18 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             $dashboardPluginViewContent = $this->getTemplateContent('/dashboard-view-single-tab.phtml');
         }else{
             
-            for($i=1;$i<=$tabCount;$i++){
-                $tabIconArr[$i] = $this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i];
-            }
-
             //set the containter for the unique id for each tab     
-            $pluginConfigPluginId = '<?php echo $this->pluginConfig[\'plugin_id\']?>';
-            
-            //set the tab header content dynamically depending upon the number of tabs set
-            $tabHeader = "";
-            for($i=1; $i<=$tabCount; $i++){   
-                $tabHeader .= '<li class="nav-item '.($i==1?"active":"").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$tabIconArr[$i].' nav-link'.($i==1?" active":"").'" href="#'.str_replace(" ","-",$tabIconArr[$i]).'-'.$pluginConfigPluginId.'" data-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
-            }
-
-            //set the tab content
+            $pluginConfigPluginId = '<?php echo $this->pluginConfig[\'plugin_id\']?>';            
+            $tabHeader = "";          
             $tabContent = "";
-            for($i=1; $i<=$tabCount; $i++){          
-                $tabContent .= '<div class="tab-pane'.($i==1?" active":"").'" id="'.str_replace(" ","-",$tabIconArr[$i]).'-'.$pluginConfigPluginId.'">'."\r\n\t\t\t\t\t\t".'<!-- Plugin Content for the tab here -->'."\r\n\t\t\t\t\t".'</div>'."\r\n\t\t\t\t\t";
+
+            //set the tab header and content dynamically depending upon the number of tabs set
+            for($i=1;$i<=$tabCount;$i++){
+                $pluginTabId = 'tab-'.$i.'-'.str_replace(" ","-",$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i]).'-'.$pluginConfigPluginId;
+
+                $tabHeader .= '<li class="nav-item '.($i==1?"active":"").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i].' nav-link'.($i==1?" active":"").'" href="#'.$pluginTabId.'" data-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
+
+                $tabContent .= '<div class="tab-pane'.($i==1?" active":"").'" id="'.$pluginTabId.'">'."\r\n\t\t\t\t\t\t".'<!-- Plugin Content for the tab here -->'."\r\n\t\t\t\t\t".'</div>'."\r\n\t\t\t\t\t";
             }
 
             //get the plugin view template for multiple tabs
