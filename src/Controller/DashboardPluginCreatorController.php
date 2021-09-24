@@ -177,7 +177,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                     $stepForm->getInputFilter()->remove('dpc_tab_count');
                 }else{
                     //if plugin type is multi and tab count is empty, remove the between validator
-                    if(empty($postValues['step-form']['dpc_tab_count'])){              
+                    if($postValues['step-form']['dpc_tab_count'] == ""){  
                         $newValidatorChain = new \Laminas\Validator\ValidatorChain;
                         foreach($stepForm->getInputFilter()->get('dpc_tab_count')->getValidatorChain()->getValidators() 
                                   as $validator){                            
@@ -186,7 +186,6 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                                                                  true);
                             }
                         }
-
                         $stepForm->getInputFilter()->get('dpc_tab_count')->setValidatorChain($newValidatorChain);
                     }
                 }
