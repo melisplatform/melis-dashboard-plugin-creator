@@ -208,7 +208,15 @@ return [
                                             \Laminas\Validator\NotEmpty::IS_EMPTY => 'tr_melisdashboardplugincreator_err_empty',
                                         ],
                                     ],
-                                ],                        
+                                ],    
+                                [
+                                'name' => 'IsInt',
+                                    'options' => [
+                                        'messages' => [
+                                            \Laminas\I18n\Validator\IsInt::NOT_INT  => 'tr_melisdashboardplugincreator_integer_only'                                            
+                                        ],                                                                       
+                                    ],
+                                ],                    
                                 [
                                     'name' => 'Between',
                                     'options' => [

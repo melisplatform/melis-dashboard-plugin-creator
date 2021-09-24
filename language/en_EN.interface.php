@@ -19,7 +19,8 @@
 	    'tr_melisdashboardplugincreator_err_invalid_name' => 'Only alphabetic characters are authorized',	
         'tr_melisdashboardplugincreator_err_long_50' => 'Value is too long, it should be less than 50 characters',
 	    'tr_melisdashboardplugincreator_err_empty' => 'The input is required and cannot be empty',
-	    'tr_melisdashboardplugincreator_value_must_be_between_2_to_25' => 'The input must be numeric and must be between 2 to 25',
+	    'tr_melisdashboardplugincreator_value_must_be_between_2_to_25' => 'The input must be between 2 and 25',
+        'tr_melisdashboardplugincreator_integer_only' => 'The input must be integer only',
 
         'tr_melisdashboardplugincreator_save_upload_image_imageFalseType' => 'Invalid image format, please upload a valid image',
         'tr_melisdashboardplugincreator_save_upload_image_imageNotDetected' => 'Unknown image format, please upload a valid image',
