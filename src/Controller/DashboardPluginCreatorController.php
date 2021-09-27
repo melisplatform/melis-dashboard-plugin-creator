@@ -21,8 +21,7 @@ use MelisCore\Controller\MelisAbstractActionController;
 class DashboardPluginCreatorController extends MelisAbstractActionController
 {
     const NEW_MODE = "new_module";
-    const EXISTING_MODE = "existing_module";
-  
+      
     /**
      * This will render the dashboard plugin creator tool
      * @return ViewModel
@@ -83,7 +82,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
      /**
      * This method render the steps of the tool
-     * this will call dynamically the requested step ViewModel
+     * this will call dynamically the requested step 
      * @return ViewModel
      */
     public function renderDashboardPluginCreatorStepsAction()
@@ -97,12 +96,11 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
         // Current viewModel
         $viewStep = new ViewModel();
-        //$viewStep->id = 'melisdashboardplugincreator_step'.$curStep;
         $viewStep->setTemplate('melis-dashboard-plugin-creator/render-form');
         $viewRender = $this->getServiceManager()->get('ViewRenderer');
 
         /**
-         * This will validate the current step, if next button is clicked, and get the form/data of the next step if no errors in validation,
+         * This will validate the current step if 'next' button is clicked, and get the form/data of the next step if no errors in validation,
          * else, it will just get the current step form
          * 
          */
@@ -229,20 +227,16 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                             'ModuleExist' => sprintf($translator->translate('tr_melisdashboardplugincreator_err_module_exist'), $postValues['step-form']['dpc_new_module_name'])
                         ]);
 
-                        //adding a variable to viewmodel to flag an error
                         $errorMessages = $stepForm->getMessages();
                     }
                 }
 
                 //validate plugin name if it already exists for the selected existing module
                 if(!empty($postValues['step-form']['dpc_existing_module_name'])){  
-                    //dump('not empty existing module name '.$postValues['step-form']['dpc_existing_module_name']);
-
                     $existingModuleName = $postValues['step-form']['dpc_existing_module_name'];
                     $modulePlugins = $this->getModuleExistingPlugins($existingModuleName);
 
                     if($modulePlugins && $modulePlugins[$existingModuleName]['pluginId']){
-
                         $dashboardPluginCreatorSrv = $this->getServiceManager()->get('MelisDashboardPluginCreatorService');
                         $newPluginName = $dashboardPluginCreatorSrv->generateModuleNameCase($postValues['step-form']['dpc_plugin_name']);
 
@@ -290,8 +284,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         }else{
             list($stepForm, $data) = $this->getStepFormAndData($nextStep);          
         }
-    
-       
+           
         $viewStep->stepForm = $stepForm;//the form to be displayed
         $viewStep->errors = $errorMessages;
         $viewStep->data = $data;
@@ -391,7 +384,6 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         }else{ 
             list($stepForm, $data) = $this->getStepFormAndData($nextStep); 
         }
-
 
         $viewStep->stepForm = $stepForm;//the form to be displayed
         $viewStep->errors = $errors;
@@ -589,8 +581,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
                 //get the current locale used from meliscore session
                 $container = new Container('meliscore');
-                $data['lang_locale'] = $container['melis-lang-locale'];       
-
+                $data['lang_locale'] = $container['melis-lang-locale'];  
                 break;
 
             case 2:  
@@ -669,7 +660,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
     }
 
     /**
-     * This will dynamically set the dashboard tab field elements based on the number of tabs given in the step 1
+     * This will dynamically set the dashboard tab field elements based on the number of tabs given in step 1
      * @param obj $stepForm
      * @return obj
     */

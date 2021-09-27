@@ -50,8 +50,7 @@ $(function(){
             mainFormData.append('validate',true);          
         }         
         
-        //uncomment after testing
-        //$("#id_melisdashboardplugincreator_steps").append(loader);
+        $("#id_melisdashboardplugincreator_steps").append(loader);
 
         $.ajax({
             type: 'POST',
@@ -134,16 +133,7 @@ $(function(){
             $("#dpc_existing_module_name").parents('.form-group').show();    
         }
     });
-
-    /*this filter out the non digit characters from the tab count field*/
-    $body.on('keyup','input[name="dpc_tab_count"]',function(e){
-        if (/\D/g.test(this.value))
-        {
-            // Filter non-digits from input value.
-            this.value = this.value.replace(/\D/g, '');    
-        }
-    }); 
-
+ 
     /*manually sets the checked properties of Activate Plugin checkbox in the step 5 form*/
     $body.on("click", ".melis-dpc-final-content .fa", function(){
         if ($(this).hasClass("fa-check-square-o")){

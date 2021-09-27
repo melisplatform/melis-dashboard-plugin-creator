@@ -24,10 +24,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
     protected $dpcSteps;
     protected $pluginName;
     protected $moduleName;
-
-    const NEW_MODE = "new_module";
-    const EXISTING_MODE = "existing_module";
-    
+    const EXISTING_MODE = "existing_module";    
 
     public function __construct()
     {    
@@ -215,7 +212,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $tabIconArr = array();
         $tabIcons = '';
 
-        // get the controller template
+        //get the controller template
         $dashboardPluginControllerContent = $this->getTemplateContent('/DashboardPluginController.php');   
 
         //update the view folder name  
