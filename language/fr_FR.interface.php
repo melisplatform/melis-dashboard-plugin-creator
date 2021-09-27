@@ -20,7 +20,7 @@
 		'tr_melisdashboardplugincreator_err_long_50' => 'Valeur trop longue, elle doit être de moins de 50 caractères',
 		'tr_melisdashboardplugincreator_err_empty' => 'Valeur requise, ne peut être vide',
 		'tr_melisdashboardplugincreator_value_must_be_between_2_to_25' => 'Seules les valeurs entre 2 et 25 sont autorisées',
-		'tr_melisdashboardplugincreator_integer_only' => 'The input must be integer only',
+		'tr_melisdashboardplugincreator_integer_only' => 'La valeur saisie doit être un nombre entier uniquement',
 
 		'tr_melisdashboardplugincreator_save_upload_image_imageFalseType' => 'Format d\'image invalide',
 		'tr_melisdashboardplugincreator_save_upload_image_imageNotDetected' => 'Format d\'image inconnu',
