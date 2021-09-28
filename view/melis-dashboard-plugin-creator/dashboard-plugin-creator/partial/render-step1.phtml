@@ -56,18 +56,19 @@
 
                             <?php 
                                 if($optKey == 'multi'){ ?>      
-                                    <div id = 'tab_count_div' <?=empty($tabCountField->getValue())?"style = 'display: none;'":""?>>
-                                        <div class="d-flex justify-content-between col-md-7" >
+                                    <div id = 'tab_count_div' class="col-md-7"  <?=empty($tabCountField->getValue())?"style = 'display: none;'":""?>>
+                                        <div class="d-flex justify-content-between col-md-4">
                                             <label class="padding-right-5"><?=$this->translate('tr_melisdashboardplugincreator_with')?></label>
                                             <input class="<?=$tabCountField->getAttribute('class')?> tab-count-input" type = "text" id = "<?=$tabCountField->getAttribute('id')?>" name = "<?=$tabCountField->getAttribute('name')?>" required="required" value="<?=$tabCountField->getValue()?>" >
-                                             <label class="padding-left-5"><?=$this->translate('tr_melisdashboardplugincreator_tabs')?></label>
-                                        </div>    
-                                    </div>     
+                                            <label class="padding-left-5"><?=$this->translate('tr_melisdashboardplugincreator_tabs')?></label>
+                                        </div>                                        
+                                    </div>
                             <?php    }
                             ?>
                     <?php    }                               
                 ?>
                      </div>
+
              <?php   }else if($key == 'dpc_plugin_destination'){ ?>
                         <div class = "row">
                             <?php foreach($pluginDestinationOptions as $optKey => $optVal){ ?>

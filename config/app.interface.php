@@ -80,7 +80,13 @@ return [
                     'bell' => 'fa-bell',
                     'clock' => 'fa-clock-o',
                     'wrench' => 'fa-wrench',
-                    'ban' => 'fa-ban'
+                    'ban' => 'fa-ban',
+                    'money' => 'fa-money',
+                    'file' => 'fa-file',
+                    'home' => 'fa-home',
+                    'heart' => 'fa-heart',
+                    'inbox' => 'fa-inbox',
+                    'envelope' => 'fa-envelope'
                 ]
 
             ],

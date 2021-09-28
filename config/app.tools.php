@@ -546,7 +546,13 @@ return [
                                         'fa-bell' => 'fa-bell',
                                         'fa-clock-o' => 'fa-clock-o',
                                         'fa-wrench' => 'fa-wrench',
-                                        'fa-ban' => 'fa-ban'
+                                        'fa-ban' => 'fa-ban',
+                                        'fa-money' => 'fa-money',
+                                        'fa-file' => 'fa-file',
+                                        'fa-home' => 'fa-home',
+                                        'fa-heart' => 'fa-heart',
+                                        'fa-inbox' => 'fa-inbox',
+                                        'fa-envelope' => 'fa-envelope'
                                     ],    
                                 ],
                                 'attributes' => [

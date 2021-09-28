@@ -122,11 +122,12 @@
 }
 
 .melis-dashboard-plugin-creator-steps-content .padding-right-5{
-    padding-right:5px;
+    padding-right:5px;   
 }
 
 .melis-dashboard-plugin-creator-steps-content .tab-count-input{
    margin-top:-16px;
+   min-width: 100px; 
 }
 
 .melis-dashboard-plugin-creator-steps-content .multi{
@@ -135,4 +136,11 @@
 
 .grid-stack-item-content .clear{
     margin: 85px;
+}
+
+@media screen and  (max-width: 768px) {
+    #tab_count_div{
+        margin-left:-15px; 
+        margin-top:15px;
+    }
 }
