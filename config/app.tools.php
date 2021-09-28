@@ -547,9 +547,9 @@ return [
                                         'fa-clock-o' => 'fa-clock-o',
                                         'fa-wrench' => 'fa-wrench',
                                         'fa-ban' => 'fa-ban',
-                                        'fa-money' => 'fa-money',
+                                        'fa-dashboard' => 'fa-dashboard',
                                         'fa-file' => 'fa-file',
-                                        'fa-home' => 'fa-home',
+                                        'fa-list' => 'fa-list',
                                         'fa-heart' => 'fa-heart',
                                         'fa-inbox' => 'fa-inbox',
                                         'fa-envelope' => 'fa-envelope'

@@ -81,9 +81,9 @@ return [
                     'clock' => 'fa-clock-o',
                     'wrench' => 'fa-wrench',
                     'ban' => 'fa-ban',
-                    'money' => 'fa-money',
+                    'dashboard' => 'fa-dashboard',
                     'file' => 'fa-file',
-                    'home' => 'fa-home',
+                    'list' => 'fa-list',
                     'heart' => 'fa-heart',
                     'inbox' => 'fa-inbox',
                     'envelope' => 'fa-envelope'
