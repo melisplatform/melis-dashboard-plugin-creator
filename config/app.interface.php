@@ -81,7 +81,7 @@ return [
                     'clock' => 'fa-clock-o',
                     'wrench' => 'fa-wrench',
                     'ban' => 'fa-ban',
-                    'dashboard' => 'fa-dashboard',
+                    'share' => 'fa-share',
                     'file' => 'fa-file',
                     'list' => 'fa-list',
                     'heart' => 'fa-heart',
