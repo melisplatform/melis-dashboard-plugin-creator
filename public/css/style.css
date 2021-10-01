@@ -184,3 +184,6 @@
     padding-left: 0px;
 }
 
+#dpc_existing_module_name{
+    min-width: 200px;
+}
