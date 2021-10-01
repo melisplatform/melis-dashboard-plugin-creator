@@ -77,7 +77,6 @@
         'tr_melisdashboardplugincreator_common_label_no' => 'No',
         'tr_melisdashboardplugincreator_delete_plugin_thumbnail_title' => 'Delete Plugin Thumbnail',
         'tr_melisdashboardplugincreator_delete_plugin_thumbnail_confirm' => 'Are you sure you want to delete this thumbnail?', 
-        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_success' => 'Plugin thumbnail has been successfully deleted',
         'tr_melisdashboardplugincreator_delete_plugin_thumbnail_error' => 'Error encountered while deleting the plugin thumbnail',
         
         //Step3 Form

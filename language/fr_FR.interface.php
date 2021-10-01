@@ -75,10 +75,9 @@
 		'tr_melisdashboardplugincreator_upload_thumbnail tooltip' => 'Uploadez l\'image du plugin',
 		'tr_melisdashboardplugincreator_common_label_yes' => 'Oui',
         'tr_melisdashboardplugincreator_common_label_no' => 'Non',
-        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_title' => 'Delete Plugin Thumbnail',
-        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_confirm' => 'Are you sure you want to delete this thumbnail?',
-        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_success' => 'Plugin thumbnail has been successfully deleted',   
-        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_error' => 'Error encountered while deleting the plugin thumbnail',     
+        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_title' => 'Supprimer l\'image',
+        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_confirm' => 'Êtes-vous sûr(e) de vouloir supprimer l\'image ?',
+        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_error' => 'Erreur lors de la suppression de l\'imag',     
 
 		//Step3 Form
 		'tr_melisdashboardplugincreator_title_step_3' => 'Traductions et icône du Dashboard plugin',

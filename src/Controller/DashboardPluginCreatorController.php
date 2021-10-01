@@ -338,35 +338,38 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             $stepForm2 = $factory->createForm($appConfigForm);         
             $stepForm2->setData($postValues['step-form']);
 
-            if($stepForm2->isValid()){  
-                //process uploading of thumbnail
-                list($isValid2ndForm, $pluginThumbnail, $textMessage) = $this->uploadPluginThumbnail($postValues['step-form']['dpc_plugin_upload_thumbnail']);
+            if($stepForm2->isValid()){        
+                //get the saved thumbnail 
+                $pluginThumbnail = !empty($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'])?$container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail']:null;
 
-                if($isValid2ndForm){
-                    //save to session   
-                    $container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'] = '/MelisDashboardPluginCreator/temp-thumbnail/'.$sessionID.'/'.pathinfo($pluginThumbnail, PATHINFO_FILENAME).'.'.pathinfo($pluginThumbnail, PATHINFO_EXTENSION);  
+                //if no saved uploaded thumbnail, try to upload again
+                if(empty($pluginThumbnail)){
 
-                }else{
+                    //process uploading of thumbnail
+                    list($isValid2ndForm, $pluginThumbnail, $textMessage) = $this->uploadPluginThumbnail($postValues['step-form']['dpc_plugin_upload_thumbnail']);
 
-                    //if no saved thumbnail in session and no current upload, or the uploaded file is invalid, set error message
-                    if((!empty($pluginThumbnail)) 
-                        || (empty($pluginThumbnail) && empty($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail']))){
-                        
+                    if($isValid2ndForm){
+                        //save to session   
+                        $container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'] = '/MelisDashboardPluginCreator/temp-thumbnail/'.$sessionID.'/'.pathinfo($pluginThumbnail, PATHINFO_FILENAME).'.'.pathinfo($pluginThumbnail, PATHINFO_EXTENSION); 
+
+                    }else{         
                         //unset previously uploaded file
-                        unset($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail']); 
+                        if(!empty($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'])){
+                            unset($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail']); 
+                        }                
               
                         $stepForm2->get('dpc_plugin_upload_thumbnail')->setMessages([
                             'pluginError' => $textMessage,
                             'label' => 'Plugin thumbnail'
                         ]);
 
-                        $uploadFormErrorMessages = $this->formatErrors($stepForm2->getMessages(), $stepForm2->getElements());                     
-                    }else{
-                        $isValid2ndForm = 1;
-                    }              
-                }  
+                        $uploadFormErrorMessages = $this->formatErrors($stepForm2->getMessages(), $stepForm2->getElements());   
+                    }  
+                }else{
+                    $isValid2ndForm = 1;
+                }
 
-            }else{           
+            }else{    
                 $uploadFormErrorMessages = $this->formatErrors($stepForm2->getMessages(), $stepForm2->getElements());
             }    
              
@@ -853,7 +856,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                     $existingTranslatedPluginTitle = $this->getExistingTranslatedPluginTitle($this->getModuleExistingPlugins($container['melis-dashboardplugincreator']['step_1']['dpc_existing_module_name']), $container['melis-dashboardplugincreator']['step_1']['dpc_existing_module_name']);
                
                     //check here if the plugin title for the specific language has duplicates
-                    if(in_array($dpcService->removeExtraSpace($stepFormtmp->get('dpc_plugin_title')->getValue()), $existingTranslatedPluginTitle[$lang['lang_locale']])){
+                    if($existingTranslatedPluginTitle && in_array($dpcService->removeExtraSpace($stepFormtmp->get('dpc_plugin_title')->getValue()), $existingTranslatedPluginTitle[$lang['lang_locale']])){
                                       
                         $stepFormtmp->get('dpc_plugin_title')->setMessages([
                             'PluginTitleExist_'.$lang['lang_locale'] => sprintf($translator->translate('tr_melisdashboardplugincreator_err_plugin_title_exist'), $stepFormtmp->get('dpc_plugin_title')->getValue(), $lang['lang_name'])
@@ -863,23 +866,23 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                         $errors = ArrayUtils::merge($errors, $stepFormtmp->getMessages());
 
                     }else{
-                        $validFormCount++;
-                        $container['melis-dashboardplugincreator']['step_'.$curStep][$lang['lang_locale']] = $stepFormtmp->getData();
+                        $validFormCount++;                      
                     }
                 }else{
-                    $validFormCount++;
-                    $container['melis-dashboardplugincreator']['step_'.$curStep][$lang['lang_locale']] = $stepFormtmp->getData();
+                    $validFormCount++;                    
                 }                                 
 
-            }else{
-                //clear session data of the invalid form
-                unset($container['melis-dashboardplugincreator']['step_'.$curStep][$lang['lang_locale']]);
+            }else{                              
 
                 //if no duplicate in plugin title, get the form error messages
                 if($pluginTitleDuplicate == 0){
                     $errors = ArrayUtils::merge($errors, $stepFormtmp->getMessages());
                 }
             }   
+
+            //add to session the posted values
+            $container['melis-dashboardplugincreator']['step_'.$curStep][$lang['lang_locale']] = $stepFormtmp->getData();
+
         }//end foreach
 
         //if at least 1 form is valid, or if there are no duplicates in the plugin title for each language, flag as valid
@@ -910,7 +913,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
     }
 
     /**
-     * This uploads the plugin thubnail to the temp folder
+     * This uploads the plugin thumbnail to the temp folder
      * @param array $uploadedFile
      * @return array
     */
@@ -1014,6 +1017,74 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
     }
 
     /**
+     * This processes the uploading of the plugin thumbnail     
+     * @return Laminas\View\Model\JsonModel
+    */
+    public function processUploadAction(){   
+        $container = new Container('dashboardplugincreator');//session container
+        $sessionID = $container->getManager()->getId();    
+        $errors = array();       
+        $uploadFormErrorMessages = array();
+        $textMessage = '';    
+        $isValid2ndForm = 0;
+        $pluginThumbnail = null;
+
+        $factory = new \Laminas\Form\Factory();
+        $formElements = $this->getServiceManager()->get('FormElementManager');
+        $factory->setFormElementManager($formElements);
+        $melisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');   
+       
+        $request = $this->getRequest();       
+        $uploadedFile = $request->getFiles()->toArray();
+
+        //validate upload form
+        $appConfigForm = $melisCoreConfig->getFormMergedAndOrdered('melisdashboardplugincreator/forms/melisdashboardplugincreator_step2_form2', 'melisdashboardplugincreator_step2_form2');
+        $stepForm2 = $factory->createForm($appConfigForm);         
+        $stepForm2->setData($uploadedFile['dpc_plugin_upload_thumbnail']);
+
+        if($stepForm2->isValid()){  
+            //process uploading of thumbnail
+            list($isValid2ndForm, $pluginThumbnail, $textMessage) = $this->uploadPluginThumbnail($uploadedFile['dpc_plugin_upload_thumbnail']);
+
+            if($isValid2ndForm){
+                //save to session   
+                $container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'] = '/MelisDashboardPluginCreator/temp-thumbnail/'.$sessionID.'/'.pathinfo($pluginThumbnail, PATHINFO_FILENAME).'.'.pathinfo($pluginThumbnail, PATHINFO_EXTENSION); 
+
+            }else{         
+                //unset previously uploaded file
+                if(!empty($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'])){
+                    unset($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail']); 
+                }                
+      
+                $stepForm2->get('dpc_plugin_upload_thumbnail')->setMessages([
+                    'pluginError' => $textMessage,
+                    'label' => 'Plugin thumbnail'
+                ]);
+
+                $uploadFormErrorMessages = $this->formatErrors($stepForm2->getMessages(), $stepForm2->getElements());   
+            }  
+
+        }else{           
+            $uploadFormErrorMessages = $this->formatErrors($stepForm2->getMessages(), $stepForm2->getElements());
+        }           
+
+        // Retrieving steps form config
+        $stepsConfig = $this->getStepConfig();
+        $translator = $this->getServiceManager()->get('translator');
+
+        $results = array(
+            'success' => $isValid2ndForm,
+            'errors' => $uploadFormErrorMessages,
+            'pluginThumbnail' => !empty($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'])?$container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail']:null,
+            'textTitle' => $translator->translate($stepsConfig['melisdashboardplugincreator_step2']['name']),
+            'textMessage' => ''
+        );
+
+        return new JsonModel($results);
+    }
+
+
+    /**
      * This sets the label for the error messages
      * @param array $errors
      * @param array $formElements
@@ -1113,7 +1184,6 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         return round(number_format($size / pow(1024, $power), 2, '.', ',')) .  $units[$power];
     }
 
-
     /**
      * This will get all of the existing translated values of 'name' (plugin menu title) config of the plugin used in validation for the duplicates
      * @param array $modulePlugins -> value is the  $plugin['datas']['name'] of the existing dashboard plugin ex: tr_melistoolprospects_dashboard_Prospects 
@@ -1148,22 +1218,16 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         return $nameTranslationArr;
     }
 
-
     /**
      * This method will delete the uploaded plugin thumbnail from the session data
      * @return boolean
     */
     public function removePluginThumbnailAction()
     {   
-        $request = $this->getRequest();
-        $postValues = get_object_vars($request->getPost()); 
-        $fileNamePreview = trim(str_replace(' ','_',$postValues['pluginFilename'])); //filename of the current thumbnail in preview 
-
         // Initializing the Dashboard Plugin creator session container
         $container = new Container('dashboardplugincreator');
         
         if(!empty($container['melis-dashboardplugincreator'])){ 
-
             if(!empty($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'])){
                 unset($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail']);
             }          

@@ -150,7 +150,6 @@ $(function(){
             $(this).next("input").attr("checked", true);
         }
     });
-
   
     /*when dashboard plugin creator tab is closed, delete the temp thumbnail folder for the session if there are any*/
     $body.on("click", ".close-tab", function(e){  
@@ -165,14 +164,29 @@ $(function(){
         }); 
     }); 
 
+    /*upload plugin thumbnail*/
+    $body.on("change", "#dpc_plugin_upload_thumbnail", function(e){                  
+        var uploadUrl = '/melis/MelisDashboardPluginCreator/DashboardPluginCreator/processUpload';        
+        var form = $("#id-dashboard-plugin-creator-thumbnail-upload-form")[0]; // You need to use standard javascript object here
+        var uploadFormData = new FormData(form);
+        uploadFormData.append('file', $('input[type=file]')[0].files[0]); 
+       
+        $.ajax({
+            type: 'POST',
+            url:  uploadUrl,
+            data: uploadFormData,          
+            dataType: "json",
+            encode: true,
+            cache: false,
+            contentType: false,
+            processData: false
+        }).done(function (data) {
+           
+            if(data.success){   
+                //remove highlight errors
+                $("form#id-dashboard-plugin-creator-thumbnail-upload-form .form-control").parents('.form-group').find("label").css("color","#686868");  
 
-    //show preview when after selecting a plugin thumbnail
-    $body.on("change", "#dpc_plugin_upload_thumbnail", function(e){ 
-        var imgPath = $(this)[0].value;
-        var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-
-        if(extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
-            if (typeof (FileReader) != "undefined") {
+                //show preview after successful upload                   
                 var uploadArea = $("#pluginThumbnailUploadArea");
                 var imageHolder = $(".plugin_thumbnail_div");
                 
@@ -183,87 +197,72 @@ $(function(){
                     $('<div class="plugin_thumbnail_div"></div>').appendTo(uploadArea);     
                 }   
                
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $("<img />", {
-                        "src": e.target.result,
-                            "class": "plugin_thumbnail"
-                    }).appendTo('.plugin_thumbnail_div');
+                $("<img />", {
+                    "src": data.pluginThumbnail,
+                    "class": "plugin_thumbnail"
+                }).appendTo('.plugin_thumbnail_div');
 
-                    //append view and remove icon
-                    $('<div class="hover-details">'+
-                        '<div class="me-p-btn-cont">'+
-                            '<a id="plugin-thumbnail-eye" class="viewImageDocument" href="" target="_blank">'+
-                                '<i class="fa fa-eye"></i>'+
-                            '</a>'+
-                            '<a id="removePluginThumbnail" data-type="image">'+
-                                '<i class="fa fa-times"></i>' + 
-                            '</a>'+
-                        '</div></div>').appendTo('.plugin_thumbnail_div');     
+                //append view and remove thumbnail icons
+                $('<div class="hover-details">'+
+                    '<div class="me-p-btn-cont">'+
+                        '<a id="plugin-thumbnail-eye" class="viewImageDocument" href="" target="_blank">'+
+                            '<i class="fa fa-eye"></i>'+
+                        '</a>'+
+                        '<a id="removePluginThumbnail" data-type="image">'+
+                            '<i class="fa fa-times"></i>' + 
+                        '</a>'+
+                    '</div></div>').appendTo('.plugin_thumbnail_div');     
 
-                    //set href src to view icon
-                    $("#plugin-thumbnail-eye").attr('href', e.target.result);                                 
-                }          
- 
-                //set the image file name to hidden field
-                //remove this one if current algo is ok
-                $("#pluginThumbnailFileName").val($(this)[0].files[0]['name']);              
-
+                //set href src to view icon
+                $("#plugin-thumbnail-eye").attr('href', data.pluginThumbnail);    
                 imageHolder.show();
-                reader.readAsDataURL($(this)[0].files[0]);
-
-            } 
-        } else { 
-            //invalid image file
-            $('#dpc_plugin_upload_thumbnail').val('');
-            $('.plugin_thumbnail_div').remove();          
-            melisHelper.melisKoNotification(translations.tr_melisdashboardplugincreator_menu_texts_display, translations.tr_melisdashboardplugincreator_save_upload_image_imageFalseType, null);
-        }
+                   
+            }else{       
+                if($('.plugin_thumbnail_div').length){
+                    $('.plugin_thumbnail_div').remove();
+                }
+                
+                melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors);
+                tcHighlightErrors(0, data.errors, ".dashboard-plugin-creator-step-2");
+            }
+        }).fail(function(xhr, textStatus, errorThrown) {  
+            console.log( translations.tr_meliscore_error_message );
+        });    
+      
     });
 
-    //this function will remove the saved plugin thumbnail for the current session
-    $body.on("click", "#removePluginThumbnail", function() {
-        var $this       = $(this),               
-            ajaxUrl     = '/melis/MelisDashboardPluginCreator/DashboardPluginCreator/removePluginThumbnail',
-            dataString  = [];
+    /*when remove icon is clicked, remove the uploaded thumbnail from the session*/
+    $body.on("click", "#removePluginThumbnail", function() { 
+        melisCoreTool.pending("#removePluginThumbnail");
+        melisCoreTool.confirm(
+            translations.tr_melisdashboardplugincreator_common_label_yes,
+            translations.tr_melisdashboardplugincreator_common_label_no,
+            translations.tr_melisdashboardplugincreator_delete_plugin_thumbnail_title,
+            translations.tr_melisdashboardplugincreator_delete_plugin_thumbnail_confirm,              
+            function() {   
+                var ajaxUrl = '/melis/MelisDashboardPluginCreator/DashboardPluginCreator/removePluginThumbnail';
 
-            //remove this one if current algo is ok
-            dataString.push({
-                name: 'pluginFilename',
-                value: $("#pluginThumbnailFileName").val()
-            });
+                $.ajax({
+                    type: 'POST',
+                    url: ajaxUrl,
+                    data: null,
+                    dataType: 'json',
+                    encode: true
+                }).done(function (data) {                        
+                    if(data.success) {            
+                        $('#dpc_plugin_upload_thumbnail').val('');
+                        $('.plugin_thumbnail_div').remove();         
+                                                                              
+                    } else {
+                        melisHelper.melisKoNotification(translations.tr_melisdashboardplugincreator_delete_plugin_thumbnail_title, translations.tr_melisdashboardplugincreator_delete_plugin_thumbnail_error, null);
+                    }
+                    melisCore.flashMessenger();
+                }).fail(function () {
+                    alert( translations.tr_meliscore_error_message );
+                });                              
+          });
 
-            melisCoreTool.pending("#removePluginThumbnail");
-
-            melisCoreTool.confirm(
-                translations.tr_melisdashboardplugincreator_common_label_yes,
-                translations.tr_melisdashboardplugincreator_common_label_no,
-                translations.tr_melisdashboardplugincreator_delete_plugin_thumbnail_title,
-                translations.tr_melisdashboardplugincreator_delete_plugin_thumbnail_confirm,              
-                function() {
-                    $.ajax({
-                        type: 'POST',
-                        url: ajaxUrl,
-                        data: dataString,
-                        dataType: 'json',
-                        encode: true
-                    }).done(function (data) {                        
-                        if(data.success) {
-                            //remove uploaded file
-                            $('#dpc_plugin_upload_thumbnail').val('');
-                            $('.plugin_thumbnail_div').remove();
-                            melisHelper.melisOkNotification(translations.tr_melisdashboardplugincreator_delete_plugin_thumbnail_title, translations.tr_melisdashboardplugincreator_delete_plugin_thumbnail_success);
-                                                         
-                        } else {
-                            melisHelper.melisKoNotification(translations.tr_melisdashboardplugincreator_delete_plugin_thumbnail_title, translations.tr_melisdashboardplugincreator_delete_plugin_thumbnail_error, null);
-                        }
-                        melisCore.flashMessenger();
-                    }).fail(function () {
-                        alert( translations.tr_meliscore_error_message );
-                    });
-              });
-
-            melisCoreTool.done("#removePluginThumbnail");
+        melisCoreTool.done("#removePluginThumbnail");
     });
 
 });
