@@ -103,7 +103,6 @@
     cursor: pointer;
 }
 
-
 /*Plugin thumbnail*/
 .melis-dashboard-plugin-creator-steps-content .plugin_thumbnail{
     width:100%; 
@@ -115,6 +114,10 @@
     margin-bottom: 10px;
     width:190px; 
     height:100px
+}
+
+.melis-dashboard-plugin-creator-steps-content .padding-left-0{
+    padding-left:0px;
 }
 
 .melis-dashboard-plugin-creator-steps-content .padding-left-5{
@@ -144,3 +147,40 @@
         margin-top:15px;
     }
 }
+
+/*for the radio boxes*/
+.melis-dashboard-plugin-creator-steps-content .plugin-creator-radio .form-control{
+    width:15px!important;
+}
+
+.melis-dashboard-plugin-creator-steps-content .plugin-creator-radio label{
+    font-weight: 600 !important;
+}
+
+.melis-dashboard-plugin-creator-steps-content .plugin-creator-radio label > input[type="radio"] {
+    display: none;
+}
+
+.melis-dashboard-plugin-creator-steps-content .plugin-creator-radio label > input[type="radio"] + *::before {
+    content: "";
+    display: inline-block;
+    vertical-align: bottom;
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.3rem;
+    border-radius: 50%;
+    border-style: solid;
+    border-width: 0.1rem;
+    border-color: gray;
+    padding: 8px;
+}
+
+.melis-dashboard-plugin-creator-steps-content .plugin-creator-radio label > input[type="radio"]:checked + *::before {
+    background: radial-gradient(#ce5459 0%, #ce5459 40%, transparent 50%, transparent);
+    border-color: #ce5459;
+}
+
+.melis-dashboard-plugin-creator-steps-content .melis-radio-box{
+    padding-left: 0px;
+}
+

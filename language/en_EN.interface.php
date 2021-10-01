@@ -33,6 +33,7 @@
         'tr_melisdashboardplugincreator_err_plugin_name_exist' => '"%s" already exists for the selected module, please try another one',
         'tr_melisdashboardplugincreator_err_plugin_title_exist' => '"%s" plugin title already exists for the "%s" language of the selected module, please try another one',
         'tr_melisdashboardplugincreator_generate_plugin_error_encountered' => 'Error encountered while generating the dashboard plugin.',
+        'tr_melisdashboardplugincreator_upload_too_big' => 'The picture size should not exceed %s',
 
 	    // Steps
 	    'tr_melisdashboardplugincreator_plugin' => 'Plugin',
@@ -72,9 +73,15 @@
         'tr_melisdashboardplugincreator_dpc_plugin_desc tooltip' => 'Enter the description',       
         'tr_melisdashboardplugincreator_upload_thumbnail' => 'Plugin thumbnail image (recommended 190x100)',
         'tr_melisdashboardplugincreator_upload_thumbnail tooltip' => 'Upload the plugin\'s thumbnail',
+        'tr_melisdashboardplugincreator_common_label_yes' => 'Yes',
+        'tr_melisdashboardplugincreator_common_label_no' => 'No',
+        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_title' => 'Delete Plugin Thumbnail',
+        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_confirm' => 'Are you sure you want to delete this thumbnail?', 
+        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_success' => 'Plugin thumbnail has been successfully deleted',
+        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_error' => 'Error encountered while deleting the plugin thumbnail',
         
         //Step3 Form
-        'tr_melisdashboardplugincreator_title_step_3' => 'Plugin’s dashboard translations and image',
+        'tr_melisdashboardplugincreator_title_step_3' => 'Plugin’s dashboard translations and icon',
         'tr_melisdashboardplugincreator_desc_step_3' => 'Enter the text translations in different languages, at least one language must be filled in.<br>Choose the icon of your plugin that will appear in the left top corner on the dashboard.',
         'tr_melisdashboardplugincreator_plugin_icon' => 'Plugin icon',
         'tr_melisdashboardplugincreator_plugin_icon tooltip' => 'Select the plugin icon',

@@ -32,28 +32,41 @@
     </div>
 </div>
 
-<div class="col-xs-12 col-md-12">
-        <?php
-            $form = $this->stepForm['form2'];
-            echo $this->form()->openTag($form);
-            echo $this->melisFieldCollection($form);
-            echo $this->form()->closeTag();
-        ?>
-  
-        <?php 
-            if(!empty($this->data['thumbnail'])){?>
-                <div class="plugin_thumbnail_div">
-                    <img src="<?= $this->data['thumbnail']?>" class = "plugin_thumbnail">
-                    <div class="hover-details">
-                        <div class="me-p-btn-cont">
-                            <a class="viewImageDocument" href="<?= $this->data['thumbnail']?>" target="_blank">
-                                <i class="fa fa-eye"></i>
-                            </a>                                                             
-                        </div>
+<div class="col-xs-12 col-md-12" id = 'pluginThumbnailUploadArea'>
+    <?php
+        $form = $this->stepForm['form2'];
+        echo $this->form()->openTag($form);
+        echo $this->melisFieldCollection($form);
+        echo $this->form()->closeTag();
+
+        if(!empty($this->data['thumbnail'])){
+            $explodePath = explode('/',$this->data['thumbnail']);
+            $fileName = $explodePath[count($explodePath)-1];
+
+            $form->get('dpc_plugin_upload_thumbnail')->setValue($fileName);
+        }
+    ?>
+
+    <input type='hidden' name='pluginThumbnailFileName' id='pluginThumbnailFileName' value='<?=$fileName?>'>  
+                 
+    <?php 
+        if(!empty($this->data['thumbnail'])){ ?>
+            <div class="plugin_thumbnail_div" >
+                <img src="<?= $this->data['thumbnail']?>" class = "plugin_thumbnail">  
+                <div class="hover-details">
+                    <div class="me-p-btn-cont">
+                        <a class="" href="<?= $this->data['thumbnail']?>" target="_blank">
+                            <i class="fa fa-eye"></i>
+                        </a>       
+                        <a id="removePluginThumbnail" data-type="image">
+                            <i class="fa fa-times"></i>
+                        </a>                                                                              
                     </div>
                 </div>
-        <?php    }
-        ?>        
+             </div>
+    <?php    }
+    ?>           
+              
 </div>
 
 

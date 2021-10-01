@@ -15,6 +15,7 @@ use Laminas\View\Model\ViewModel;
 use Laminas\Form\Form;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\Validator\File\IsImage;
+use Laminas\Validator\File\Size;
 use Laminas\File\Transfer\Adapter\Http;
 use MelisCore\Controller\MelisAbstractActionController;
 
@@ -930,7 +931,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             $upload = false;
             $textMessage = '';
             $fileName = '';
-        
+
             $imageValidator = new IsImage([
                 'messages' => [
                     'fileIsImageFalseType' => $tool->getTranslation('tr_melisdashboardplugincreator_save_upload_image_imageFalseType'),
@@ -941,21 +942,43 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
             if(!empty($uploadedFile['name'])){ 
                
-                if($this->createFolder($thumbnailTempPath)){           
-                    $adapter = new Http();     
-                    $validator = [$imageValidator];                    
-                    $fileName = $uploadedFile['name'];               
-                    $adapter->setValidators($validator, $fileName);
-
-                    /** Ensuring file is an image is  */
+                if($this->createFolder($thumbnailTempPath)){    
+                    $fileName = str_replace(' ','_',trim($uploadedFile['name']));
+                  
+                    /** validate image  */
                     if(!empty($uploadedFile['tmp_name'])) {
+
+                        //check if file is image
                         $sourceImg = @imagecreatefromstring(@file_get_contents($uploadedFile['tmp_name']));
                         if ($sourceImg === false) {                          
                             return array($upload, $fileName, $tool->getTranslation('tr_melisdashboardplugincreator_save_upload_image_imageFalseType'));
                         }
+
+                        //check if size does not exceed the limit set
+                        //set size validator
+                        $melisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');
+                        $pluginThumbnailConfig = $melisCoreConfig->getItem('melisdashboardplugincreator/datas/plugin_thumbnail');          
+                        $minSize = $pluginThumbnailConfig['min_size'];
+                        $maxSize = $pluginThumbnailConfig['max_size'];
+                    
+                        // Limit the file size to between 10kB and 4MB
+                        $sizeValidator = new Size([
+                            'min' => $minSize,              
+                            'max' => $maxSize,
+                        ]);
+
+                        // Perform validation with file path
+                        if (!$sizeValidator->isValid($uploadedFile['tmp_name'])) {                           
+                            return array($upload, $fileName, $tool->getTranslation('tr_melisdashboardplugincreator_upload_too_big', array($this->formatBytes($maxSize)))   );
+                        }
                     }
 
-                    if($adapter->isValid()) {                                                                                      
+
+                    $adapter = new Http();     
+                    $validator = array($imageValidator);  
+                    $adapter->setValidators($validator, $fileName);
+
+                    if($adapter->isValid()) {
                         $adapter->setDestination($thumbnailTempPath);
                         //adds file directory to filename      
                         $fileName = $thumbnailTempPath .'/'. $fileName;          
@@ -971,7 +994,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                         } else {                          
                             $textMessage = $tool->getTranslation('tr_melisdashboardplugincreator_save_upload_error_encounter');
                         }
-                    } else {                                  
+                    } else {   
                         foreach ($adapter->getMessages() as $message) {
                             $textMessage = $message;
                         }
@@ -1017,10 +1040,10 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
 
     /**
-     * This method removes the temp thumbnail folder for the current session
+     * This method removes the temp thumbnail directory for the current session
      * @return boolean
     */
-    public function removeTempThumbnailAction()
+    public function removeTempThumbnailDirAction()
     {   
         // Initializing the Dashboard Plugin creator session container
         $container = new Container('dashboardplugincreator');
@@ -1081,6 +1104,16 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         return $modulePlugins;
     }
 
+    /*ref: MelisComDocumentController*/
+    /*this will format the size of the uploaded file into kb*/
+    private function formatBytes($bytes) {
+        $size = $bytes;
+        $units = array( 'B', 'Ko', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        $power = $size > 0 ? floor(log($size, 1024)) : 0;
+        return round(number_format($size / pow(1024, $power), 2, '.', ',')) .  $units[$power];
+    }
+
+
     /**
      * This will get all of the existing translated values of 'name' (plugin menu title) config of the plugin used in validation for the duplicates
      * @param array $modulePlugins -> value is the  $plugin['datas']['name'] of the existing dashboard plugin ex: tr_melistoolprospects_dashboard_Prospects 
@@ -1115,4 +1148,31 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         return $nameTranslationArr;
     }
 
+
+    /**
+     * This method will delete the uploaded plugin thumbnail from the session data
+     * @return boolean
+    */
+    public function removePluginThumbnailAction()
+    {   
+        $request = $this->getRequest();
+        $postValues = get_object_vars($request->getPost()); 
+        $fileNamePreview = trim(str_replace(' ','_',$postValues['pluginFilename'])); //filename of the current thumbnail in preview 
+
+        // Initializing the Dashboard Plugin creator session container
+        $container = new Container('dashboardplugincreator');
+        
+        if(!empty($container['melis-dashboardplugincreator'])){ 
+
+            if(!empty($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'])){
+                unset($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail']);
+            }          
+        }
+          
+        $results = array(
+            'success' => 1       
+        );
+
+        return new JsonModel($results);
+    }
 }

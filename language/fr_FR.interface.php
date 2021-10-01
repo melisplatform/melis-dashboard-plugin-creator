@@ -1,7 +1,7 @@
 <?php
     return [	
-	    'tr_melisdashboardplugincreator_title' => 'Créateur de plugins du Dashboard',
-		'tr_melisdashboardplugincreator_desc' => 'Le créateur de plugins du Dashboard génère des nouveaux plugins prêt à l\'emploi.',
+	    'tr_melisdashboardplugincreator_title' => 'Créateur de Dashboard plugin',
+		'tr_melisdashboardplugincreator_desc' => 'Le créateur de Dashboard plugin génère des nouveaux plugins prêt à l\'emploi.',
 
 		//Buttons
 		'tr_melisdashboardplugincreator_back' => 'Retour',
@@ -33,12 +33,13 @@
 		'tr_melisdashboardplugincreator_err_plugin_name_exist' => '"%s" existe déjà pour le module sélectionné, veuillez en choisir un autre',
 		'tr_melisdashboardplugincreator_err_plugin_title_exist' => 'Le titre du plugin "%s" existe déjà pour la langue "%s" du module sélectionné',
 		'tr_melisdashboardplugincreator_generate_plugin_error_encountered' => 'Erreurs lors de la génération du plugin.',
+		'tr_melisdashboardplugincreator_upload_too_big' => 'La taille de l\'image ne doit pas excéder %s',
 
 		// Steps
 		'tr_melisdashboardplugincreator_plugin' => 'Plugin',
 		'tr_melisdashboardplugincreator_menu_texts_display' => 'Textes du menu et affichage',
 		'tr_melisdashboardplugincreator_dashboard_texts_display' => 'Textes du dashboard et affichage',
-		'tr_melisdashboardplugincreator_summary' => 'Résumé',
+		'tr_melisdashboardplugincreator_summary' => 'Récapitulatif',
 		'tr_melisdashboardplugincreator_finalization' => 'Finalisation',
 
 		//Step1 Form
@@ -64,7 +65,7 @@
 		'tr_melisdashboardplugincreator_dpc_existing_module_placeholder' => 'Choisissez un module',
 
 		//Step2 Form
-		'tr_melisdashboardplugincreator_title_step_2' => 'Traductions et images du menu du plugin',
+		'tr_melisdashboardplugincreator_title_step_2' => 'Traductions et images du menu des plugin',
 		'tr_melisdashboardplugincreator_desc_step_2' => 'Saisissez la traduction du texte dans les différentes langues, au moins une langue doit être saisie.<br>Choisissez l\'image du plugin qui apparaîtra dans le menu de droite.',
 		'tr_melisdashboardplugincreator_dpc_plugin_title' => 'Titre du plugin',
 		'tr_melisdashboardplugincreator_dpc_plugin_title tooltip' => 'Saisissez le titre du plugin',
@@ -72,10 +73,16 @@
 		'tr_melisdashboardplugincreator_dpc_plugin_desc tooltip' => 'Saisissez la description',       
 		'tr_melisdashboardplugincreator_upload_thumbnail' => 'Image du plugin(190x100 recommandé)',
 		'tr_melisdashboardplugincreator_upload_thumbnail tooltip' => 'Uploadez l\'image du plugin',
+		'tr_melisdashboardplugincreator_common_label_yes' => 'Oui',
+        'tr_melisdashboardplugincreator_common_label_no' => 'Non',
+        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_title' => 'Delete Plugin Thumbnail',
+        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_confirm' => 'Are you sure you want to delete this thumbnail?',
+        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_success' => 'Plugin thumbnail has been successfully deleted',   
+        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_error' => 'Error encountered while deleting the plugin thumbnail',     
 
 		//Step3 Form
-		'tr_melisdashboardplugincreator_title_step_3' => 'Traductions et image du plugin du dashboard',
-		'tr_melisdashboardplugincreator_desc_step_3' => 'Saisissez la traduction du texte dans les différentes langues, au moins une langue doit être saisie.<br>Choisissez l\'icone du plugin qui apparaîtra dans le coin à gauche du plugin.',
+		'tr_melisdashboardplugincreator_title_step_3' => 'Traductions et icône du Dashboard plugin',
+		'tr_melisdashboardplugincreator_desc_step_3' => 'Saisissez la traduction du texte dans les différentes langues, au moins une langue doit être saisie.<br>Choisissez l\'icône du plugin qui apparaîtra dans le coin à gauche du plugin.',
 		'tr_melisdashboardplugincreator_plugin_icon' => 'Icone du plugin',
 		'tr_melisdashboardplugincreator_plugin_icon tooltip' => 'Sélectionnez l\'icone du plugin',
 		'tr_melisdashboardplugincreator_dashboard_tab_icon' => 'Icones des onglets du plugin',
@@ -83,7 +90,7 @@
 		'tr_melisdashboardplugincreator_dashboard_tab_label' => 'Onglet du plugin',
 
 		 //Step4 Form
-		'tr_melisdashboardplugincreator_title_step_4' => 'Résumé',
+		'tr_melisdashboardplugincreator_title_step_4' => 'Récapitulatif',
 		'tr_melisdashboardplugincreator_desc_step_4' => 'Vérifiez les paramètres avant la création du plugin',
 		'tr_melisdashboardplugincreator_desc_step_4_dashboard_tab' => 'Onglet du plugin',
 		'tr_melisdashboardplugincreator_desc_step_4_dashboard_tab_icon' => 'Icone de l\'onglet du plugin',

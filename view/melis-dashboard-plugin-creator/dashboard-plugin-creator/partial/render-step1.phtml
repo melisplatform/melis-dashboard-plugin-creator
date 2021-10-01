@@ -47,10 +47,10 @@
                     <?php foreach($pluginTypeOptions as $optKey => $optVal){ 
                         $class = $optKey=='multi'?'col-md-2 multi':'col-md-2';
                         ?>
-                            <div class="<?=$class?>">
+                            <div class="<?=$class?> plugin-creator-radio">
                                 <label class="melis-radio-box" for="<?=$optKey.str_replace(' ', '_', $optVal)?>">   
-                                    <input class = "<?=$val->getAttribute('class')?>" type="radio" value="<?=$optKey?>" name="<?=$key?>" id="<?= $optKey.str_replace(' ', '_', $optVal) ?>" required="required"  <?=$pluginTypeValue==$optKey?"checked":""?>/><?=$optVal?>
-                                    <span class="melis-radio-box-circle"></span>
+                                    <input class = "<?=$val->getAttribute('class')?>" type="radio" value="<?=$optKey?>" name="<?=$key?>" id="<?= $optKey.str_replace(' ', '_', $optVal) ?>" required="required"  <?=$pluginTypeValue==$optKey?"checked":""?>/>
+                                    <span><?=$optVal?></span>
                                 </label>
                             </div>
 
@@ -72,10 +72,10 @@
              <?php   }else if($key == 'dpc_plugin_destination'){ ?>
                         <div class = "row">
                             <?php foreach($pluginDestinationOptions as $optKey => $optVal){ ?>
-                                <div class="col-md-2">
+                                <div class="col-md-2 plugin-creator-radio">
                                     <label class="melis-radio-box" for="<?=$optKey.str_replace(' ', '_', $optVal)?>">   
-                                        <input class = "<?=$val->getAttribute('class')?>" type="radio" value="<?=$optKey?>" name="<?=$key?>" id="<?= $optKey.str_replace(' ', '_', $optVal) ?>" required="required"  <?=$pluginDestinationValue==$optKey?"checked":""?> /><?=$optVal?>
-                                        <span class="melis-radio-box-circle"></span>
+                                        <input class = "<?=$val->getAttribute('class')?>" type="radio" value="<?=$optKey?>" name="<?=$key?>" id="<?= $optKey.str_replace(' ', '_', $optVal) ?>" required="required"  <?=$pluginDestinationValue==$optKey?"checked":""?> />
+                                        <span><?=$optVal?></span>
                                     </label>
                                 </div>
                         <?php  }                               
@@ -87,16 +87,18 @@
                         </div>
             <?php }else if ($key == 'dpc_existing_module_name'){ ?>
                         <div class = "form-group input-group">
-                            <select id="<?=$key?>" name="<?=$key?>" required="required" class = "<?=$val->getAttribute('class')?>">
-                                <option value=""><?=$this->translate($existingModuleField->getOptions()['empty_option'])?></option>
-                                <?php 
-                                    if($existingModuleOptions){
-                                        foreach($existingModuleOptions as $module){ ?>
-                                            <option value="<?=$module?>" <?=$existingModuleField->getValue()==$module?"selected":""?>><?=$module?></option>
-                                    <?php  }
-                                    }
-                                ?>
-                            </select>
+                            <div class="col-md-2 padding-left-0">
+                                <select id="<?=$key?>" name="<?=$key?>" required="required" class = "<?=$val->getAttribute('class')?>">
+                                    <option value=""><?=$this->translate($existingModuleField->getOptions()['empty_option'])?></option>
+                                    <?php 
+                                        if($existingModuleOptions){
+                                            foreach($existingModuleOptions as $module){ ?>
+                                                <option value="<?=$module?>" <?=$existingModuleField->getValue()==$module?"selected":""?>><?=$module?></option>
+                                        <?php  }
+                                        }
+                                    ?>
+                                </select>
+                            </div>                            
                         </div>                        
            <?php } ?>  
 

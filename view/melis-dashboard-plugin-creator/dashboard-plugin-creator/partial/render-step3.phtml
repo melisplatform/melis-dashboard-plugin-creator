@@ -62,11 +62,10 @@
             <?php foreach($pluginIconOptions as $optKey => $optVal){ 
                 $id = $pluginIconField->getAttribute('name').'_'.str_replace(' ', '_', $optVal);                             
                 ?>
-                    <div class="col-md-1">
+                    <div class="col-md-1 plugin-creator-radio">
                         <label class="melis-radio-box" for="<?=$id?>">                            
                             <input class = "<?=$pluginIconField->getAttribute('class')?>" type="radio" value="<?=$optKey?>" name="<?=$pluginIconField->getAttribute('name')?>" id="<?=$id?>" required="required"  <?=$pluginIconField->getValue()==$optKey?"checked":""?>/> 
-                            <span class="melis-radio-box-circle"></span> 
-                            <span class="fa <?=$optVal?> fa-lg"></span>                            
+                            <span><span class="fa <?=$optVal?> fa-lg"></span></span>                            
                         </label>                                            
                     </div>                           
             <?php    }                               
@@ -99,11 +98,10 @@
                                 <?php foreach($pluginTabIconOptions as $optKey => $optVal){  
                                     $id = $pluginTabIconField->getAttribute('name').'_'.str_replace(' ', '_', $optKey);                  
                                     ?>
-                                        <div class="col-md-1">
+                                        <div class="col-md-1 plugin-creator-radio">
                                             <label class="melis-radio-box" for="<?=$id?>"> 
-                                                <input class = "<?=$pluginTabIconField->getAttribute('class')?>" type="radio" value="<?=$optKey?>" name="<?=$pluginTabIconField->getAttribute('name')?>" id="<?=$id?>" required="required"  <?=$pluginTabIconField->getValue()==$optKey?"checked":""?>/>
-                                                <span class="melis-radio-box-circle"></span> 
-                                                <span class="fa <?=$optVal?> fa-lg"></span>                                
+                                                <input class = "<?=$pluginTabIconField->getAttribute('class')?>" type="radio" value="<?=$optKey?>" name="<?=$pluginTabIconField->getAttribute('name')?>" id="<?=$id?>" required="required"  <?=$pluginTabIconField->getValue()==$optKey?"checked":""?>/>                                                
+                                                <span><span class="fa <?=$optVal?> fa-lg"></span></span>                                
                                             </label>
                                         </div>                           
                             <?php    }                               

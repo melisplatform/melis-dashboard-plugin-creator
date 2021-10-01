@@ -87,8 +87,11 @@ return [
                     'heart' => 'fa-heart',
                     'inbox' => 'fa-inbox',
                     'envelope' => 'fa-envelope'
-                ]
-
+                ],              
+                'plugin_thumbnail' => [
+                    'min_size' => 1,
+                    'max_size' => '512000' 
+                ]  
             ],
         ]
     ]

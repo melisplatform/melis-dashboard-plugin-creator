@@ -174,8 +174,7 @@ return [
                                 ], 
                                
                             ],
-                            'filters'  => [
-                                ['name' => 'StripTags'],
+                            'filters'  => [                              
                                 ['name' => 'StringTrim'],
                             ],
                         ],
@@ -285,7 +284,6 @@ return [
                                 ]                              
                             ],
                             'filters'  => [
-                                ['name' => 'StripTags'],
                                 ['name' => 'StringTrim'],
                             ],
                         ],
