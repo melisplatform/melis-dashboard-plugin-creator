@@ -154,8 +154,13 @@
 }
 
 .melis-dashboard-plugin-creator-steps-content .plugin-creator-radio label{
-    font-weight: 600 !important;
+    font-weight: 600 !important; 
 }
+
+.melis-dashboard-plugin-creator-steps-content #melisdashboardplugincreator_step3 .plugin-creator-radio label{  
+    font-size: 18px !important;
+}
+
 
 .melis-dashboard-plugin-creator-steps-content .plugin-creator-radio label > input[type="radio"] {
     display: none;
@@ -172,7 +177,8 @@
     border-style: solid;
     border-width: 0.1rem;
     border-color: gray;
-    padding: 8px;
+    padding: 8px;   
+    margin-bottom: 2px;
 }
 
 .melis-dashboard-plugin-creator-steps-content .plugin-creator-radio label > input[type="radio"]:checked + *::before {
@@ -187,3 +193,5 @@
 #dpc_existing_module_name{
     min-width: 200px;
 }
+
+
