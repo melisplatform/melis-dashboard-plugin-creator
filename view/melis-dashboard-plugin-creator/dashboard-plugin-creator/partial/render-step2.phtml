@@ -47,7 +47,14 @@
         }
     ?>
 
-                    
+    <div class="progressContent hidden">
+        <?= $this->translate('tr_melisdashboardplugincreator_input_file_uploading'); ?>
+        <div class="progress">
+            <span class="status float-right text-danger hidden">0%</span>
+            <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow=0 aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+            </div>
+        </div><br/>
+    </div>                  
     <?php 
         if(!empty($this->data['thumbnail'])){ ?>
             <div class="plugin_thumbnail_div" >

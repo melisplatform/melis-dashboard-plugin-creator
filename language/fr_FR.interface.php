@@ -77,7 +77,8 @@
         'tr_melisdashboardplugincreator_common_label_no' => 'Non',
         'tr_melisdashboardplugincreator_delete_plugin_thumbnail_title' => 'Supprimer l\'image',
         'tr_melisdashboardplugincreator_delete_plugin_thumbnail_confirm' => 'Êtes-vous sûr(e) de vouloir supprimer l\'image ?',
-        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_error' => 'Erreur lors de la suppression de l\'imag',     
+        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_error' => 'Erreur lors de la suppression de l\'imag',    
+        'tr_melisdashboardplugincreator_input_file_uploading' => 'Upload...', 
 
 		//Step3 Form
 		'tr_melisdashboardplugincreator_title_step_3' => 'Traductions et icône du Dashboard plugin',
