@@ -170,7 +170,9 @@ $(function(){
         var form = $("#id-dashboard-plugin-creator-thumbnail-upload-form")[0]; // You need to use standard javascript object here
         var uploadFormData = new FormData(form);
         uploadFormData.append('file', $('input[type=file]')[0].files[0]); 
-       
+        
+        melisCoreTool.pending(".btn-steps");
+
         $.ajax({
             type: 'POST',
             url:  uploadUrl,
@@ -191,6 +193,8 @@ $(function(){
         }).done(function (data) {
            
             if(data.success){   
+                $("div.progressContent").addClass("hidden");
+
                 //remove highlight errors
                 $("form#id-dashboard-plugin-creator-thumbnail-upload-form .form-control").parents('.form-group').find("label").css("color","#686868");  
 
@@ -226,6 +230,9 @@ $(function(){
                 imageHolder.show();
                    
             }else{       
+
+                $("div.progressContent").addClass("hidden");
+
                 if($('.plugin_thumbnail_div').length){
                     $('.plugin_thumbnail_div').remove();
                 }
@@ -233,8 +240,8 @@ $(function(){
                 melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors);
                 tcHighlightErrors(0, data.errors, ".dashboard-plugin-creator-step-2");
             }
-
-            $("div.progressContent").addClass("hidden");
+            
+            melisCoreTool.done(".btn-steps");
 
         }).fail(function(xhr, textStatus, errorThrown) {  
             console.log( translations.tr_meliscore_error_message );
