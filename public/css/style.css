@@ -143,6 +143,17 @@
     -o-transform: translate(-50%, -50%);
 }
 
+.melis-dashboard-plugin-creator-steps-content .plugin_thumbnail_div .me-p-btn-cont a {
+    padding: 11px 14px;
+    margin: 0 3px; 
+    background: #fff; 
+    border-radius: 100%; 
+    display: inline-block; 
+    cursor: pointer;
+    height: 42px; 
+    width: 42px; 
+}
+
 
 .melis-dashboard-plugin-creator-steps-content .padding-left-0{
     padding-left:0px;
