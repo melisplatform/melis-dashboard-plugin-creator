@@ -65,7 +65,7 @@
 		'tr_melisdashboardplugincreator_dpc_existing_module_placeholder' => 'Choisissez un module',
 
 		//Step2 Form
-		'tr_melisdashboardplugincreator_title_step_2' => 'Traductions et images du menu des plugin',
+		'tr_melisdashboardplugincreator_title_step_2' => 'Traductions et images du menu des plugins',
 		'tr_melisdashboardplugincreator_desc_step_2' => 'Saisissez la traduction du texte dans les différentes langues, au moins une langue doit être saisie.<br>Choisissez l\'image du plugin qui apparaîtra dans le menu de droite.',
 		'tr_melisdashboardplugincreator_dpc_plugin_title' => 'Titre du plugin',
 		'tr_melisdashboardplugincreator_dpc_plugin_title tooltip' => 'Saisissez le titre du plugin',

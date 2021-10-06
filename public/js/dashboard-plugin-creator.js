@@ -206,7 +206,7 @@ $(function(){
                     imageHolder.empty();
                 }else{                    
                     //append image holder to the upload area div
-                    $('<div class="plugin_thumbnail_div"></div>').appendTo(uploadArea);     
+                    $('<div class="col-xs-12 col-lg-6"><div class="plugin_thumbnail_div"></div></div>').appendTo(uploadArea);     
                 }   
                
                 $("<img />", {

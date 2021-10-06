@@ -739,7 +739,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param string $str
      * @return string
      */
-    protected function cleanString($str)
+    public function cleanString($str)
     {
         $str = preg_replace("/[áàâãªä]/u", "a", $str);
         $str = preg_replace("/[ÁÀÂÃÄ]/u", "A", $str);
@@ -761,6 +761,17 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $str = str_replace("Ñ", "N", $str);
 
         return ($str);
+    }
+
+    /**
+     * Remove accents in the string
+     * @param string $str
+     * @return string
+     */
+    public function removeAccents($str){
+        $transliterator = \Transliterator::createFromRules(':: Any-Latin; :: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: NFC;', \Transliterator::FORWARD);
+        $normalized = $transliterator->transliterate($str);
+        return $normalized;
     }        
 
     /**

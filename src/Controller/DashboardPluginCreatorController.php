@@ -946,8 +946,12 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             if(!empty($uploadedFile['name'])){ 
                
                 if($this->createFolder($thumbnailTempPath)){    
-                    $fileName = str_replace(' ','_',trim($uploadedFile['name']));
-                  
+
+                    //call dashboard plugin creator service 
+                    $dpcService = $this->getServiceManager()->get('MelisDashboardPluginCreatorService');
+                    //clean filename by removing accents and spaces
+                    $fileName = $dpcService->removeAccents(str_replace(' ','_',trim($uploadedFile['name'])));
+
                     /** validate image  */
                     if(!empty($uploadedFile['tmp_name'])) {
 
