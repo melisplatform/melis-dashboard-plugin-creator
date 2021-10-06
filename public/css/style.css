@@ -154,6 +154,13 @@
     width: 42px; 
 }
 
+/*Plugin Thumbnail*/
+.melis-dashboard-plugin-creator-steps-content .plugin_thumbnail_div_preview_summary{        
+    width: 190px;
+    height: auto;
+    max-width: 100%;
+}
+
 
 .melis-dashboard-plugin-creator-steps-content .padding-left-0{
     padding-left:0px;

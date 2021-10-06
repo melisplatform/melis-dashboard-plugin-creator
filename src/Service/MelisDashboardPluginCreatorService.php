@@ -39,7 +39,12 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * This will generate the dashboard plugin based on the parameters stored in the current session   
      * @return boolean
      */
-    public function generateDashboardPlugin(){           
+    public function generateDashboardPlugin(){   
+        // Event parameters prepare
+        $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
+        // Sending service start event
+        $arrayParameters = $this->sendEvent('melisdashboard_plugin_creator_service_generate_dashhboard_plugin_start', $arrayParameters);
+
         //set module name
         if($this->dpcSteps['step_1']['dpc_plugin_destination'] == self::EXISTING_MODE){
             $this->moduleName = $this->dpcSteps['step_1']['dpc_existing_module_name'];
@@ -61,13 +66,14 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             //remove temp thumbnail directory of the current session    
             $tempPath = pathinfo($this->getTempThumbnail(), PATHINFO_DIRNAME);            
             $this->removeDir($tempPath);
-
-            return true;
         }else{
             //this will rollback the steps performed when generating the dashboard plugin
-            $this->rollbackPluginGeneration($moduleDir);
-            return false;            
+            $this->rollbackPluginGeneration($moduleDir);              
         }    
+
+        $arrayParameters['results'] = $isSuccessful;
+        $arrayParameters = $this->sendEvent('melisdashboard_plugin_creator_service_get_module_existing_plugins_end', $arrayParameters);
+        return $arrayParameters['results']; 
     }
 
     /**
@@ -312,6 +318,11 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @return string
      */
     public function getTempThumbnail(){
+        // Event parameters prepare
+        $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
+        // Sending service start event
+        $arrayParameters = $this->sendEvent('melisdashboard_plugin_creator_service_get_temp_thumbnail_plugins_start', $arrayParameters);
+
         //session container     
         $container = new Container('dashboardplugincreator');     
         $sessionID = $container->getManager()->getId(); 
@@ -327,7 +338,9 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $baseName = pathinfo($this->dpcSteps['step_2']['plugin_thumbnail'], PATHINFO_BASENAME);      
         $pluginThumbnail = $thumbnailTempPath.$baseName;
 
-        return $pluginThumbnail;
+        $arrayParameters['results'] = $pluginThumbnail;
+        $arrayParameters = $this->sendEvent('melisdashboard_plugin_creator_service_get_temp_thumbnail_plugins_end', $arrayParameters);
+        return $arrayParameters['results']; 
     }
 
     /**
@@ -689,6 +702,99 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
         return true;
     } 
+
+
+     /**
+     * This will get all of the names and plugin ids of the existing plugins for the given module 
+     * @param ViewModel $viewStep
+     * @param string $existingModuleName
+     * @return array
+    */     
+    public function getModuleExistingPlugins($existingModuleName){      
+        // Event parameters prepare
+        $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
+        // Sending service start event
+        $arrayParameters = $this->sendEvent('melisdashboard_plugin_creator_service_get_module_existing_plugins_start', $arrayParameters);
+
+        $modulePlugins = [];
+        $dashboardPluginsService = $this->getServiceManager()->get('MelisCoreDashboardPluginsService');
+        $melisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');
+
+        //get the dashboard untranslated config translations
+        $dashboardPlugins = $melisCoreConfig->getItem('/meliscore/interface/melis_dashboardplugin/interface/melisdashboardplugin_section','',false);
+        if(isset($dashboardPlugins['interface']) && count($dashboardPlugins['interface'])) {
+            foreach ($dashboardPlugins['interface'] as $pluginName => $pluginConf) {
+                $plugin = $pluginConf;
+
+                $path = $pluginConf['conf']['type'] ?? null;
+
+                if($path) {
+                    $plugin = $melisCoreConfig->getItem($path,'',false);
+                }
+           
+                if(is_array($plugin) && count($plugin) && $dashboardPluginsService->canAccess($pluginName)) {
+                    if(!isset($plugin['datas']['skip_plugin_container'])) {
+                        $module = $plugin['forward']['module'];                                  
+                                       
+                        //save to array the list of plugins for the current module  
+                        if(trim($module) == $arrayParameters['existingModuleName']){
+                            $name = !empty($plugin['datas']['name']) ? $plugin['datas']['name'] : $pluginName;//the menu title
+                            $pluginId = !empty($plugin['datas']['plugin_id']) ? $plugin['datas']['plugin_id'] : '';//plugin id
+
+                            $modulePlugins[$module]['name'][] = $name;
+                            $modulePlugins[$module]['pluginId'][] = $pluginId;
+                        }                              
+                    }
+                }
+            }            
+        }
+       
+        $arrayParameters['results'] = $modulePlugins;
+        $arrayParameters = $this->sendEvent('melisdashboard_plugin_creator_service_get_module_existing_plugins_end', $arrayParameters);
+        return $arrayParameters['results']; 
+    }
+
+    /**
+     * This will get all of the existing translated values of 'name' (plugin menu title) config of the plugin used in validation for the duplicates
+     * @param array $modulePlugins -> value is the  $plugin['datas']['name'] of the existing dashboard plugin ex: tr_melistoolprospects_dashboard_Prospects 
+     * @param string $existingModuleName 
+     * @return array
+    */     
+    public function getExistingTranslatedPluginTitle($modulePlugins, $existingModuleName){   
+        // Event parameters prepare
+        $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
+        // Sending service start event
+        $arrayParameters = $this->sendEvent('melisdashboard_plugin_creator_service_get_existing_translated_plugin_title_start', $arrayParameters);
+
+        $nameTranslationArr = [];//this will store the translated values of the config 'name' -> plugin menu title
+   
+        //get here the translations of each plugin inside the module
+        if($arrayParameters['modulePlugins']){
+            //get language files of the module
+            $moduleDir = $_SERVER['DOCUMENT_ROOT'].'/../module/'.$arrayParameters['existingModuleName'].'/language/';
+            $translationFiles = array_diff(scandir($moduleDir), array('.', '..'));
+
+            //call dashboard plugin creator service 
+            $dpcService = $this->getServiceManager()->get('MelisDashboardPluginCreatorService');
+            
+            foreach($arrayParameters['modulePlugins'][$existingModuleName]['name'] as $key => $value){
+                //get the translated version of the 'name' config to compare against with the inputted value
+                foreach($translationFiles as $file){
+                    $locale = explode('.',$file);
+                    $locale = $locale[0];
+
+                    $translationArr = include $moduleDir.$file;
+                    $nameTranslationArr[$locale][] = $dpcService->removeExtraSpace($translationArr[$value]);//remove extra spaces of the translated values for the validation of the plugin title 
+                }
+            }
+        }
+
+        //returns the translation of each language of all the dashboard plugins of the selected existing module
+        $arrayParameters['results'] = $nameTranslationArr;
+        $arrayParameters = $this->sendEvent('melisdashboard_plugin_creator_service_get_existing_translated_plugin_title_end', $arrayParameters);
+        return $arrayParameters['results']; 
+    }
+
 
 
     /**

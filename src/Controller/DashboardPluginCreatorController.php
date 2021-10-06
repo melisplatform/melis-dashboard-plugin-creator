@@ -235,7 +235,9 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                 //validate plugin name if it already exists for the selected existing module
                 if(!empty($postValues['step-form']['dpc_existing_module_name'])){  
                     $existingModuleName = $postValues['step-form']['dpc_existing_module_name'];
-                    $modulePlugins = $this->getModuleExistingPlugins($existingModuleName);
+                    //call dashboard plugin creator service 
+                    $dpcService = $this->getServiceManager()->get('MelisDashboardPluginCreatorService');
+                    $modulePlugins = $dpcService->getModuleExistingPlugins($existingModuleName);
 
                     if($modulePlugins && $modulePlugins[$existingModuleName]['pluginId']){
                         $dashboardPluginCreatorSrv = $this->getServiceManager()->get('MelisDashboardPluginCreatorService');
@@ -853,7 +855,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                     //call dashboard plugin creator service 
                     $dpcService = $this->getServiceManager()->get('MelisDashboardPluginCreatorService');
 
-                    $existingTranslatedPluginTitle = $this->getExistingTranslatedPluginTitle($this->getModuleExistingPlugins($container['melis-dashboardplugincreator']['step_1']['dpc_existing_module_name']), $container['melis-dashboardplugincreator']['step_1']['dpc_existing_module_name']);
+                    $existingTranslatedPluginTitle = $dpcService->getExistingTranslatedPluginTitle($dpcService->getModuleExistingPlugins($container['melis-dashboardplugincreator']['step_1']['dpc_existing_module_name']), $container['melis-dashboardplugincreator']['step_1']['dpc_existing_module_name']);
                
                     //check here if the plugin title for the specific language has duplicates
                     if($existingTranslatedPluginTitle && in_array($dpcService->removeExtraSpace($stepFormtmp->get('dpc_plugin_title')->getValue()), $existingTranslatedPluginTitle[$lang['lang_locale']])){
@@ -1137,48 +1139,6 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         return true;
     }
 
-    /**
-     * This will get all of the names and plugin ids of the existing plugins for the given module 
-     * @param ViewModel $viewStep
-     * @param string $existingModuleName
-     * @return array
-    */     
-    private function getModuleExistingPlugins($existingModuleName){        
-        $modulePlugins = [];
-        $dashboardPluginsService = $this->getServiceManager()->get('MelisCoreDashboardPluginsService');
-        $melisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');
-
-        //get the dashboard untranslated config translations
-        $dashboardPlugins = $melisCoreConfig->getItem('/meliscore/interface/melis_dashboardplugin/interface/melisdashboardplugin_section','',false);
-        if(isset($dashboardPlugins['interface']) && count($dashboardPlugins['interface'])) {
-            foreach ($dashboardPlugins['interface'] as $pluginName => $pluginConf) {
-                $plugin = $pluginConf;
-
-                $path = $pluginConf['conf']['type'] ?? null;
-
-                if($path) {
-                    $plugin = $melisCoreConfig->getItem($path,'',false);
-                }
-           
-                if(is_array($plugin) && count($plugin) && $dashboardPluginsService->canAccess($pluginName)) {
-                    if(!isset($plugin['datas']['skip_plugin_container'])) {
-                        $module = $plugin['forward']['module'];                                  
-                                       
-                        //save to array the list of plugins for the current module  
-                        if(trim($module) == $existingModuleName){
-                            $name = !empty($plugin['datas']['name']) ? $plugin['datas']['name'] : $pluginName;//the menu title
-                            $pluginId = !empty($plugin['datas']['plugin_id']) ? $plugin['datas']['plugin_id'] : '';//plugin id
-
-                            $modulePlugins[$module]['name'][] = $name;
-                            $modulePlugins[$module]['pluginId'][] = $pluginId;
-                        }                              
-                    }
-                }
-            }            
-        }
-        return $modulePlugins;
-    }
-
     /*ref: MelisComDocumentController*/
     /*this will format the size of the uploaded file into kb*/
     private function formatBytes($bytes) {
@@ -1188,39 +1148,6 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         return round(number_format($size / pow(1024, $power), 2, '.', ',')) .  $units[$power];
     }
 
-    /**
-     * This will get all of the existing translated values of 'name' (plugin menu title) config of the plugin used in validation for the duplicates
-     * @param array $modulePlugins -> value is the  $plugin['datas']['name'] of the existing dashboard plugin ex: tr_melistoolprospects_dashboard_Prospects 
-     * @param string $existingModuleName 
-     * @return array
-    */     
-    private function getExistingTranslatedPluginTitle($modulePlugins, $existingModuleName){        
-        $nameTranslationArr = [];//this will store the translated values of the config 'name' -> plugin menu title
-   
-        //get here the translations of each plugin inside the module
-        if($modulePlugins){
-            //get language files of the module
-            $moduleDir = $_SERVER['DOCUMENT_ROOT'].'/../module/'.$existingModuleName.'/language/';
-            $translationFiles = array_diff(scandir($moduleDir), array('.', '..'));
-
-            //call dashboard plugin creator service 
-            $dpcService = $this->getServiceManager()->get('MelisDashboardPluginCreatorService');
-            
-            foreach($modulePlugins[$existingModuleName]['name'] as $key => $value){
-                //get the translated version of the 'name' config to compare against with the inputted value
-                foreach($translationFiles as $file){
-                    $locale = explode('.',$file);
-                    $locale = $locale[0];
-
-                    $translationArr = include $moduleDir.$file;
-                    $nameTranslationArr[$locale][] = $dpcService->removeExtraSpace($translationArr[$value]);//remove extra spaces of the translated values for the validation of the plugin title 
-                }
-            }
-        }
-
-        //returns the translation of each language of all the dashboard plugins of the selected existing module
-        return $nameTranslationArr;
-    }
 
     /**
      * This method will delete the uploaded plugin thumbnail from the session data
