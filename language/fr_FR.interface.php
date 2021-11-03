@@ -106,5 +106,5 @@
 		'tr_melisdashboardplugincreator_finalization_success_desc' => 'Vous pouvez activer le plugin manuellement en rechargeant la page',
 		'tr_melisdashboardplugincreator_execute_aadtnl_setup' => 'Derniers réglages en cours',
 		'tr_melisdashboardplugincreator_please_wait' => 'Veuillez patienter',
-		'tr_melisdashboardplugincreator_refreshing' => 'Refchargement'
+		'tr_melisdashboardplugincreator_refreshing' => 'Rechargement'
     ];

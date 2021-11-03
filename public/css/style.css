@@ -240,4 +240,7 @@
     min-width: 200px;
 }
 
+.text-primary-custom {  
+    color: #28a745 !important; 
+}
 

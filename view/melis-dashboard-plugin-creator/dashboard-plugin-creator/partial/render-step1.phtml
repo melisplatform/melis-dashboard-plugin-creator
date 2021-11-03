@@ -21,11 +21,11 @@
         $form->prepare();       
         echo $this->form()->openTag($form);
     
-        foreach($form->getElements() As $key => $val){ ?>               
+        foreach ($form->getElements() As $key => $val) { ?>               
             <div class="form-group" <?=($key=='dpc_tab_count' || (empty($val->getValue()) && ($key=='dpc_new_module_name' || $key=='dpc_existing_module_name')))?'style="display:none"':''?>>    
                     
                 <?php $required = '';
-                if(!empty($val->getAttribute('required'))){
+                if (!empty($val->getAttribute('required'))) {
                     $required = '<sup>*</sup>';
                 }                 
                 ?>
@@ -38,13 +38,13 @@
                 </label>                             
 
                 <?php 
-                    if($key == 'dpc_plugin_name' ){?>                      
+                    if ($key == 'dpc_plugin_name' ) {?>                      
                         <div class = "form-group input-group">
                             <input class = "<?=$val->getAttribute('class')?>" type = "text" id = "<?=$key?>" name = "<?=$key?>" required="required" value="<?=$val->getValue()?>">
                         </div>
-                <?php }else if($key == 'dpc_plugin_type'){ ?>                  
+                <?php } elseif($key == 'dpc_plugin_type') { ?>                  
                     <div class = "row">
-                    <?php foreach($pluginTypeOptions as $optKey => $optVal){ 
+                    <?php foreach ($pluginTypeOptions as $optKey => $optVal) { 
                         $class = $optKey=='multi'?'col-md-2 multi':'col-md-2';
                         ?>
                             <div class="<?=$class?> plugin-creator-radio">
@@ -55,7 +55,7 @@
                             </div>
 
                             <?php 
-                                if($optKey == 'multi'){ ?>      
+                                if ($optKey == 'multi') { ?>      
                                     <div id = 'tab_count_div' class="col-md-7"  <?=empty($tabCountField->getValue())?"style = 'display: none;'":""?>>
                                         <div class="d-flex justify-content-between col-md-4">
                                             <label class="padding-right-5"><?=$this->translate('tr_melisdashboardplugincreator_with')?></label>
@@ -69,7 +69,7 @@
                 ?>
                      </div>
 
-             <?php   }else if($key == 'dpc_plugin_destination'){ ?>
+             <?php  } elseif ($key == 'dpc_plugin_destination') { ?>
                         <div class = "row">
                             <?php foreach($pluginDestinationOptions as $optKey => $optVal){ ?>
                                 <div class="col-md-2 plugin-creator-radio">
@@ -81,18 +81,18 @@
                         <?php  }                               
                         ?>
                         </div>
-            <?php }else if($key == 'dpc_new_module_name'){ ?>     
+            <?php } elseif ($key == 'dpc_new_module_name') { ?>     
                         <div class = "form-group input-group">
                             <input class = "<?=$val->getAttribute('class')?>" type = "text" id = "<?=$key?>" name = "<?=$key?>" required="required" value="<?=$val->getValue()?>">
                         </div>
-            <?php }else if ($key == 'dpc_existing_module_name'){ ?>
+            <?php } elseif ($key == 'dpc_existing_module_name') { ?>
                         <div class = "form-group input-group">
                             <div class="col-md-2 padding-left-0">
                                 <select id="<?=$key?>" name="<?=$key?>" required="required" class = "<?=$val->getAttribute('class')?>">
                                     <option value=""><?=$this->translate($existingModuleField->getOptions()['empty_option'])?></option>
                                     <?php 
-                                        if($existingModuleOptions){
-                                            foreach($existingModuleOptions as $module){ ?>
+                                        if ($existingModuleOptions) {
+                                            foreach ($existingModuleOptions as $module) { ?>
                                                 <option value="<?=$module?>" <?=$existingModuleField->getValue()==$module?"selected":""?>><?=$module?></option>
                                         <?php  }
                                         }

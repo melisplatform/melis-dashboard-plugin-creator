@@ -250,7 +250,7 @@ $(function(){
     });
 
     /*when remove icon is clicked, remove the uploaded thumbnail from the session*/
-    $body.on("click", "#removePluginThumbnail", function() { 
+    $body.on("click", ".melis-dashboard-plugin-creator-steps-content #removePluginThumbnail", function() { 
         melisCoreTool.pending("#removePluginThumbnail");
         melisCoreTool.confirm(
             translations.tr_melisdashboardplugincreator_common_label_yes,

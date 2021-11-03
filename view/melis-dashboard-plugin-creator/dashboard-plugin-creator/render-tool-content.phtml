@@ -5,15 +5,15 @@
 <div class="innerAll spacing-x2 melis-dashboard-plugin-creator" id="<?php echo $id ?>" data-melisKey="<?php echo $melisKey; ?>">
     <div class="innerAll spacing-x2">
        <!-- Tool Content-->
-       <?php if (empty($this->fPErr)){ ?>
+       <?php if (empty($this->fPErr)) { ?>
             <div class="wizard wizard-design">
                 <!-- Wizard heading -->
                 <div class="wizard-head melis-dashboard-plugin-creator-steps">
                     <ul class="bwizard-steps">
                         <?php
-                            if(!empty($this->toolSteps)){
+                            if (!empty($this->toolSteps)) {
                                 $ctr = 0;
-                                foreach($this->toolSteps as $key => $config){
+                                foreach ($this->toolSteps as $key => $config) {
                                     $clss = !$ctr++ ? 'class="active"' : '';
                                     echo '<li '.$clss.' id="dpc_'.$key.'"><span><i class="fa '.$config['icon'].' fa-lg" aria-hidden="true"></i> '.$this->translate($config['name']).'</span></li>';
                                 }
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </div>
-        <?php }else{ ?>
+        <?php } else { ?>
             <div class="alert alert-warning">
                 <h3><?php echo $this->translate('tr_melisdashboardplugincreator_fp_title') ?></h3>
                 <p><?php echo $this->translate('tr_melisdashboardplugincreator_fp_msg') ?></p>

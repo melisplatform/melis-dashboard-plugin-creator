@@ -65,20 +65,20 @@ class Module
             ];
 
             $translationList = [];
-            if(file_exists($_SERVER['DOCUMENT_ROOT'].'/../module/MelisModuleConfig/config/translation.list.php')){
+            if (file_exists($_SERVER['DOCUMENT_ROOT'].'/../module/MelisModuleConfig/config/translation.list.php')) {
                 $translationList = include 'module/MelisModuleConfig/config/translation.list.php';
             }
 
-            foreach($translationType as $type){
+            foreach ($translationType as $type) {
 
                 $transPath = '';
                 $moduleTrans = __NAMESPACE__."/$locale.$type.php";
 
-                if(in_array($moduleTrans, $translationList)){
+                if (in_array($moduleTrans, $translationList)) {
                     $transPath = "module/MelisModuleConfig/languages/".$moduleTrans;
                 }
 
-                if(empty($transPath)){
+                if (empty($transPath)) {
 
                     // if translation is not found, use melis default translations
                     $defaultLocale = (file_exists(__DIR__ . "/../language/$locale.$type.php"))? $locale : "en_EN";

@@ -46,7 +46,7 @@
         <!-- render plugin icon field -->
        <div class="form-group"> 
             <?php $required = '';
-            if(!empty($pluginIconField->getAttribute('required'))){
+            if (!empty($pluginIconField->getAttribute('required'))) {
                 $required = '<sup>*</sup>';
             }                 
             ?>
@@ -58,8 +58,8 @@
                 </div>
             </label>                             
                 
-            <div class = "row">
-            <?php foreach($pluginIconOptions as $optKey => $optVal){ 
+            <div class="row">
+            <?php foreach ($pluginIconOptions as $optKey => $optVal) { 
                 $id = $pluginIconField->getAttribute('name').'_'.str_replace(' ', '_', $optVal);                             
                 ?>
                     <div class="col-md-1 plugin-creator-radio">
@@ -74,7 +74,7 @@
         </div>  
 
         <?php 
-            if($this->data['tabCount']){?>
+            if ($this->data['tabCount']) {?>
                 <div class="form-group">           
                     <label  class="d-flex flex-row justify-content-between" id = 'dashboard_tab_icon_field_title'>
                         <div class = "label-text"><?=$this->translate('tr_melisdashboardplugincreator_dashboard_tab_icon')?><sup>*</sup></div>
@@ -85,7 +85,7 @@
                 </div>  
 
                 <?php 
-                    for($i=1; $i<=$this->data['tabCount'];$i++){ 
+                    for ($i=1; $i<=$this->data['tabCount'];$i++) { 
                         $pluginTabIconField = $form->get('dpc_plugin_tab_icon_'.$i);
                         $pluginTabIconOptions = $pluginTabIconField->getValueOptions();                                   
                     ?>        
@@ -95,7 +95,7 @@
                             </label>           
                          
                             <div class = "row">
-                                <?php foreach($pluginTabIconOptions as $optKey => $optVal){  
+                                <?php foreach ($pluginTabIconOptions as $optKey => $optVal) {  
                                     $id = $pluginTabIconField->getAttribute('name').'_'.str_replace(' ', '_', $optKey);                  
                                     ?>
                                         <div class="col-md-1 plugin-creator-radio">

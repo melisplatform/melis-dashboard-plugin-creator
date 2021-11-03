@@ -2,12 +2,12 @@
     <div class="row">
         <div class="col-md-12">  
             <div class = 'alert alert-default' role = 'alert'>                         
-                <i class="fa fa-thumbs-o-up fa-5x fa-fw pull-left text-primary"></i>
+                <i class="fa fa-thumbs-o-up fa-5x fa-fw pull-left text-primary-custom"></i>
                 <p><strong><?php echo $this->translate('tr_melisdashboardplugincreator_finalization_success_title') ?></strong></p>
               
-                <?php if($this->restartRequired){ ?>
+                <?php if ($this->restartRequired) { ?>
                     <p id="tc-restart-msg"><?php echo $this->translate('tr_melisdashboardplugincreator_finalization_success_desc_with_counter') ?></p>
-                <?php }else{ ?>
+                <?php } else { ?>
                     <p><?php echo $this->translate('tr_melisdashboardplugincreator_finalization_success_desc') ?></p>
                 <?php } ?>   
             </div>            
@@ -25,7 +25,7 @@
                     $("#tc-restart-msg").text("<?php echo $this->translate('tr_melisdashboardplugincreator_refreshing') ?>");
                     clearInterval(countDown);
                     window.location.reload();                    
-                }else{
+                } else {
                     $("#tc-restart-cd").text(tcResCd);
                     tcResCd--;
                 }
@@ -33,7 +33,7 @@
         };
     <?php } 
 
-    if($this->restartRequired){ ?>
+    if ($this->restartRequired) { ?>
         countdown();
     <?php } ?>
 </script>

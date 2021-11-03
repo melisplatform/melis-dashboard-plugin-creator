@@ -24,10 +24,10 @@ class MelisDashboardPluginCreatorModuleSelectFactory extends MelisSelectFactory
         $moduleLoadFile = $moduleService->getUserModules();
 
         $valueoptions = [];
-        if($moduleLoadFile){
-            foreach($moduleLoadFile as $key => $val) {
+        if ($moduleLoadFile) {
+            foreach ($moduleLoadFile as $key => $val) {
                 //exclude the MelisModuleConfig and MelisSites
-                if($val != 'MelisModuleConfig' && $val != 'MelisSites'){
+                if ($val != 'MelisModuleConfig' && $val != 'MelisSites') {
                     $valueoptions[$val] = $val;
                 }            
             }

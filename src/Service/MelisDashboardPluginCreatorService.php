@@ -43,16 +43,17 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         // Event parameters prepare
         $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
         // Sending service start event
-        $arrayParameters = $this->sendEvent('melisdashboard_plugin_creator_service_generate_dashhboard_plugin_start', $arrayParameters);
+        $arrayParameters = $this->sendEvent('melisdashboard_plugin_creator_service_generate_dashboard_plugin_start', $arrayParameters);
 
         //set module name
-        if($this->dpcSteps['step_1']['dpc_plugin_destination'] == self::EXISTING_MODE){
+        if ($this->dpcSteps['step_1']['dpc_plugin_destination'] == self::EXISTING_MODE) {
             $this->moduleName = $this->dpcSteps['step_1']['dpc_existing_module_name'];
-        }else{
+        } else {
             $this->moduleName = $this->generateModuleNameCase($this->dpcSteps['step_1']['dpc_new_module_name']);
             //unset the tools tree section of the newly created module
             $this->emptyConfigToolsTreeSection($_SERVER['DOCUMENT_ROOT'].'/../module/'.$this->moduleName);
         }
+
         //set plugin name
         $this->pluginName = $this->generateModuleNameCase($this->dpcSteps['step_1']['dpc_plugin_name']);
 
@@ -61,18 +62,18 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         
         //perform the steps in generating the dashboard plugin
         $isSuccessful = $this->performGeneration($moduleDir);   
-          
-        if($isSuccessful){    
+           
+        if ($isSuccessful) {    
             //remove temp thumbnail directory of the current session    
             $tempPath = pathinfo($this->getTempThumbnail(), PATHINFO_DIRNAME);            
             $this->removeDir($tempPath);
-        }else{
+        } else {
             //this will rollback the steps performed when generating the dashboard plugin
             $this->rollbackPluginGeneration($moduleDir);              
         }    
 
         $arrayParameters['results'] = $isSuccessful;
-        $arrayParameters = $this->sendEvent('melisdashboard_plugin_creator_service_get_module_existing_plugins_end', $arrayParameters);
+        $arrayParameters = $this->sendEvent('melisdashboard_plugin_creator_service_generate_dashboard_plugin_end', $arrayParameters);
         return $arrayParameters['results']; 
     }
 
@@ -84,43 +85,43 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
     protected function performGeneration($moduleDir){
         //create a dashboardplugin config
         $isSuccessful = $this->generateDashboardPluginConfig($moduleDir);
-        if(!$isSuccessful){
+        if (!$isSuccessful) {
             return false;
         }
 
         //update module.config.php
         $isSuccessful = $this->updateModuleConfig($moduleDir);
-        if(!$isSuccessful){
+        if (!$isSuccessful) {
             return false;
         }     
 
         //set the translations
         $isSuccessful = $this->setTranslations($moduleDir);  
-        if(!$isSuccessful){
+        if (!$isSuccessful) {
             return false;
         }   
 
         //generate assets
         $isSuccessful = $this->generateDashboardPluginAssets($moduleDir);
-        if(!$isSuccessful){
+        if (!$isSuccessful) {
             return false;
         }
 
         //create the dashboard plugin controller
         $isSuccessful = $this->generateDashboardPluginController($moduleDir);
-        if(!$isSuccessful){
+        if (!$isSuccessful) {
             return false;
         }
 
         //generate view file
         $isSuccessful = $this->generateDashboardPluginView($moduleDir);
-        if(!$isSuccessful){
+        if (!$isSuccessful) {
             return false;
         }
 
         //update Module.php to add the newly created dashboard plugin config
         $isSuccessful = $this->updateModuleFile($moduleDir);
-        if(!$isSuccessful){
+        if (!$isSuccessful) {
             return false;
         }
    
@@ -135,10 +136,10 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
     protected function rollbackPluginGeneration($moduleDir){
 
         //remove created files if using existing mode
-        if($this->dpcSteps['step_1']['dpc_plugin_destination'] == self::EXISTING_MODE){              
+        if ($this->dpcSteps['step_1']['dpc_plugin_destination'] == self::EXISTING_MODE) {              
             
             /*delete dashboard plugin config*/
-            if(file_exists($moduleDir.'/config/dashboard-plugins/'.$this->pluginName.'Plugin.config.php')){
+            if (file_exists($moduleDir.'/config/dashboard-plugins/'.$this->pluginName.'Plugin.config.php')) {
                 unlink($moduleDir.'/config/dashboard-plugins/'.$this->pluginName.'Plugin.config.php');
             }
             
@@ -149,34 +150,34 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             $this->setTranslations($moduleDir, false);
           
             /*******start remove assets*****/
-            if(file_exists($moduleDir.'/public/dashboard-plugin/css/'.$this->pluginName.'.css')){
+            if (file_exists($moduleDir.'/public/dashboard-plugin/css/'.$this->pluginName.'.css')) {
                 unlink($moduleDir.'/public/dashboard-plugin/css/'.$this->pluginName.'.css');
             }
             
-            if(file_exists($moduleDir.'/public/dashboard-plugin/js/'.$this->pluginName.'.js')){
+            if (file_exists($moduleDir.'/public/dashboard-plugin/js/'.$this->pluginName.'.js')) {
                 unlink($moduleDir.'/public/dashboard-plugin/js/'.$this->pluginName.'.js');
             }
             
             $fileName = pathinfo($this->dpcSteps['step_2']['plugin_thumbnail'], PATHINFO_FILENAME).'.'.pathinfo($this->dpcSteps['step_2']['plugin_thumbnail'], PATHINFO_EXTENSION);
-            if(file_exists($moduleDir.'/public/dashboard-plugin/images/'.$fileName)){
+            if (file_exists($moduleDir.'/public/dashboard-plugin/images/'.$fileName)) {
                 unlink($moduleDir.'/public/dashboard-plugin/images/'.$fileName);
             }
             /*******end remove assets*****/                                        
 
             //delete controller
-            if(file_exists($moduleDir.'/src/'.$this->moduleName.'/Controller/DashboardPlugins/'.$this->moduleName.$this->pluginName.'Plugin.php')){
+            if (file_exists($moduleDir.'/src/'.$this->moduleName.'/Controller/DashboardPlugins/'.$this->moduleName.$this->pluginName.'Plugin.php')) {
                 unlink($moduleDir.'/src/'.$this->moduleName.'/Controller/DashboardPlugins/'.$this->moduleName.$this->pluginName.'Plugin.php');
             }
             
             //delete view
-            if(file_exists($moduleDir.'/view/'.$this->convertToViewName($this->moduleName).'/dashboard-plugins/'.$this->convertToViewName($this->pluginName).'.phtml')){
+            if (file_exists($moduleDir.'/view/'.$this->convertToViewName($this->moduleName).'/dashboard-plugins/'.$this->convertToViewName($this->pluginName).'.phtml')) {
                 unlink($moduleDir.'/view/'.$this->convertToViewName($this->moduleName).'/dashboard-plugins/'.$this->convertToViewName($this->pluginName).'.phtml');
             }
            
             //update module.php to remove the dashboard config 
             $this->updateModuleFile($moduleDir, false);  
 
-        }else{        
+        } else {        
             //remove newly created module if using new module              
             $this->removeDir($moduleDir);
         }
@@ -243,23 +244,23 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         
         //check if tab count is set
         $tabCount = !empty($this->dpcSteps['step_1']['dpc_tab_count'])?$this->dpcSteps['step_1']['dpc_tab_count']:0;
-        if($tabCount == 0){
+        if ($tabCount == 0) {
             //get the plugin view template for single tab
             $dashboardPluginViewContent = $this->getTemplateContent('/dashboard-view-single-tab.phtml');
-        }else{
-            
+        } else {            
             //set the containter for the unique id for each tab     
             $pluginConfigPluginId = '<?php echo $this->pluginConfig[\'plugin_id\']?>';            
             $tabHeader = "";          
             $tabContent = "";
+            $dummyContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum consequat auctor. Nunc eget quam ligula. Phasellus dictum urna id iaculis eleifend. Ut ut augue hendrerit lacus volutpat mollis a vitae massa. Etiam ex arcu, finibus eget velit et, semper pharetra neque. Proin a pellentesque arcu. In gravida sagittis diam, at consectetur turpis volutpat vel. Integer suscipit ipsum vitae consequat tristique. Fusce semper lectus mattis metus pellentesque, ac tincidunt ipsum dignissim.";
 
             //set the tab header and content dynamically depending upon the number of tabs set
-            for($i=1;$i<=$tabCount;$i++){
+            for ($i=1;$i<=$tabCount;$i++) {
                 $pluginTabId = 'tab-'.$i.'-'.str_replace(" ","-",$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i]).'-'.$pluginConfigPluginId;
 
                 $tabHeader .= '<li class="nav-item '.($i==1?"active":"").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i].' nav-link'.($i==1?" active":"").'" href="#'.$pluginTabId.'" data-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
-
-                $tabContent .= '<div class="tab-pane'.($i==1?" active":"").'" id="'.$pluginTabId.'">'."\r\n\t\t\t\t\t\t".'<!-- Plugin Content for the tab here -->'."\r\n\t\t\t\t\t".'</div>'."\r\n\t\t\t\t\t";
+                $defaultContent = "<h3>Tab ".$i."</h3>\r\n\t\t\t\t\t\t<p>".$dummyContent."</p>";
+                $tabContent .= '<div class="tab-pane'.($i==1?" active":"").'" id="'.$pluginTabId.'">'."\r\n\t\t\t\t\t\t".$defaultContent."\r\n\t\t\t\t\t".'</div>'."\r\n\t\t\t\t\t";
             }
 
             //get the plugin view template for multiple tabs
@@ -286,15 +287,14 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $assetArr = array('css' => $targetDir.'/css', 'js' => $targetDir.'/js','images' => $targetDir.'/images');
         $res = false;
 
-        foreach($assetArr as $asset => $dir){            
-            if($asset == 'css'){
+        foreach ($assetArr as $asset => $dir) {            
+            if ($asset == 'css') {
                 $res = $this->generateFile($this->pluginName.'.'.$asset, $dir, '');
-            }else if($asset == 'js'){                    
+            } elseif ($asset == 'js') {                    
                 $res = $this->generateFile($this->pluginName.'.'.$asset, $dir, $this->getTemplateContent('/blank_plugin.js'));
-            }else if($asset == 'images'){
-                
+            } elseif ($asset == 'images') {                
                 //check if target directory exists
-                if(!file_exists($dir)) {
+                if (!file_exists($dir)) {
                     mkdir($dir, 0777, true);
                 }                        
 
@@ -304,7 +304,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
                 //set the filename
                 $fileName = $this->dpcSteps['step_1']['dpc_plugin_name'].'_pluginThumbnail.'.pathinfo($this->dpcSteps['step_2']['plugin_thumbnail'], PATHINFO_EXTENSION); 
 
-                if(copy($tempThumbnail, $dir.'/'.$fileName)){                   
+                if (copy($tempThumbnail, $dir.'/'.$fileName)) {                   
                     $res = true;
                 }                    
             }             
@@ -358,15 +358,15 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $errorCount = 0;
         $res = false;
 
-        foreach($languages as $lang){
+        foreach ($languages as $lang) {
             $langFile = $languageDir.$lang['lang_locale'].'.interface.php';
-            $langFile = file_exists($langFile)?$langFile:$languageDir.$lang['lang_locale'].'php';
+            $langFile = file_exists($langFile)?$langFile:$languageDir.$lang['lang_locale'].'.php';
 
-            if($langFile){
+            if ($langFile) {
                  //get the existing translation of the language
                 $translationArr = include $langFile;
                 
-                if($appendConfig){
+                if ($appendConfig) {
                     //set the menu title
                     $translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu title'] = !empty($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_title'])
                                                         ?$this->removeExtraSpace($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_title']):"";
@@ -381,7 +381,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
                     //set the plugin section title
                     $translationArr['tr_PluginSection_'.strtolower($this->moduleName)] = $this->moduleName;
 
-                }else{
+                } else {
                     //unset translation for the dashboard plugin
                     unset($translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu title']);
                     unset($translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu description']);
@@ -393,14 +393,14 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             $configFactory = new Factory();
             $write = $configFactory->toFile($langFile, $translationArr);
 
-            if(!$write){
+            if (!$write) {
                 $errorCount++;
             }
         }
 
-        if($errorCount){
+        if ($errorCount) {
             return $res;
-        }else{
+        } else {
             return true;
         }
     }
@@ -423,7 +423,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         //get the content of module.config.php 
         $moduleFileContent = file_get_contents($moduleConfigFile);
 
-        if($appendConfig){         
+        if ($appendConfig) {         
 
             //add the template map entry for the dashboard plugin 
             $moduleFileContent = $this->setTemplateMapEntry($moduleFileContent, $moduleToViewName, $pluginToViewName);
@@ -431,7 +431,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             //add the controller plugin entry for the dashboard plugin 
             $moduleFileContent = $this->setControllerPluginEntry($moduleFileContent, $moduleToViewName, $pluginToViewName);
     
-        }else{
+        } else {
 
             $match = null;
             $controllerPluginKey = $this->moduleName.$this->pluginName.'Plugin';
@@ -443,7 +443,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             $pattern = "/^.*$pattern.*\$/m";
 
             // search, and store all matching occurences in $matches
-            if(preg_match_all($pattern, $moduleFileContent, $matches)){                  
+            if (preg_match_all($pattern, $moduleFileContent, $matches)) {                  
                 $match = implode("\n", $matches[0]);
                 //remove the controller plugin key entry
                 $moduleFileContent = str_replace($match, '', $moduleFileContent);
@@ -457,7 +457,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             $pattern = "/^.*$pattern.*\$/m";
 
             // search, and store all matching occurences in $matches
-            if(preg_match_all($pattern, $moduleFileContent, $matches)){ 
+            if (preg_match_all($pattern, $moduleFileContent, $matches)) { 
                 $match = implode("\n", $matches[0]);
                 //remove the template map key entry
                 $moduleFileContent = str_replace($match, '', $moduleFileContent);
@@ -486,12 +486,12 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $pattern = 'template_map\s*[\'"]\s*=>\s*(array\s*\(|\[)\s*';
         $pattern = '/('.$pattern.')/';        
 
-        if(preg_match_all($pattern, $moduleFileContent, $matches)){
+        if (preg_match_all($pattern, $moduleFileContent, $matches)) {
             $match = implode("\n", $matches[0]);//return as string
         }
 
         //if template_map exists in the config, add immediately the entry
-        if($match){  
+        if ($match) {  
             //check the existence of the template_map entries for the formatting purposes
             $moduleDir = $_SERVER['DOCUMENT_ROOT'].'/../module/'.$this->moduleName;
             $moduleConfig = include $moduleDir.'/config/module.config.php';
@@ -505,16 +505,16 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
             $moduleFileContent = str_replace($match, substr_replace($match, $templateMapEntry, strlen($match), 0), $moduleFileContent);
 
-        } else{  
+        } else {  
             //search for the view_manager key to add the template_map key
             $pattern = 'view_manager\s*[\'"]\s*=>\s*(array\s*\(|\[)\s*';
             $pattern = '/('.$pattern.')/';        
 
-            if(preg_match_all($pattern, $moduleFileContent, $matches)){
+            if (preg_match_all($pattern, $moduleFileContent, $matches)) {
                 $match = implode("\n", $matches[0]);//return as string
             }
 
-            if($match){
+            if ($match) {
                 $templateMapArr ="'template_map' => ["."\t\t".                    
                     "\r\n\t\t\t'". $templateMapKey."' => __DIR__".$templateMapValue.",\r\n\t\t".                   
                 "]";
@@ -543,25 +543,25 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $pattern = '/('.$pattern.')/';
         $match = null;
 
-        if(preg_match_all($pattern, $moduleFileContent, $matches)){
+        if (preg_match_all($pattern, $moduleFileContent, $matches)) {
             $match = implode("\n", $matches[0]);//return as string
         }
       
         //if controller_plugin/invokables exists in the config, add immediately the entry
-        if($match){                  
+        if ($match) {                  
             $controllerPluginEntry = "'".$controllerPluginKey."' => ".$controllerPluginValue;       
             $moduleFileContent = str_replace($match, substr_replace($match, "\r\n\t\t\t".$controllerPluginEntry.",", strlen($match), 0), $moduleFileContent);
-        }else{      
+        } else {      
 
             //search for the 'controllers' key, then add the controller_plugin key before the 'controllers' key 
             $pattern = '[\'"]\s*controllers\s*[\'"]\s*=>\s*(array\s*\(|\[)\s*';
             $pattern = '/('.$pattern.')/';        
 
-            if(preg_match_all($pattern, $moduleFileContent, $matches)){
+            if (preg_match_all($pattern, $moduleFileContent, $matches)) {
                 $match = implode("\n", $matches[0]);//return as string
             }
 
-            if($match){  
+            if ($match) {  
 
                 //set the template
                 $template ="'controller_plugins' => ["."\r\n\t\t".
@@ -593,20 +593,20 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         //set the dashboard config file 
         $dashBoardConfigFile = PHP_EOL . "\t\t\t". "include __DIR__ . '/config/dashboard-plugins/".$this->pluginName."Plugin.config.php',";
         
-        if($appendConfig){
+        if ($appendConfig) {
             //search for the module.config.php keyword to append the dashboard plugin config file 
             $pattern = 'module.config.php\s*[\'"]\s*,';
             $pattern = '/('.$pattern.')/';
 
-            if(preg_match_all($pattern, $moduleFileContent, $matches)){
+            if (preg_match_all($pattern, $moduleFileContent, $matches)) {
                 $match = implode("\n", $matches[0]);//return as string
             }
 
-            if($match){
+            if ($match) {
                 $moduleFileContent = str_replace($match, substr_replace($match, $dashBoardConfigFile, strlen($match), 0), $moduleFileContent);
             }
           
-        }else{
+        } else {
             //remove the dashboard plugin config  
             $moduleFileContent = str_replace($dashBoardConfigFile, '', $moduleFileContent);
         }
@@ -644,14 +644,14 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
             //add file if not yet exists
             $targetFile = $targetDir.'/'.$fileName;
-            if(!file_exists($targetFile)){          
+            if (!file_exists($targetFile)) {          
                 $targetFile = fopen($targetFile, 'x+');
                 fwrite($targetFile, $fileContent);
                 fclose($targetFile);
             }
 
             return true;
-        }catch(Exception $e){
+        } catch(Exception $e) {
             return false;
         }       
     }
@@ -689,14 +689,14 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $toolsTreeConfig = include $toolsTreeConfigFile;
         
         //unset the meliscustom_toolstree_section of the newly created module
-        if(isset($toolsTreeConfig['plugins']['meliscore']['interface']['meliscore_leftmenu']['interface']['meliscustom_toolstree_section']['interface'][strtolower($this->moduleName).'_conf'])){
+        if (isset($toolsTreeConfig['plugins']['meliscore']['interface']['meliscore_leftmenu']['interface']['meliscustom_toolstree_section']['interface'][strtolower($this->moduleName).'_conf'])) {
             unset($toolsTreeConfig['plugins']['meliscore']['interface']['meliscore_leftmenu']['interface']['meliscustom_toolstree_section']['interface'][strtolower($this->moduleName).'_conf']);
         }
         
         $configFactory = new Factory();
         $write = $configFactory->toFile($toolsTreeConfigFile, $toolsTreeConfig);
 
-        if(!$write){
+        if (!$write) {
            return false;
         }
 
@@ -722,22 +722,22 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
         //get the dashboard untranslated config translations
         $dashboardPlugins = $melisCoreConfig->getItem('/meliscore/interface/melis_dashboardplugin/interface/melisdashboardplugin_section','',false);
-        if(isset($dashboardPlugins['interface']) && count($dashboardPlugins['interface'])) {
+        if (isset($dashboardPlugins['interface']) && count($dashboardPlugins['interface'])) {
             foreach ($dashboardPlugins['interface'] as $pluginName => $pluginConf) {
                 $plugin = $pluginConf;
 
                 $path = $pluginConf['conf']['type'] ?? null;
 
-                if($path) {
+                if ($path) {
                     $plugin = $melisCoreConfig->getItem($path,'',false);
                 }
            
-                if(is_array($plugin) && count($plugin) && $dashboardPluginsService->canAccess($pluginName)) {
-                    if(!isset($plugin['datas']['skip_plugin_container'])) {
+                if (is_array($plugin) && count($plugin) && $dashboardPluginsService->canAccess($pluginName)) {
+                    if (!isset($plugin['datas']['skip_plugin_container'])) {
                         $module = $plugin['forward']['module'];                                  
                                        
                         //save to array the list of plugins for the current module  
-                        if(trim($module) == $arrayParameters['existingModuleName']){
+                        if (trim($module) == $arrayParameters['existingModuleName']) {
                             $name = !empty($plugin['datas']['name']) ? $plugin['datas']['name'] : $pluginName;//the menu title
                             $pluginId = !empty($plugin['datas']['plugin_id']) ? $plugin['datas']['plugin_id'] : '';//plugin id
 
@@ -769,7 +769,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $nameTranslationArr = [];//this will store the translated values of the config 'name' -> plugin menu title
    
         //get here the translations of each plugin inside the module
-        if($arrayParameters['modulePlugins']){
+        if ($arrayParameters['modulePlugins']) {
             //get language files of the module
             $moduleDir = $_SERVER['DOCUMENT_ROOT'].'/../module/'.$arrayParameters['existingModuleName'].'/language/';
             $translationFiles = array_diff(scandir($moduleDir), array('.', '..'));
@@ -777,9 +777,9 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             //call dashboard plugin creator service 
             $dpcService = $this->getServiceManager()->get('MelisDashboardPluginCreatorService');
             
-            foreach($arrayParameters['modulePlugins'][$existingModuleName]['name'] as $key => $value){
+            foreach ($arrayParameters['modulePlugins'][$existingModuleName]['name'] as $key => $value) {
                 //get the translated version of the 'name' config to compare against with the inputted value
-                foreach($translationFiles as $file){
+                foreach ($translationFiles as $file) {
                     $locale = explode('.',$file);
                     $locale = $locale[0];
 

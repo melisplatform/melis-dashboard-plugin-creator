@@ -3,7 +3,7 @@
         <ul class="nav-tabs product-text-tab">    
             <?php                 
                 $ctr = 0;
-                foreach ($this->data['languages'] As $key => $val){ ?>
+                foreach ($this->data['languages'] As $key => $val) { ?>
                 <li class="<?php echo ($ctr++) ?: 'active'?>">
                     <a class="clearfix" data-toggle="tab" href="#toolcreator-text-transaltions-<?php echo $val['lang_locale']?>" aria-expanded="false">
                         <?php echo $val['lang_label']?>
@@ -71,11 +71,9 @@
                         </div>
                     </div>
                  </div>
-            </div>
-           
+            </div>           
     <?php    }
-    ?>           
-              
+    ?>      
 </div>
 
 

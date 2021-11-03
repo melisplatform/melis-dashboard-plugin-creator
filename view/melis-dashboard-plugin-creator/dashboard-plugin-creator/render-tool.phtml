@@ -4,10 +4,8 @@
 ?>
 <div id="<?php echo $id ?>" data-melisKey="<?php echo $melisKey; ?>" class="tab-pane container-level-a">
     <?php
-        if(!empty($this->zoneconfig['interface']))
-        {
-            foreach($this->zoneconfig['interface'] as $keyConfig => $val)
-            {
+        if (!empty($this->zoneconfig['interface'])) {
+            foreach ($this->zoneconfig['interface'] as $keyConfig => $val) {
                 echo $this->$keyConfig;
             }
         }
