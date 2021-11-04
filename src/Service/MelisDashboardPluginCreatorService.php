@@ -497,9 +497,9 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             $moduleConfig = include $moduleDir.'/config/module.config.php';
             $existingTemplateMapEntry = $moduleConfig['view_manager']['template_map'];
 
-            if(count($existingTemplateMapEntry) > 0){
+            if (count($existingTemplateMapEntry) > 0) {
                 $templateMapEntry = "'".$templateMapKey."' => __DIR__".$templateMapValue.",\r\n\t\t\t";
-            }else{
+            } else {
                 $templateMapEntry = "\t'".$templateMapKey."' => __DIR__".$templateMapValue.",\r\n\t\t";
             }
 

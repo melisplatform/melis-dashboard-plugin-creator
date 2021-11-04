@@ -70,7 +70,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         if (!is_writable($_SERVER['DOCUMENT_ROOT'] . '/../module'))
             $filePermissionErr[] = 'tr_melisdashboardplugincreator_fp_module';
 
-        if (!empty($filePermissionErr)){
+        if (!empty($filePermissionErr)) {
             $view->fPErr = $filePermissionErr;
             return $view;
         }
@@ -354,7 +354,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
                     } else {         
                         //unset previously uploaded file
-                        if(!empty($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'])){
+                        if (!empty($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'])) {
                             unset($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail']); 
                         }                
               
