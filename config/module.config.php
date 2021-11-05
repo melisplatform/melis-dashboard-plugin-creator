@@ -46,13 +46,12 @@ return [
             'MelisDashboardPluginCreatorService' => \MelisDashboardPluginCreator\Service\MelisDashboardPluginCreatorService::class,           
         ]
     ],
-
     'controllers' => [
         'invokables' => [
             'MelisDashboardPluginCreator\Controller\DashboardPluginCreator' => \MelisDashboardPluginCreator\Controller\DashboardPluginCreatorController::class,
         ],
     ],
-     'form_elements' => [
+    'form_elements' => [
         'factories' => [      
             'MelisDashboardPluginCreatorModuleSelect' => \MelisDashboardPluginCreator\Form\Factory\MelisDashboardPluginCreatorModuleSelectFactory::class,
         ],

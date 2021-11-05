@@ -102,7 +102,7 @@
 		'tr_melisdashboardplugincreator_activate_plugin_after_creation' => 'Activer le plugin à la création',
 		'tr_melisdashboardplugincreator_activate_plugin_note' => '<b>Note </b>: Activer le plugin rechargera la plateforme',
 		'tr_melisdashboardplugincreator_finalization_success_title' => 'Le plugin a été créé avec succès',
-		'tr_melisdashboardplugincreator_finalization_success_desc_with_counter' => 'La plateforme va se recharger dans <strong><span id="tc-restart-cd">5</span></strong>',
+		'tr_melisdashboardplugincreator_finalization_success_desc_with_counter' => 'La plateforme va se recharger dans <strong><span id="dpc-restart-cd">5</span></strong>',
 		'tr_melisdashboardplugincreator_finalization_success_desc' => 'Vous pouvez activer le plugin manuellement en rechargeant la page',
 		'tr_melisdashboardplugincreator_execute_aadtnl_setup' => 'Derniers réglages en cours',
 		'tr_melisdashboardplugincreator_please_wait' => 'Veuillez patienter',

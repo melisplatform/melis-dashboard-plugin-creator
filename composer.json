@@ -9,15 +9,15 @@
 		"issues": "https://github.com/melisplatform/melis-dashboard-plugin-creator/issues"
 	},
 	"keywords": [
-		"cms",
 		"melis",
 		"zf2",
-		"module"		
+		"module",
+		"plugin",
+		"dashboard"		
 	],
 	"extra": {
 		"module-name": "MelisDashboardPluginCreator",
-		"melis-site": false,
-		"melis-module-category": "cms"
+		"melis-site": false		
 	},
 	"require": {
 		"php": "^7.1.3|^7.2|^7.3",

@@ -102,7 +102,7 @@
         'tr_melisdashboardplugincreator_activate_plugin_after_creation' => 'Activate plugin after creation',
         'tr_melisdashboardplugincreator_activate_plugin_note' => '<b>Note</b>: Activating the plugin will require to restart the platform',
         'tr_melisdashboardplugincreator_finalization_success_title' => 'The plugin has been successfully created',
-        'tr_melisdashboardplugincreator_finalization_success_desc_with_counter' => 'The platform will refresh in <strong><span id="tc-restart-cd">5</span></strong>',
+        'tr_melisdashboardplugincreator_finalization_success_desc_with_counter' => 'The platform will refresh in <strong><span id="dpc-restart-cd">5</span></strong>',
         'tr_melisdashboardplugincreator_finalization_success_desc' => 'You can manually activate the plugin by reloading the page',
         'tr_melisdashboardplugincreator_execute_aadtnl_setup' => 'Executing additional setup',
         'tr_melisdashboardplugincreator_please_wait' => 'Please wait',

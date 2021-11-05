@@ -62,7 +62,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         
         //perform the steps in generating the dashboard plugin
         $isSuccessful = $this->performGeneration($moduleDir);   
-           
+               
         if ($isSuccessful) {    
             //remove temp thumbnail directory of the current session    
             $tempPath = pathinfo($this->getTempThumbnail(), PATHINFO_DIRNAME);            
@@ -255,7 +255,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             $dummyContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum consequat auctor. Nunc eget quam ligula. Phasellus dictum urna id iaculis eleifend. Ut ut augue hendrerit lacus volutpat mollis a vitae massa. Etiam ex arcu, finibus eget velit et, semper pharetra neque. Proin a pellentesque arcu. In gravida sagittis diam, at consectetur turpis volutpat vel. Integer suscipit ipsum vitae consequat tristique. Fusce semper lectus mattis metus pellentesque, ac tincidunt ipsum dignissim.";
 
             //set the tab header and content dynamically depending upon the number of tabs set
-            for ($i=1;$i<=$tabCount;$i++) {
+            for ($i=1; $i<=$tabCount; $i++) {
                 $pluginTabId = 'tab-'.$i.'-'.str_replace(" ","-",$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i]).'-'.$pluginConfigPluginId;
 
                 $tabHeader .= '<li class="nav-item '.($i==1?"active":"").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i].' nav-link'.($i==1?" active":"").'" href="#'.$pluginTabId.'" data-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
@@ -271,7 +271,6 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
         //generate view file
         $res = $this->generateFile($this->convertToViewName($this->pluginName).'.phtml', $targetDir, $dashboardPluginViewContent);
-
         return $res;
     }
 
@@ -298,12 +297,13 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
                     mkdir($dir, 0777, true);
                 }                        
 
-                //copy saved thumbnail to the plugin image directory of the module          
+                //get uploaded thumbnail        
                 $tempThumbnail = $this->getTempThumbnail();
 
                 //set the filename
                 $fileName = $this->dpcSteps['step_1']['dpc_plugin_name'].'_pluginThumbnail.'.pathinfo($this->dpcSteps['step_2']['plugin_thumbnail'], PATHINFO_EXTENSION); 
 
+                //copy saved thumbnail to the plugin image directory of the module  
                 if (copy($tempThumbnail, $dir.'/'.$fileName)) {                   
                     $res = true;
                 }                    
@@ -385,7 +385,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
                     //unset translation for the dashboard plugin
                     unset($translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu title']);
                     unset($translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu description']);
-                    unset($translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).' title']);                    
+                    unset($translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).' title']);         
                 }                
             }     
 
@@ -623,6 +623,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param string $fileName - file name
      * @param string $targetDir - the target directory where the file will created
      * @param string $fileContent - will be the content of the file created
+     * @return boolean
      */
     public function generateFile($fileName, $targetDir, $fileContent = null)
     {       

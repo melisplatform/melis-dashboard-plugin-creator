@@ -37,7 +37,6 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
         //generate new session id, this will be used in creating a temp folder path for plugin thumbnails
         $container->getManager()->regenerateId();
-
         return $view;
     }
 
@@ -589,6 +588,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                 break;
 
             case 2:  
+                //get language form
                 list($stepFormArr, $data['languages']) = $this->getLanguageForms($curStep);            
                 
                 //get the 2nd form
@@ -614,6 +614,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                 break;
 
             case 3: 
+                //get language form
                 list($stepFormArr, $data['languages']) = $this->getLanguageForms($curStep);            
                 
                 //get the step 3 icon form
@@ -740,6 +741,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         $melisCoreContainer = new Container('meliscore');
         $locale = $melisCoreContainer['melis-lang-locale']; 
 
+        //set the current locale as the first language value in the array
         foreach ($languages as $key => $langData) {
             if (trim($langData["lang_locale"]) == trim($locale)) {
                 unset($languages[$key]);
@@ -968,7 +970,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                         $minSize = $pluginThumbnailConfig['min_size'];
                         $maxSize = $pluginThumbnailConfig['max_size'];
                     
-                        // Limit the file size to between 10kB and 4MB
+                        // Limit the file size based on what is set in the config
                         $sizeValidator = new Size([
                             'min' => $minSize,              
                             'max' => $maxSize,
@@ -979,7 +981,6 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                             return array($upload, $fileName, $tool->getTranslation('tr_melisdashboardplugincreator_upload_too_big', array($this->formatBytes($maxSize)))   );
                         }
                     }
-
 
                     $adapter = new Http();     
                     $validator = array($imageValidator);  
@@ -1138,7 +1139,11 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
     }
 
     /*ref: MelisComDocumentController*/
-    /*this will format the size of the uploaded file into kb*/
+    /**
+     * this will format the size of the uploaded file into kb
+     * @param number of bytes
+     * @return bytes
+    */
     private function formatBytes($bytes) {
         $size = $bytes;
         $units = array( 'B', 'Ko', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');

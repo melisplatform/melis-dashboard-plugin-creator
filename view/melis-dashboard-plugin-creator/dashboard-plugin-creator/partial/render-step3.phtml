@@ -5,7 +5,7 @@
                 $ctr = 0; 
                 foreach ($this->data['languages'] As $key => $val) { ?>
                 <li class="<?php echo ($ctr++) ?: 'active'?>">
-                    <a class="clearfix" data-toggle="tab" href="#toolcreator-text-transaltions-<?php echo $val['lang_locale']?>" aria-expanded="false">
+                    <a class="clearfix" data-toggle="tab" href="#dpccreator-text-transaltions-<?php echo $val['lang_locale']?>" aria-expanded="false">
                         <?php echo $val['lang_label']?>
                     </a>
                 </li>
@@ -17,7 +17,7 @@
     <div class="tab-content">
       
         <?php $ctr = 0; foreach ($this->stepForm['languageForm'] As $key => $form):?>
-            <div id="toolcreator-text-transaltions-<?php echo $key ?>" class="tab-pane <?php echo ($ctr++) ? '': 'active'?>">
+            <div id="dpccreator-text-transaltions-<?php echo $key ?>" class="tab-pane <?php echo ($ctr++) ? '': 'active'?>">
                 <?php                  
                     $form->prepare();
                     $form->setAttribute('id', $form->getAttribute('id').'-'.$key);
