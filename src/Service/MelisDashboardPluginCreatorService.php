@@ -62,7 +62,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         
         //perform the steps in generating the dashboard plugin
         $isSuccessful = $this->performGeneration($moduleDir);   
-               
+                   
         if ($isSuccessful) {    
             //remove temp thumbnail directory of the current session    
             $tempPath = pathinfo($this->getTempThumbnail(), PATHINFO_DIRNAME);            
@@ -156,9 +156,11 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             
             if (file_exists($moduleDir.'/public/dashboard-plugin/js/'.$this->pluginName.'.js')) {
                 unlink($moduleDir.'/public/dashboard-plugin/js/'.$this->pluginName.'.js');
-            }
-            
-            $fileName = pathinfo($this->dpcSteps['step_2']['plugin_thumbnail'], PATHINFO_FILENAME).'.'.pathinfo($this->dpcSteps['step_2']['plugin_thumbnail'], PATHINFO_EXTENSION);
+            }            
+
+            //set the filename
+            $fileName = $this->dpcSteps['step_1']['dpc_plugin_name'].'_pluginThumbnail.'.pathinfo($this->dpcSteps['step_2']['plugin_thumbnail'], PATHINFO_EXTENSION);
+
             if (file_exists($moduleDir.'/public/dashboard-plugin/images/'.$fileName)) {
                 unlink($moduleDir.'/public/dashboard-plugin/images/'.$fileName);
             }
