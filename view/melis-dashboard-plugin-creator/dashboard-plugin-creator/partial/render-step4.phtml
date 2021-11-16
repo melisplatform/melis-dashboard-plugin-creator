@@ -48,15 +48,15 @@
                                     <?php    }
                                     ?>
                                 
-                                <td><?php echo ucwords(str_replace("_", ' ', $sessionData['dpc_plugin_destination'])) ?></td>
-
-                                  <?php 
-                                        if ($sessionData['dpc_plugin_destination'] == 'new_module') { ?>
-                                            <td><?php echo $sessionData['dpc_new_module_name'] ?></td>
-                                    <?php  } else { ?>
-                                           <td><?php echo $sessionData['dpc_existing_module_name'] ?></td>
-                                   <?php }
-                                    ?>
+                                <td><?php echo $sessionData['dpc_plugin_destination'] == 'new_module'?$this->translate('tr_melisdashboardplugincreator_destination_new_opt'):$this->translate('tr_melisdashboardplugincreator_destination_existing_opt') ?></td>
+                             
+                               <?php 
+                                    if ($sessionData['dpc_plugin_destination'] == 'new_module') { ?>
+                                        <td><?php echo $sessionData['dpc_new_module_name'] ?></td>
+                                <?php  } else { ?>
+                                       <td><?php echo $sessionData['dpc_existing_module_name'] ?></td>
+                               <?php }
+                                ?>
                             </tr>
                         </tbody>                        
                     </table>
