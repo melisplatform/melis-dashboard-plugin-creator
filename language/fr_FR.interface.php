@@ -13,6 +13,7 @@
 		'tr_melisdashboardplugincreator_fp_msg' => 'Pour créer ce plugin veuillez donner des droits d\'écriture pour les dossiers suivants ou contactez l\'administrateur.',
 		'tr_melisdashboardplugincreator_fp_config' => '<b>/config/melis.module.load.php</b> - Ce fichier est nécessaire pour activer le nouveau module après sa création',
 		'tr_melisdashboardplugincreator_fp_module' => '<b>/module</b> - Le répertoire dans lequel les modules créés sont enregistrés',
+		'tr_melisdashboardplugincreator_fp_temp_thumbnail' => '<b>/public/temp-thumbnail</b> - The directory where the uploaded plugin thumbnails are temporarily saved',
 
 		 // Error messages
 		'tr_melisdashboardplugincreator_err_message' => 'Impossible de procéder à l\'étape suivante',
@@ -77,7 +78,7 @@
         'tr_melisdashboardplugincreator_common_label_no' => 'Non',
         'tr_melisdashboardplugincreator_delete_plugin_thumbnail_title' => 'Supprimer l\'image',
         'tr_melisdashboardplugincreator_delete_plugin_thumbnail_confirm' => 'Êtes-vous sûr(e) de vouloir supprimer l\'image ?',
-        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_error' => 'Erreur lors de la suppression de l\'imag',    
+        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_error' => 'Erreur lors de la suppression de l\'image',    
         'tr_melisdashboardplugincreator_input_file_uploading' => 'Upload...', 
 
 		//Step3 Form

@@ -69,6 +69,16 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         if (!is_writable($_SERVER['DOCUMENT_ROOT'] . '/../module'))
             $filePermissionErr[] = 'tr_melisdashboardplugincreator_fp_module';
 
+        //check if temp-thumbnail directory exists and is writable
+        $tempThumbnailDirectory = $this->getTempThumbnailDirectory();   
+        if (!file_exists($tempThumbnailDirectory)) {
+            mkdir($tempThumbnailDirectory, 0755, true);          
+        }
+
+        if (!is_writable($tempThumbnailDirectory)) {
+            $filePermissionErr[] = 'tr_melisdashboardplugincreator_fp_temp_thumbnail';
+        }
+
         if (!empty($filePermissionErr)) {
             $view->fPErr = $filePermissionErr;
             return $view;
@@ -925,11 +935,9 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         $_FILES = array($uploadedFile);
 
         try {
-            $tool =   $this->getServiceManager()->get('MelisCoreTool');          
-            $melisModule = $this->getServiceManager()->get('MelisAssetManagerModulesService');                        
-            $names = explode("\\", __NAMESPACE__);                       
-            $moduleName = $names[0];
-            $thumbnailTempPath = $melisModule->getModulePath($moduleName,true).'/public/temp-thumbnail/';
+            $tool =   $this->getServiceManager()->get('MelisCoreTool'); 
+            $thumbnailTempPath = $this->getTempThumbnailDirectory();
+            //attach current session id to temp-thumbnail directory
             $sessionID = $container->getManager()->getId(); 
             $thumbnailTempPath = $thumbnailTempPath.$sessionID.'/';
 
@@ -1172,5 +1180,19 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         );
 
         return new JsonModel($results);
+    }
+
+    /**
+     * Retrieves the temp thumbnail directory
+     * @return string
+    */
+    private function getTempThumbnailDirectory(){
+        // Set the user
+        $melisModule = $this->getServiceManager()->get('MelisAssetManagerModulesService');                        
+        $names = explode("\\", __NAMESPACE__);                       
+        $moduleName = $names[0];        
+        $tempThumbnailDirectory = $melisModule->getModulePath($moduleName,true).'/public/temp-thumbnail/';
+
+        return $tempThumbnailDirectory;
     }
 }
