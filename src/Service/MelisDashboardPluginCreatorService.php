@@ -364,7 +364,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             $langFile = $languageDir.$lang['lang_locale'].'.interface.php';
             $langFile = file_exists($langFile)?$langFile:$languageDir.$lang['lang_locale'].'.php';
 
-            if ($langFile) {
+            if (file_exists($langFile)) {
                  //get the existing translation of the language
                 $translationArr = include $langFile;
                 
@@ -388,16 +388,16 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
                     unset($translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu title']);
                     unset($translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu description']);
                     unset($translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).' title']);         
-                }                
-            }     
+                }    
 
-            //write back to file the updated translation array
-            $configFactory = new Factory();
-            $write = $configFactory->toFile($langFile, $translationArr);
+                //write back to file the updated translation array
+                $configFactory = new Factory();
+                $write = $configFactory->toFile($langFile, $translationArr);
 
-            if (!$write) {
-                $errorCount++;
-            }
+                if (!$write) {
+                    $errorCount++;
+                }            
+            }              
         }
 
         if ($errorCount) {
