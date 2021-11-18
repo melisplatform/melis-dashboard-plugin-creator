@@ -13,7 +13,7 @@
 		'tr_melisdashboardplugincreator_fp_msg' => 'Pour créer ce plugin veuillez donner des droits d\'écriture pour les dossiers suivants ou contactez l\'administrateur.',
 		'tr_melisdashboardplugincreator_fp_config' => '<b>/config/melis.module.load.php</b> - Ce fichier est nécessaire pour activer le nouveau module après sa création',
 		'tr_melisdashboardplugincreator_fp_module' => '<b>/module</b> - Le répertoire dans lequel les modules créés sont enregistrés',
-		'tr_melisdashboardplugincreator_fp_temp_thumbnail' => '<b>/melis-dashboard-plugin-creator/public/temp-thumbnail</b> - The directory where the uploaded plugin thumbnails are temporarily saved',
+		'tr_melisdashboardplugincreator_fp_temp_thumbnail' => '<b>/melis-dashboard-plugin-creator/public/temp-thumbnail</b> - Le répertoire dans lequel les images sont enregistrées temporairement',
 
 		 // Error messages
 		'tr_melisdashboardplugincreator_err_message' => 'Impossible de procéder à l\'étape suivante',
