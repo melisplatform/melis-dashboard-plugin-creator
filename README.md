@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your mac
 
 ### Prerequisites
 
-The following modules need to be installed to run the Melis Link Checker module:
+The following modules need to be installed to run the Melis Dashboard Plugin Creator module:
 
 - Melis Core
 - Melis Tool Creator
