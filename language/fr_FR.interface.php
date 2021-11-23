@@ -31,6 +31,7 @@
 		'tr_melisdashboardplugincreator_save_upload_error_encounter' => 'Erreur lors de l\'upload de l\'image.',
 		'tr_melisdashboardplugincreator_save_upload_file' => 'Fichier',
 		'tr_melisdashboardplugincreator_err_module_exist' => '"%s" existe déjà, veuillez en essayer un autre',
+		'tr_melisdashboardplugincreator_err_module_name_reserved_keyword' => '"%s" est un mot clef réservé, veuillez en saisir un autre',
 		'tr_melisdashboardplugincreator_err_plugin_name_exist' => '"%s" existe déjà pour le module sélectionné, veuillez en choisir un autre',
 		'tr_melisdashboardplugincreator_err_plugin_title_exist' => 'Le titre du plugin "%s" existe déjà pour la langue "%s" du module sélectionné',
 		'tr_melisdashboardplugincreator_generate_plugin_error_encountered' => 'Erreurs lors de la génération du plugin.',

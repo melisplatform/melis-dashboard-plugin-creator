@@ -31,6 +31,7 @@
         'tr_melisdashboardplugincreator_save_upload_error_encounter' => 'Error encountered while uploading the thumbnail.',
         'tr_melisdashboardplugincreator_save_upload_file' => 'File',
         'tr_melisdashboardplugincreator_err_module_exist' => '"%s" already exists, please try another one',
+        'tr_melisdashboardplugincreator_err_module_name_reserved_keyword' => '"%s" is a reserved keyword, please try another one',
         'tr_melisdashboardplugincreator_err_plugin_name_exist' => '"%s" already exists for the selected module, please try another one',
         'tr_melisdashboardplugincreator_err_plugin_title_exist' => '"%s" plugin title already exists for the "%s" language of the selected module, please try another one',
         'tr_melisdashboardplugincreator_generate_plugin_error_encountered' => 'Error encountered while generating the dashboard plugin.',
