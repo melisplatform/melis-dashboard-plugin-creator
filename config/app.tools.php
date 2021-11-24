@@ -317,14 +317,7 @@ return [
                         'action' => '',
                     ],
                     'hydrator'  => 'Laminas\Hydrator\ArraySerializable',
-                    'elements' => [
-                        [
-                            'spec' => [
-                                'name' => 'dpc_lang_local',
-                                'type' => 'Hidden',
-                                'id' => ''
-                            ],
-                        ],
+                    'elements' => [                        
                         [
                             'spec' => [
                                 'name' => 'dpc_plugin_title',
@@ -355,7 +348,14 @@ return [
                                     'rows' => 4
                                 ],
                             ],
-                        ],                      
+                        ],  
+                        [
+                            'spec' => [
+                                'name' => 'dpc_lang_local',
+                                'type' => 'Hidden',
+                                'id' => ''
+                            ],
+                        ],                    
                     ],
                     'input_filter' => [
                         'dpc_plugin_title' => [
@@ -451,14 +451,7 @@ return [
                         'action' => '',
                     ],
                     'hydrator'  => 'Laminas\Hydrator\ArraySerializable',
-                    'elements' => [
-                        [
-                            'spec' => [
-                                'name' => 'dpc_lang_local',
-                                'type' => 'Hidden',
-                                'id' => ''
-                            ],
-                        ],
+                    'elements' => [                        
                         [
                             'spec' => [
                                 'name' => 'dpc_plugin_title',
@@ -473,7 +466,14 @@ return [
                                     'required' => 'required',
                                 ],
                             ],
-                        ],                                           
+                        ],     
+                        [
+                            'spec' => [
+                                'name' => 'dpc_lang_local',
+                                'type' => 'Hidden',
+                                'id' => ''
+                            ],
+                        ],                                      
                     ],
                     'input_filter' => [
                         'dpc_plugin_title' => [
