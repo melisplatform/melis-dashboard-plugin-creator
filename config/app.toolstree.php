@@ -55,6 +55,7 @@ return [
                         'melisKey' => 'melisdashboardplugincreator_tool',
                         'name' => 'tr_melisdashboardplugincreator_title',
                         'icon' => 'fa fa-puzzle-piece',
+                        'follow_regular_rendering' => false,
                     ],
                     'forward' => [
                         'module' => 'MelisDashboardPluginCreator',
