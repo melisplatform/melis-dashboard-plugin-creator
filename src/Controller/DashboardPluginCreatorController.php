@@ -1148,12 +1148,13 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         // Initializing the Dashboard Plugin creator session container
         $container = new Container('dashboardplugincreator');
         
-        if (!empty($container['melis-dashboardplugincreator'])) {       
+        if (!empty($container['melis-dashboardplugincreator']) && !empty($container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'])) {       
             //call dashboard plugin creator service 
             $dpcService = $this->getServiceManager()->get('MelisDashboardPluginCreatorService');
 
             //get the temp directory that stored the uploaded plugin thumbnails        
             $tempPath = pathinfo($dpcService->getTempThumbnail(), PATHINFO_DIRNAME);  
+           
             if ($tempPath) {               
                 //remove temp thumbnail directory 
                $dpcService->removeDir($tempPath); 

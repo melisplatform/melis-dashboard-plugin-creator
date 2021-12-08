@@ -152,7 +152,8 @@ $(function(){
     });
   
     /*when dashboard plugin creator tab is closed, delete the temp thumbnail folder for the session if there are any*/
-    $body.on("click", "a[data-id=id_melisdashboardplugincreator_tool]", function(e){          
+    $body.on("click", "a.close-tab[data-id=id_melisdashboardplugincreator_tool]", function(e){ 
+    
         $.ajax({
             type: 'POST',
             url: '/melis/MelisDashboardPluginCreator/DashboardPluginCreator/removeTempThumbnailDir',
