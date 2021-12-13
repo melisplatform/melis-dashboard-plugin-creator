@@ -39,7 +39,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * This will generate the dashboard plugin based on the parameters stored in the current session   
      * @return boolean
      */
-    public function generateDashboardPlugin(){   
+    public function generateDashboardPlugin()
+    {   
         // Event parameters prepare
         $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
         // Sending service start event
@@ -82,7 +83,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param string $moduleDir
      * @return boolean
      */
-    protected function performGeneration($moduleDir){
+    protected function performGeneration($moduleDir)
+    {
         //create a dashboardplugin config
         $isSuccessful = $this->generateDashboardPluginConfig($moduleDir);
         if (!$isSuccessful) {
@@ -133,8 +135,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param string $moduleDir
      * @return boolean
      */
-    protected function rollbackPluginGeneration($moduleDir){
-
+    protected function rollbackPluginGeneration($moduleDir)
+    {
         //remove created files if using existing mode
         if ($this->dpcSteps['step_1']['dpc_plugin_destination'] == self::EXISTING_MODE) {              
             
@@ -257,10 +259,10 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             $dummyContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum consequat auctor. Nunc eget quam ligula. Phasellus dictum urna id iaculis eleifend. Ut ut augue hendrerit lacus volutpat mollis a vitae massa. Etiam ex arcu, finibus eget velit et, semper pharetra neque. Proin a pellentesque arcu. In gravida sagittis diam, at consectetur turpis volutpat vel. Integer suscipit ipsum vitae consequat tristique. Fusce semper lectus mattis metus pellentesque, ac tincidunt ipsum dignissim.";
 
             //set the tab header and content dynamically depending upon the number of tabs set
-            for ($i=1; $i<=$tabCount; $i++) {
+            for ($i = 1; $i <= $tabCount; $i++) {
                 $pluginTabId = 'tab-'.$i.'-'.str_replace(" ","-",$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i]).'-'.$pluginConfigPluginId;
 
-                $tabHeader .= '<li class="nav-item '.($i==1?"active":"").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i].' nav-link'.($i==1?" active":"").'" href="#'.$pluginTabId.'" data-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
+                $tabHeader .= '<li class="nav-item '.($i == 1 ? "active" : "").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i].' nav-link'.($i==1?" active":"").'" href="#'.$pluginTabId.'" data-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
                 $defaultContent = "<h3>Tab ".$i."</h3>\r\n\t\t\t\t\t\t<p>".$dummyContent."</p>";
                 $tabContent .= '<div class="tab-pane'.($i==1?" active":"").'" id="'.$pluginTabId.'">'."\r\n\t\t\t\t\t\t".$defaultContent."\r\n\t\t\t\t\t".'</div>'."\r\n\t\t\t\t\t";
             }
@@ -319,7 +321,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * This method retrieves the temp thumbnail path and filename     
      * @return string
      */
-    public function getTempThumbnail(){
+    public function getTempThumbnail()
+    {
         // Event parameters prepare
         $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
         // Sending service start event
@@ -327,7 +330,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
         //session container     
         $container = new Container('dashboardplugincreator');     
-        $sessionID = $container->getManager()->getId(); 
+        $sessionID = $container['melis-dashboardplugincreator']['sessionID'];
 
         //get the dashboard plugin creator's module directory 
         $melisModule = $this->getServiceManager()->get('MelisAssetManagerModulesService');  
@@ -351,7 +354,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param boolean $appencConfig    
      * @return string
      */
-    protected function setTranslations($moduleDir, $appendConfig = true){
+    protected function setTranslations($moduleDir, $appendConfig = true)
+    {
         $languageDir = $moduleDir.'/language/';
         
         //retrieve all available languages
@@ -362,7 +366,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
         foreach ($languages as $lang) {
             $langFile = $languageDir.$lang['lang_locale'].'.interface.php';
-            $langFile = file_exists($langFile)?$langFile:$languageDir.$lang['lang_locale'].'.php';
+            $langFile = file_exists($langFile) ? $langFile : $languageDir.$lang['lang_locale'].'.php';
 
             if (file_exists($langFile)) {
                  //get the existing translation of the language
@@ -371,14 +375,14 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
                 if ($appendConfig) {
                     //set the menu title
                     $translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu title'] = !empty($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_title'])
-                                                        ?$this->removeExtraSpace($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_title']):"";
+                                                        ? $this->removeExtraSpace($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_title']) : "";
                     
                     //set the menu description
-                    $translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu description'] = !empty($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_desc'])                                ?$this->removeExtraSpace($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_desc']):"";
+                    $translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu description'] = !empty($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_desc'])                                ? $this->removeExtraSpace($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_desc']) : "";
                     
                     //set the dashboard title
                     $translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).' title'] = !empty($this->dpcSteps['step_3'][$lang['lang_locale']]['dpc_plugin_title'])
-                                                        ?$this->removeExtraSpace($this->dpcSteps['step_3'][$lang['lang_locale']]['dpc_plugin_title']):"";  
+                                                        ? $this->removeExtraSpace($this->dpcSteps['step_3'][$lang['lang_locale']]['dpc_plugin_title']) : "";  
 
                     //set the plugin section title
                     $translationArr['tr_PluginSection_'.strtolower($this->moduleName)] = $this->moduleName;
@@ -414,7 +418,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param boolean $appendConfig
      * @return boolean
      */
-    protected function updateModuleConfig($moduleDir, $appendConfig = true){
+    protected function updateModuleConfig($moduleDir, $appendConfig = true)
+    {
         $res = false;
 
         //get the existing module.config.php
@@ -479,7 +484,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param string pluginToViewName
      * @return string
      */
-    protected function setTemplateMapEntry($moduleFileContent, $moduleToViewName, $pluginToViewName){        
+    protected function setTemplateMapEntry($moduleFileContent, $moduleToViewName, $pluginToViewName)
+    {        
         $templateMapKey = $moduleToViewName."/dashboard-plugins/".$pluginToViewName;
         $templateMapValue = ".'/../view/".$moduleToViewName."/dashboard-plugins/".$pluginToViewName.".phtml'"; 
                   
@@ -536,7 +542,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param string pluginToViewName
      * @return string
      */
-    protected function setControllerPluginEntry($moduleFileContent, $moduleToViewName, $pluginToViewName){       
+    protected function setControllerPluginEntry($moduleFileContent, $moduleToViewName, $pluginToViewName)
+    {       
         $controllerPluginKey = $this->moduleName.$this->pluginName.'Plugin';
         $controllerPluginValue =  "\\".$this->moduleName."\Controller\DashboardPlugins\\".$controllerPluginKey."::class";
                 
@@ -687,7 +694,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param string $moduleDir
      * @return boolean
      */
-    protected function emptyConfigToolsTreeSection($moduleDir){
+    protected function emptyConfigToolsTreeSection($moduleDir)
+    {
         $toolsTreeConfigFile = $moduleDir.'/config/app.toolstree.php';        
         $toolsTreeConfig = include $toolsTreeConfigFile;
         
@@ -713,7 +721,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param string $existingModuleName
      * @return array
     */     
-    public function getModuleExistingPlugins($existingModuleName){      
+    public function getModuleExistingPlugins($existingModuleName)
+    {      
         // Event parameters prepare
         $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
         // Sending service start event
@@ -763,7 +772,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param string $existingModuleName 
      * @return array
     */     
-    public function getExistingTranslatedPluginTitle($modulePlugins, $existingModuleName){   
+    public function getExistingTranslatedPluginTitle($modulePlugins, $existingModuleName)
+    {   
         // Event parameters prepare
         $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
         // Sending service start event
@@ -806,7 +816,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param string $dirPath
      * @return boolean
      */
-    public function removeDir($dirPath) {
+    public function removeDir($dirPath) 
+    {
         if (! is_dir($dirPath)) {
             return false;
         }
@@ -834,7 +845,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param string $str
      * @return string
      */
-    public function generateModuleNameCase($str) {
+    public function generateModuleNameCase($str) 
+    {
         $str = preg_replace('/([a-z])([A-Z])/', "$1$2", $str);
         $str = str_replace(['-', '_'], '', ucwords(strtolower($str)));
         $str = ucfirst($str);
@@ -877,7 +889,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param string $str
      * @return string
      */
-    public function removeAccents($str){
+    public function removeAccents($str)
+    {
         $transliterator = \Transliterator::createFromRules(':: Any-Latin; :: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: NFC;', \Transliterator::FORWARD);
         $normalized = $transliterator->transliterate($str);
         return $normalized;
@@ -888,7 +901,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      * @param string $str
      * @return string
      */
-    public function removeExtraSpace($string){
+    public function removeExtraSpace($string)
+    {
         $cleanStr = trim(preg_replace('/\s\s+/', ' ', str_replace("\n", " ", $string)));
         return $cleanStr;
     }

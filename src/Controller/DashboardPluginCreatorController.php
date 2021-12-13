@@ -37,6 +37,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
         //generate new session id, this will be used in creating a temp folder path for plugin thumbnails
         $container->getManager()->regenerateId();
+        $container['melis-dashboardplugincreator']['sessionID'] = $container->getManager()->getId();
         return $view;
     }
 
@@ -162,7 +163,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * @param boolean $validate
      * @return ViewModel
     */ 
-    private function processStep1($viewStep, $nextStep, $validate){
+    private function processStep1($viewStep, $nextStep, $validate)
+    {
         $container = new Container('dashboardplugincreator');//session container
         $curStep = 1;       
         $data = array();
@@ -294,10 +296,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
             //format error labels
             if ($errorMessages) {
-                foreach ($errorMessages as $keyError => $valueError)
-                {
-                    foreach ($stepForm->getElements() as $keyForm => $valueForm)
-                    {
+                foreach ($errorMessages as $keyError => $valueError) {
+                    foreach ($stepForm->getElements() as $keyForm => $valueForm) {
                         $elementName = $valueForm->getAttribute('name');
                         $elementLabel = $valueForm->getLabel();              
 
@@ -325,9 +325,10 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * @param boolean $validate
      * @return ViewModel
     */ 
-    private function processStep2($viewStep, $nextStep, $validate){   
+    private function processStep2($viewStep, $nextStep, $validate)
+    {   
         $container = new Container('dashboardplugincreator');//session container
-        $sessionID = $container->getManager()->getId(); 
+        $sessionID = $container['melis-dashboardplugincreator']['sessionID'];
         $curStep = 2;       
         $data = array();
         $errors = array();
@@ -427,7 +428,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * @param boolean $validate
      * @return ViewModel
     */ 
-    private function processStep3($viewStep, $nextStep, $validate){       
+    private function processStep3($viewStep, $nextStep, $validate)
+    {       
         $container = new Container('dashboardplugincreator');//session container
         $curStep = 3;       
         $data = array();
@@ -496,7 +498,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * @param boolean $validate
      * @return ViewModel
     */  
-    private function processStep4($viewStep, $nextStep, $validate){           
+    private function processStep4($viewStep, $nextStep, $validate)
+    {           
         $data = array();        
         $stepForm = null;   
 
@@ -515,7 +518,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * @param boolean $validate
      * @return ViewModel
     */
-    private function processStep5($viewStep, $nextStep, $validate){
+    private function processStep5($viewStep, $nextStep, $validate)
+    {
         $container = new Container('dashboardplugincreator');//session container             
         $data = array();       
         $errors = array();
@@ -584,7 +588,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * @param bool $validate
      * @return array
     */
-    private function getStepFormAndData($curStep, $validate = false){
+    private function getStepFormAndData($curStep, $validate = false)
+    {
         $container = new Container('dashboardplugincreator');//session container
 
         //get the current step's form config
@@ -695,7 +700,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * @param obj $stepForm
      * @return obj
     */
-    private function setDashboardTabIconElements($stepForm){       
+    private function setDashboardTabIconElements($stepForm)
+    {       
         $container = new Container('dashboardplugincreator');//session container
         $melisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');  
 
@@ -710,7 +716,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             $inputFilter = $stepForm->getInputFilter();
 
             //add dashboard tab icon elements to form
-            for ($i=1; $i<=$tabCount; $i++) {
+            for ($i = 1; $i <= $tabCount; $i++) {
                 $element = new \Laminas\Form\Element\Radio('dpc_plugin_tab_icon_'.$i);
                 $element->setLabel($translator->translate('tr_melisdashboardplugincreator_dashboard_tab_label').' '.$i);
                 $element->setValueOptions($dashboardTabIconOptions); 
@@ -750,7 +756,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * @param int $step
      * @return array
     */
-    private function getLanguageForms($step){
+    private function getLanguageForms($step)
+    {
         $container = new Container('dashboardplugincreator');
         // get all languages available in the plaftform
         $coreLang = $this->getServiceManager()->get('MelisCoreTableLang');
@@ -799,7 +806,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * This retrieves the list of steps of the tool from the config
      * @return array
     */
-    private function getStepConfig(){
+    private function getStepConfig()
+    {
         $melisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');
         $toolSteps = $melisCoreConfig->getItem('melisdashboardplugincreator/datas/steps'); 
         return $toolSteps;
@@ -838,7 +846,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * @param array $formData
      * @return array
     */
-    private function validateMultiLanguageForm($curStep, $formData){
+    private function validateMultiLanguageForm($curStep, $formData)
+    {
         $container = new Container('dashboardplugincreator');//to store the session data
         $translator = $this->getServiceManager()->get('translator');
         // Meliscore languages
@@ -862,7 +871,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
             
             //loop through the language form data
             $ctr = 1;
-            foreach ($formData['step-form'] As $val) {               
+            foreach ($formData['step-form'] as $val) {               
                 if ($val['dpc_lang_local'] && $val['dpc_lang_local'] == $lang['lang_locale']) {                  
                     $stepFormtmp->setData($val);                    
                 }  
@@ -951,10 +960,10 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         $_FILES = array($uploadedFile);
 
         try {
-            $tool =   $this->getServiceManager()->get('MelisCoreTool'); 
+            $tool = $this->getServiceManager()->get('MelisCoreTool'); 
             $thumbnailTempPath = $this->getTempThumbnailDirectory();
             //attach current session id to temp-thumbnail directory
-            $sessionID = $container->getManager()->getId(); 
+            $sessionID = $container['melis-dashboardplugincreator']['sessionID'];
             $thumbnailTempPath = $thumbnailTempPath.$sessionID.'/';
 
             $upload = false;
@@ -1049,9 +1058,10 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * This processes the uploading of the plugin thumbnail     
      * @return Laminas\View\Model\JsonModel
     */
-    public function processUploadAction(){   
+    public function processUploadAction()
+    {   
         $container = new Container('dashboardplugincreator');//session container
-        $sessionID = $container->getManager()->getId();    
+        $sessionID = $container['melis-dashboardplugincreator']['sessionID'];   
         $errors = array();       
         $uploadFormErrorMessages = array();
         $textMessage = '';    
@@ -1119,12 +1129,11 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * @param array $formElements
      * @return array
     */
-    private function formatErrors($errors, $formElements){       
+    private function formatErrors($errors, $formElements)
+    {       
 
-        foreach ($errors as $keyError => $valueError)
-        {       
-            foreach ($formElements as $keyForm => $valueForm)
-            {
+        foreach ($errors as $keyError => $valueError) {       
+            foreach ($formElements as $keyForm => $valueForm) {
                 $elementName = $valueForm->getAttribute('name');
                 //override form label with the custom one if given
                 $elementLabel = !empty($valueError['label'])?$valueError['label']:$valueForm->getLabel();              
@@ -1169,7 +1178,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * @param number of bytes
      * @return bytes
     */
-    private function formatBytes($bytes) {
+    private function formatBytes($bytes) 
+    {
         $size = $bytes;
         $units = array( 'B', 'Ko', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
         $power = $size > 0 ? floor(log($size, 1024)) : 0;
@@ -1203,7 +1213,8 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
      * Retrieves the temp thumbnail directory
      * @return string
     */
-    private function getTempThumbnailDirectory(){
+    private function getTempThumbnailDirectory()
+    {
         // Set the user
         $melisModule = $this->getServiceManager()->get('MelisAssetManagerModulesService');                        
         $names = explode("\\", __NAMESPACE__);                       
