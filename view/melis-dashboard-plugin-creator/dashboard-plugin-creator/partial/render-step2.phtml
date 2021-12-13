@@ -76,7 +76,14 @@
     ?>      
 </div>
 
-
+<script>
+    $(":file").filestyle({
+        input: true,
+        buttonBefore:true,
+        buttonText : '<?= $this->translate('tr_melisdashboardplugincreator_input_file_upload_label');?>',
+        placeholder : '<?= $this->translate("tr_melisdashboardplugincreator_input_file_upload_placeholder");?>'
+    });
+</script>
 
 
 

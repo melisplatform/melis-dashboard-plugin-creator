@@ -81,6 +81,8 @@
         'tr_melisdashboardplugincreator_delete_plugin_thumbnail_confirm' => 'Êtes-vous sûr(e) de vouloir supprimer l\'image ?',
         'tr_melisdashboardplugincreator_delete_plugin_thumbnail_error' => 'Erreur lors de la suppression de l\'image',    
         'tr_melisdashboardplugincreator_input_file_uploading' => 'Upload...', 
+        'tr_melisdashboardplugincreator_input_file_upload_label' => 'Parcourir...',
+        'tr_melisdashboardplugincreator_input_file_upload_placeholder' => 'Aucun fichier sélectionné',
 
 		//Step3 Form
 		'tr_melisdashboardplugincreator_title_step_3' => 'Traductions et icône du Dashboard plugin',

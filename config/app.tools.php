@@ -432,7 +432,7 @@ return [
                                     'id' => 'dpc_plugin_upload_thumbnail',
                                     'accept' => ".gif,.jpg,.jpeg,.png",
                                     'data-classButton' => 'btn btn-primary',
-                                    'class' => 'upload-category-media-image form-control',
+                                    'class' => 'filestyle form-control',
                                     'required' => 'required',    
                                 ]
                             ]
