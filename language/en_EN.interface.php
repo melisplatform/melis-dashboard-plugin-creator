@@ -103,8 +103,9 @@
         //Step5 Form
         'tr_melisdashboardplugincreator_title_step_5' => 'Finalization',
         'tr_melisdashboardplugincreator_desc_step_5' => 'Tick the box below if you wish to activate the plugin upon creation.',
-        'tr_melisdashboardplugincreator_activate_plugin_after_creation' => 'Activate plugin after creation',
-        'tr_melisdashboardplugincreator_activate_plugin_note' => '<b>Note</b>: Activating the plugin will require to restart the platform',
+        'tr_melisdashboardplugincreator_activate_plugin_after_creation' => 'Activate plugin after creation',        
+        'tr_melisdashboardplugincreator_activate_plugin_note' => '<b>Note</b>: <br>Activating the plugin will require to restart the platform.',
+        'tr_melisdashboardplugincreator_activate_module_note' => '<br>The <b>"%s"</b> module will have to be activated first to display the generated plugin on the dashboard.',      
         'tr_melisdashboardplugincreator_finalization_success_title' => 'The plugin has been successfully created',
         'tr_melisdashboardplugincreator_finalization_success_desc_with_counter' => 'The platform will refresh in <strong><span id="dpc-restart-cd">5</span></strong>',
         'tr_melisdashboardplugincreator_finalization_success_desc' => 'You can manually activate the plugin by reloading the page',

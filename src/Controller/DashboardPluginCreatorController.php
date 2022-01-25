@@ -217,8 +217,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
   
 
             //if current step is valid, save form data to session and get the view of the next step 
-            if ($stepForm->isValid()) { 
-
+            if ($stepForm->isValid()) {                 
                 //validate new module name entered for duplicates or if the name is a reserved word
                 if (!empty($postValues['step-form']['dpc_new_module_name'])) {
                     $newModuleName = strtolower($postValues['step-form']['dpc_new_module_name']);
@@ -687,12 +686,39 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                 break;
 
             case 5:
-               $appConfigForm = $melisCoreConfig->getFormMergedAndOrdered('melisdashboardplugincreator/forms/melisdashboardplugincreator_step5_form', 'melisdashboardplugincreator_step5_form');                               
-                $stepForm = $factory->createForm($appConfigForm); 
+                $appConfigForm = $melisCoreConfig->getFormMergedAndOrdered('melisdashboardplugincreator/forms/melisdashboardplugincreator_step5_form', 'melisdashboardplugincreator_step5_form');                               
+                $stepForm = $factory->createForm($appConfigForm);    
+                $data['isInactiveExistingModule'] = $this->isInactiveExistingModule(); 
+                $data['existingModule'] =  $existingModuleName = !empty($container['melis-dashboardplugincreator']['step_1']['dpc_existing_module_name']) ? $container['melis-dashboardplugincreator']['step_1']['dpc_existing_module_name'] : null;
+
                 break;               
         }     
 
         return array($stepForm, $data);  
+    }
+
+     /**
+     * This will check if the selected existing module on Step 1 is inactive or not
+     * @param obj $stepForm
+     * @return obj
+    */
+    private function isInactiveExistingModule() 
+    {  
+        $container = new Container('dashboardplugincreator');//session container
+        $existingModuleName = !empty($container['melis-dashboardplugincreator']['step_1']['dpc_existing_module_name']) ? $container['melis-dashboardplugincreator']['step_1']['dpc_existing_module_name'] : null;
+        $isExistingModuleInactive = 0;//default to active
+        
+        if ($existingModuleName) {
+            $moduleSvc = $this->getServiceManager()->get('ModulesService');
+            $activeModules = $moduleSvc->getActiveModules();
+            
+            //check if the selected existing module is not one of the active modules of the platform
+            if (!in_array($existingModuleName, $activeModules)) {
+                $isExistingModuleInactive = 1;
+            }
+        } 
+
+        return $isExistingModuleInactive;       
     }
 
     /**
