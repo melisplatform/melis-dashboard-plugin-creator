@@ -1,4 +1,5 @@
-<?php if ($this->toolIsAccessible): ?>
+<?php if ($this->toolIsAccessible): ?>	
+
 	<div class="widget widget-tabs widget-tabs-responsive">
 	    <!-- Tabs Heading Start-->
 	    <div class="widget-head">
@@ -12,9 +13,19 @@
 	<!-- Tabs Content Start-->
 	<div class="row row-merge">
 		<div class="col-sm-12 bg-white">
-			<div class="innerAll">
+			<div class="innerAll">		
 				<div class="tab-content">
-					#TABCONTENT			
+					#TABCONTENT		
+
+					<p>
+						<b><span>To update the plugin's content, go to the following files and update accordingly.</span></b>
+						<br />
+						<b>Controller:</b> /module/ModuleTpl/src/ModuleTpl/Controller/DashboardPlugins/ModuleTplPluginNamePlugin.php
+						<br />
+						<b>View:</b> /module/ModuleTpl/view/moduletpl/dashboard-plugins/plugin-name.phtml	
+						<br />
+						<b>Assets:</b> /module/ModuleTpl/public/dashboard-plugin
+					</p>		
 				</div>
 			</div>
 		</div>

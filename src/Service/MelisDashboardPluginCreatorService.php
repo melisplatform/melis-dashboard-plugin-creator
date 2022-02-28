@@ -174,8 +174,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             }
             
             //delete view
-            if (file_exists($moduleDir.'/view/'.$this->convertToViewName($this->moduleName).'/dashboard-plugins/'.$this->convertToViewName($this->pluginName).'.phtml')) {
-                unlink($moduleDir.'/view/'.$this->convertToViewName($this->moduleName).'/dashboard-plugins/'.$this->convertToViewName($this->pluginName).'.phtml');
+            if (file_exists($moduleDir.'/view/'.$this->convertToViewName($this->moduleName).'/dashboard-plugins/'.$this->convertToViewName($this->dpcSteps['step_1']['dpc_plugin_name']).'.phtml')) {
+                unlink($moduleDir.'/view/'.$this->convertToViewName($this->moduleName).'/dashboard-plugins/'.$this->convertToViewName($this->dpcSteps['step_1']['dpc_plugin_name']).'.phtml');
             }
            
             //update module.php to remove the dashboard config 
@@ -230,7 +230,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $dashboardPluginControllerContent = str_replace('moduleTplViewFolderName', $this->convertToViewName($this->moduleName), $dashboardPluginControllerContent);
 
         //update the view file name 
-        $dashboardPluginControllerContent = str_replace('plugin-name', $this->convertToViewName($this->pluginName), $dashboardPluginControllerContent);
+        $dashboardPluginControllerContent = str_replace('plugin-name', $this->convertToViewName($this->dpcSteps['step_1']['dpc_plugin_name']), $dashboardPluginControllerContent);
         
         $res = $this->generateFile($this->moduleName.$this->pluginName.'Plugin.php', $targetDir, $dashboardPluginControllerContent);
         return $res;
@@ -274,7 +274,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         }          
 
         //generate view file
-        $res = $this->generateFile($this->convertToViewName($this->pluginName).'.phtml', $targetDir, $dashboardPluginViewContent);
+        $res = $this->generateFile($this->convertToViewName($this->dpcSteps['step_1']['dpc_plugin_name']).'.phtml', $targetDir, $dashboardPluginViewContent);
         return $res;
     }
 
@@ -425,7 +425,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         //get the existing module.config.php
         $moduleConfigFile = $moduleDir.'/config/module.config.php';
         $moduleToViewName = $this->convertToViewName($this->moduleName);
-        $pluginToViewName = $this->convertToViewName($this->pluginName);
+        $pluginToViewName = $this->convertToViewName($this->dpcSteps['step_1']['dpc_plugin_name']);
         
         //get the content of module.config.php 
         $moduleFileContent = file_get_contents($moduleConfigFile);
@@ -641,6 +641,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             $fileContent = str_replace('PluginName', $this->pluginName, $fileContent);
             $fileContent = str_replace('pluginName', lcfirst($this->pluginName), $fileContent);
             $fileContent = str_replace('pluginname', strtolower($this->pluginName), $fileContent);
+            $fileContent = str_replace('plugin-name', $this->convertToViewName($this->dpcSteps['step_1']['dpc_plugin_name']), $fileContent);
            
             //set the module name
             $fileContent = str_replace('ModuleTpl', $this->moduleName, $fileContent);
