@@ -1,0 +1,38 @@
+<melis-dashboard-plugin-creator>
+	<package_info>
+		<mp_title>Melis Dashboard Plugin Creator</mp_title>
+		<mp_subtitle>The module that will help you generate a ready-to-use dashboard plugin.</mp_subtitle>
+		<mp_description>
+			Melis Dashboard Plugin Creator is a tool that will generate a dashboard plugin, ready to be updated based on the project's requirements. The generated dashboard plugin can be either single or multi-tab, depending upon the inputs of the user.
+		</mp_description>
+		<mp_maintainers>melisplatform</mp_maintainers>
+		<mp_group>Melis Core</mp_group>
+	</package_info>
+	<package_images>
+		<img_1>
+			<mpi_image_title>MelisDashboardPluginCreator's Plugin</mpi_image_title>
+			<mpi_image_file>melis-dashboard-plugin-creator-1.JPG</mpi_image_file>
+			<mpi_image_main>1</mpi_image_main>
+		</img_1>
+		<img_2>
+			<mpi_image_title>MelisDashboardPluginCreator's Menu Texts and Display</mpi_image_title>
+			<mpi_image_file>melis-dashboard-plugin-creator-2.JPG</mpi_image_file>
+			<mpi_image_main>0</mpi_image_main>
+		</img_2>
+		<img_3>
+			<mpi_image_title>MelisDashboardPluginCreator's Dashboard Texts and Display</mpi_image_title>
+			<mpi_image_file>melis-dashboard-plugin-creator-3.JPG</mpi_image_file>
+			<mpi_image_main>0</mpi_image_main>
+		</img_3>
+		<img_4>
+			<mpi_image_title>MelisDashboardPluginCreator's Summary</mpi_image_title>
+			<mpi_image_file>melis-dashboard-plugin-creator-4.JPG</mpi_image_file>
+			<mpi_image_main>0</mpi_image_main>
+		</img_4>
+		<img_5>
+			<mpi_image_title>MelisDashboardPluginCreator's Finalization</mpi_image_title>
+			<mpi_image_file>melis-dashboard-plugin-creator-5.JPG</mpi_image_file>
+			<mpi_image_main>0</mpi_image_main>
+		</img_5>	
+	</package_images>
+</melis-dashboard-plugin-creator>
