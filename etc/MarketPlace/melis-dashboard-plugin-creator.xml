@@ -3,7 +3,7 @@
 		<mp_title>Melis Dashboard Plugin Creator</mp_title>
 		<mp_subtitle>The module that brings you a system that generates a ready-to-use dashboard plugin.</mp_subtitle>
 		<mp_description>
-			Melis Dashboard Plugin Creator is a tool that will generate a dashboard plugin, ready to be updated based on the project's requirements. The generated dashboard plugin can be either single or multi-tab, depending upon the inputs of the user.
+			Melis Dashboard Plugin Creator is a tool that will generate a dashboard plugin, ready to be updated based on the project's requirements. <br /> The generated dashboard plugin can be either single or multi-tab, depending upon the inputs of the user.
 		</mp_description>
 		<mp_maintainers>melisplatform</mp_maintainers>
 		<mp_group>Melis Core</mp_group>
