@@ -2,7 +2,7 @@
 
 Generates a ready-to-use dashboard plugin, complete with source code and necessary configuration. This will aid the developers, especially the new developers of the platform, to swiftly create a plugin with or without the ample knowledge of the plugin's technicalities.
 
-## Getting started
+## Getting started    
 
 These instructions will get you a copy of the project up and running on your machine.
 
