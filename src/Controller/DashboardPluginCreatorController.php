@@ -174,7 +174,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         //validate form if Next button is triggered
         if ($validate) {  
             $request = $this->getRequest();
-            $postValues = get_object_vars($request->getPost()); 
+            $postValues = $request->getPost()->toArray(); 
             
             //get current step's form and data
             list($stepForm, $data) = $this->getStepFormAndData($curStep);
@@ -347,7 +347,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         //validate form if Next button is triggered
         if ($validate) {         
             $request = $this->getRequest();
-            $postValues = get_object_vars($request->getPost()); 
+            $postValues = $request->getPost()->toArray();
             $uploadedFile = $request->getFiles()->toArray();
                 
             //merge upload data with the other posted values
@@ -447,7 +447,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         //validate form if Next button is triggered
         if ($validate) {              
             $request = $this->getRequest();
-            $postValues = get_object_vars($request->getPost()); 
+            $postValues = $request->getPost()->toArray();
            
             //validate language form
             list($isValidLanguageForm, $languageFormErrorMessages) = $this->validateMultiLanguageForm($curStep, $postValues);  
@@ -527,7 +527,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
         //generate dashboard plugin
         if ($validate) { 
             $request = $this->getRequest();
-            $postValues = get_object_vars($request->getPost());          
+            $postValues = $request->getPost()->toArray();        
             $isActivatePlugin = !empty($postValues['step-form']['dpc_activate_plugin'])?1:0;
 
             //if destination of the plugin is the new module, create first the new module before adding the dashboard plugin files
