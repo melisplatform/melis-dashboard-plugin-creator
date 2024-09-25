@@ -1,6 +1,6 @@
 <?php
-    return [	
-	    'tr_melisdashboardplugincreator_title' => 'Créateur de Dashboard plugin',
+	return [	
+		'tr_melisdashboardplugincreator_title' => 'Créateur de Dashboard plugin',
 		'tr_melisdashboardplugincreator_desc' => 'Le créateur de Dashboard plugin génère des nouveaux plugins prêt à l\'emploi.',
 
 		//Buttons
@@ -8,14 +8,14 @@
 		'tr_melisdashboardplugincreator_next' => 'Suivant',
 		'tr_melisdashboardplugincreator_finish_and_create_the_plugin' => 'Terminer et créer le plugin',
 
-		 // Warnings
+		// Warnings
 		'tr_melisdashboardplugincreator_fp_title' => 'Problème de droits',
 		'tr_melisdashboardplugincreator_fp_msg' => 'Pour créer ce plugin veuillez donner des droits d\'écriture pour les dossiers suivants ou contactez l\'administrateur.',
 		'tr_melisdashboardplugincreator_fp_config' => '<b>/config/melis.module.load.php</b> - Ce fichier est nécessaire pour activer le nouveau module après sa création',
 		'tr_melisdashboardplugincreator_fp_module' => '<b>/module</b> - Le répertoire dans lequel les modules créés sont enregistrés',
 		'tr_melisdashboardplugincreator_fp_temp_thumbnail' => '<b>/melis-dashboard-plugin-creator/public/temp-thumbnail</b> - Le répertoire dans lequel les images sont enregistrées temporairement',
 
-		 // Error messages
+		// Error messages
 		'tr_melisdashboardplugincreator_err_message' => 'Impossible de procéder à l\'étape suivante',
 		'tr_melisdashboardplugincreator_err_invalid_name' => 'Seul les caractères alphabetiques sont autorisés',	
 		'tr_melisdashboardplugincreator_err_long_50' => 'Valeur trop longue, elle doit être de moins de 50 caractères',
@@ -36,6 +36,9 @@
 		'tr_melisdashboardplugincreator_err_plugin_title_exist' => 'Le titre du plugin "%s" existe déjà pour la langue "%s" du module sélectionné',
 		'tr_melisdashboardplugincreator_generate_plugin_error_encountered' => 'Erreurs lors de la génération du plugin.',
 		'tr_melisdashboardplugincreator_upload_too_big' => 'La taille de l\'image ne doit pas excéder %s',
+
+		// steps
+		'tr_melisdashboardplugincreator_steps' => 'Étape',
 
 		// Steps
 		'tr_melisdashboardplugincreator_plugin' => 'Plugin',
@@ -76,13 +79,13 @@
 		'tr_melisdashboardplugincreator_upload_thumbnail' => 'Image du plugin(190x100 recommandé)',
 		'tr_melisdashboardplugincreator_upload_thumbnail tooltip' => 'Uploadez l\'image du plugin',
 		'tr_melisdashboardplugincreator_common_label_yes' => 'Oui',
-        'tr_melisdashboardplugincreator_common_label_no' => 'Non',
-        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_title' => 'Supprimer l\'image',
-        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_confirm' => 'Êtes-vous sûr(e) de vouloir supprimer l\'image ?',
-        'tr_melisdashboardplugincreator_delete_plugin_thumbnail_error' => 'Erreur lors de la suppression de l\'image',    
-        'tr_melisdashboardplugincreator_input_file_uploading' => 'Upload...', 
-        'tr_melisdashboardplugincreator_input_file_upload_label' => 'Parcourir...',
-        'tr_melisdashboardplugincreator_input_file_upload_placeholder' => 'Aucun fichier sélectionné',
+		'tr_melisdashboardplugincreator_common_label_no' => 'Non',
+		'tr_melisdashboardplugincreator_delete_plugin_thumbnail_title' => 'Supprimer l\'image',
+		'tr_melisdashboardplugincreator_delete_plugin_thumbnail_confirm' => 'Êtes-vous sûr(e) de vouloir supprimer l\'image ?',
+		'tr_melisdashboardplugincreator_delete_plugin_thumbnail_error' => 'Erreur lors de la suppression de l\'image',    
+		'tr_melisdashboardplugincreator_input_file_uploading' => 'Upload...', 
+		'tr_melisdashboardplugincreator_input_file_upload_label' => 'Parcourir...',
+		'tr_melisdashboardplugincreator_input_file_upload_placeholder' => 'Aucun fichier sélectionné',
 
 		//Step3 Form
 		'tr_melisdashboardplugincreator_title_step_3' => 'Traductions et icône du Dashboard plugin',
@@ -93,7 +96,7 @@
 		'tr_melisdashboardplugincreator_dashboard_tab_icon tooltip' => 'Sélectionnez les icones de chaque onglet',  
 		'tr_melisdashboardplugincreator_dashboard_tab_label' => 'Onglet du plugin',
 
-		 //Step4 Form
+		//Step4 Form
 		'tr_melisdashboardplugincreator_title_step_4' => 'Récapitulatif',
 		'tr_melisdashboardplugincreator_desc_step_4' => 'Vérifiez les paramètres avant la création du plugin',
 		'tr_melisdashboardplugincreator_desc_step_4_dashboard_tab' => 'Onglet du plugin',
@@ -105,11 +108,11 @@
 		'tr_melisdashboardplugincreator_desc_step_5' => 'Cochez la case pour activer le plugin à la création.',
 		'tr_melisdashboardplugincreator_activate_plugin_after_creation' => 'Activer le plugin à la création',
 		'tr_melisdashboardplugincreator_activate_plugin_note' => '<b>Note </b>: <br> Activer le plugin nécessitera le redémarrage de la plateforme.',
-	 	'tr_melisdashboardplugincreator_activate_module_note' => '<br>Le module <b>"%s"</b> devra ensuite être activé pour afficher le plugin généré sur le dashboard.',
+		'tr_melisdashboardplugincreator_activate_module_note' => '<br>Le module <b>"%s"</b> devra ensuite être activé pour afficher le plugin généré sur le dashboard.',
 		'tr_melisdashboardplugincreator_finalization_success_title' => 'Le plugin a été créé avec succès',
 		'tr_melisdashboardplugincreator_finalization_success_desc_with_counter' => 'La plateforme va se recharger dans <strong><span id="dpc-restart-cd">5</span></strong>',
 		'tr_melisdashboardplugincreator_finalization_success_desc' => 'Vous pouvez activer le plugin manuellement en rechargeant la page',
 		'tr_melisdashboardplugincreator_execute_aadtnl_setup' => 'Derniers réglages en cours',
 		'tr_melisdashboardplugincreator_please_wait' => 'Veuillez patienter',
 		'tr_melisdashboardplugincreator_refreshing' => 'Rechargement'
-    ];
+	];

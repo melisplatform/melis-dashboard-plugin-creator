@@ -69,7 +69,7 @@ return [
                             'conf' => [
                                 'id' => 'id_melisdashboardplugincreator_header',
                                 'melisKey' => 'melisdashboardplugincreator_header',
-                                'name' => 'tr_melisdashboardplugincreator_header',
+                                'name' => 'tr_meliscore_common_header',
                             ],
                             'forward' => [
                                 'module' => 'MelisDashboardPluginCreator',
@@ -83,7 +83,7 @@ return [
                             'conf' => [
                                 'id' => 'id_melisdashboardplugincreator_content',
                                 'melisKey' => 'melisdashboardplugincreator_content',
-                                'name' => 'tr_melisdashboardplugincreator_content',
+                                'name' => 'tr_meliscore_common_content',
                             ],
                             'forward' => [
                                 'module' => 'MelisDashboardPluginCreator',

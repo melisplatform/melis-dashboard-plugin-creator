@@ -262,7 +262,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             for ($i = 1; $i <= $tabCount; $i++) {
                 $pluginTabId = 'tab-'.$i.'-'.str_replace(" ","-",$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i]).'-'.$pluginConfigPluginId;
 
-                $tabHeader .= '<li class="nav-item '.($i == 1 ? "active" : "").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i].' nav-link'.($i==1?" active":"").'" href="#'.$pluginTabId.'" data-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
+                $tabHeader .= '<li class="nav-item '.($i == 1 ? "active" : "").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i].' nav-link'.($i==1?" active":"").'" data-bs-target="#'.$pluginTabId.'" href="#'.$pluginTabId.'" data-bs-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
                 $defaultContent = "<h3>Tab ".$i."</h3>\r\n\t\t\t\t\t\t<p>".$dummyContent."</p>";
                 $tabContent .= '<div class="tab-pane'.($i==1?" active":"").'" id="'.$pluginTabId.'">'."\r\n\t\t\t\t\t\t".$defaultContent."\r\n\t\t\t\t\t".'</div>'."\r\n\t\t\t\t\t";
             }

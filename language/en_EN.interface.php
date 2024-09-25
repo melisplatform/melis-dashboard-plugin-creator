@@ -1,26 +1,26 @@
 <?php
     return [
-		'tr_melisdashboardplugincreator_title' => 'Dashboard Plugin Creator',
-		'tr_melisdashboardplugincreator_desc' => 'The dashboard plugin creator generates new ready-to-use dashboard plugins.',
+        'tr_melisdashboardplugincreator_title' => 'Dashboard Plugin Creator',
+        'tr_melisdashboardplugincreator_desc' => 'The dashboard plugin creator generates new ready-to-use dashboard plugins.',
 
         //Buttons
         'tr_melisdashboardplugincreator_back' => 'Back',
         'tr_melisdashboardplugincreator_next' => 'Next',
         'tr_melisdashboardplugincreator_finish_and_create_the_plugin' => 'Finish and create the plugin',
 
-		 // Warnings
-	    'tr_melisdashboardplugincreator_fp_title' => 'File permission denied',
-	    'tr_melisdashboardplugincreator_fp_msg' => 'In-order to create dashboard plugin using this module, please give the rights to write in the following directories or contact the administrator if the problem persists',
-	    'tr_melisdashboardplugincreator_fp_config' => '<b>/config/melis.module.load.php</b> - this file is required to activate a new module after its creation',
-	 	'tr_melisdashboardplugincreator_fp_module' => '<b>/module</b> - The directory where the created modules are saved',
+        // Warnings
+        'tr_melisdashboardplugincreator_fp_title' => 'File permission denied',
+        'tr_melisdashboardplugincreator_fp_msg' => 'In-order to create dashboard plugin using this module, please give the rights to write in the following directories or contact the administrator if the problem persists',
+        'tr_melisdashboardplugincreator_fp_config' => '<b>/config/melis.module.load.php</b> - this file is required to activate a new module after its creation',
+        'tr_melisdashboardplugincreator_fp_module' => '<b>/module</b> - The directory where the created modules are saved',
         'tr_melisdashboardplugincreator_fp_temp_thumbnail' => '<b>/melis-dashboard-plugin-creator/public/temp-thumbnail</b> - The directory where the uploaded plugin thumbnails are temporarily saved',
 
-	     // Error messages
-	    'tr_melisdashboardplugincreator_err_message' => 'Unable to proceed to the next step, please try again',
-	    'tr_melisdashboardplugincreator_err_invalid_name' => 'Only alphabetic characters are authorized',	
+        // Error messages
+        'tr_melisdashboardplugincreator_err_message' => 'Unable to proceed to the next step, please try again',
+        'tr_melisdashboardplugincreator_err_invalid_name' => 'Only alphabetic characters are authorized',	
         'tr_melisdashboardplugincreator_err_long_50' => 'Value is too long, it should be less than 50 characters',
-	    'tr_melisdashboardplugincreator_err_empty' => 'The input is required and cannot be empty',
-	    'tr_melisdashboardplugincreator_value_must_be_between_2_to_25' => 'The input must be between 2 and 25',
+        'tr_melisdashboardplugincreator_err_empty' => 'The input is required and cannot be empty',
+        'tr_melisdashboardplugincreator_value_must_be_between_2_to_25' => 'The input must be between 2 and 25',
         'tr_melisdashboardplugincreator_integer_only' => 'The input must be integer only',
 
         'tr_melisdashboardplugincreator_save_upload_image_imageFalseType' => 'Invalid image format, please upload a valid image',
@@ -37,19 +37,22 @@
         'tr_melisdashboardplugincreator_generate_plugin_error_encountered' => 'Error encountered while generating the dashboard plugin.',
         'tr_melisdashboardplugincreator_upload_too_big' => 'The picture size should not exceed %s',
 
-	    // Steps
-	    'tr_melisdashboardplugincreator_plugin' => 'Plugin',
-	    'tr_melisdashboardplugincreator_menu_texts_display' => 'Menu Texts & Display',
-	    'tr_melisdashboardplugincreator_dashboard_texts_display' => 'Dashboard Texts & Display',
-	    'tr_melisdashboardplugincreator_summary' => 'Summary',
-	    'tr_melisdashboardplugincreator_finalization' => 'Finalization',
+        // steps
+        'tr_melisdashboardplugincreator_steps' => 'Étape',
 
-	    //Step1 Form
-	    'tr_melisdashboardplugincreator_title_step_1' => 'Plugin’s properties',
+        // Steps
+        'tr_melisdashboardplugincreator_plugin' => 'Plugin',
+        'tr_melisdashboardplugincreator_menu_texts_display' => 'Menu Texts & Display',
+        'tr_melisdashboardplugincreator_dashboard_texts_display' => 'Dashboard Texts & Display',
+        'tr_melisdashboardplugincreator_summary' => 'Summary',
+        'tr_melisdashboardplugincreator_finalization' => 'Finalization',
+
+        //Step1 Form
+        'tr_melisdashboardplugincreator_title_step_1' => 'Plugin’s properties',
         'tr_melisdashboardplugincreator_desc_step_1' => 'Enter the name of the plugin.<br>Then choose the code’s destination, new module or existing module.',
-	    'tr_melisdashboardplugincreator_dpc_plugin_name' => 'Plugin name',
-	    'tr_melisdashboardplugincreator_dpc_plugin_name tooltip' => 'Enter Plugin name.',
-	    'tr_melisdashboardplugincreator_dpc_plugin_type' => 'View type',
+        'tr_melisdashboardplugincreator_dpc_plugin_name' => 'Plugin name',
+        'tr_melisdashboardplugincreator_dpc_plugin_name tooltip' => 'Enter Plugin name.',
+        'tr_melisdashboardplugincreator_dpc_plugin_type' => 'View type',
         'tr_melisdashboardplugincreator_dpc_plugin_type tooltip' => 'Select plugin type.',
         'tr_melisdashboardplugincreator_single_tab' => 'Single',
         'tr_melisdashboardplugincreator_multi_tab' => 'Multi-tabs',
@@ -92,14 +95,14 @@
         'tr_melisdashboardplugincreator_dashboard_tab_icon' => 'Plugin\'s tabs\' icons',
         'tr_melisdashboardplugincreator_dashboard_tab_icon tooltip' => 'Select the icon for each tab',
         'tr_melisdashboardplugincreator_dashboard_tab_label' => 'Plugin Tab',  
-       
-         //Step4 Form
+    
+        //Step4 Form
         'tr_melisdashboardplugincreator_title_step_4' => 'Summary',
         'tr_melisdashboardplugincreator_desc_step_4' => 'Review your settings before creating the dashboard plugin',
         'tr_melisdashboardplugincreator_desc_step_4_dashboard_tab' => 'Plugin Tab',
         'tr_melisdashboardplugincreator_desc_step_4_dashboard_tab_icon' => 'Plugin Tab Icon',
         'tr_melisdashboardplugincreator_desc_step_4_icon' => 'Icon',
-       
+    
         //Step5 Form
         'tr_melisdashboardplugincreator_title_step_5' => 'Finalization',
         'tr_melisdashboardplugincreator_desc_step_5' => 'Tick the box below if you wish to activate the plugin upon creation.',
