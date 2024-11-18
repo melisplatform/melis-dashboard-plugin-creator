@@ -262,7 +262,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             for ($i = 1; $i <= $tabCount; $i++) {
                 $pluginTabId = 'tab-'.$i.'-'.str_replace(" ","-",$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i]).'-'.$pluginConfigPluginId;
 
-                $tabHeader .= '<li class="nav-item '.($i == 1 ? "active" : "").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i].' nav-link'.($i==1?" active":"").'" href="#'.$pluginTabId.'" data-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
+                $tabHeader .= '<li class="nav-item '.($i == 1 ? "active" : "").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i].' nav-link'.($i==1?" active":"").'" data-bs-target="#'.$pluginTabId.'" href="#'.$pluginTabId.'" data-bs-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
                 $defaultContent = "<h3>Tab ".$i."</h3>\r\n\t\t\t\t\t\t<p>".$dummyContent."</p>";
                 $tabContent .= '<div class="tab-pane'.($i==1?" active":"").'" id="'.$pluginTabId.'">'."\r\n\t\t\t\t\t\t".$defaultContent."\r\n\t\t\t\t\t".'</div>'."\r\n\t\t\t\t\t";
             }
@@ -332,11 +332,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $container = new Container('dashboardplugincreator');     
         $sessionID = $container['melis-dashboardplugincreator']['sessionID'];
 
-        //get the dashboard plugin creator's module directory 
-        $melisModule = $this->getServiceManager()->get('MelisAssetManagerModulesService');  
-        $names = explode("\\", __NAMESPACE__);                       
-        $moduleToolName = $names[0];
-        $thumbnailTempPath = $melisModule->getModulePath($moduleToolName,true).'/public/temp-thumbnail/';        
+        $thumbnailTempPath = $this->getTempThumbnailDirectory();        
         
         //append the current session ID to the thumbnail path
         $thumbnailTempPath = $thumbnailTempPath.$sessionID.'/';
@@ -848,9 +844,17 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
      */
     public function generateModuleNameCase($str) 
     {
-        $str = preg_replace('/([a-z])([A-Z])/', "$1$2", $str);
-        $str = str_replace(['-', '_'], '', ucwords(strtolower($str)));
-        $str = ucfirst($str);
+        // $str = preg_replace('/([a-z])([A-Z])/', "$1$2", $str);
+        // $str = str_replace(['-', '_'], '', ucwords(strtolower($str)));
+        // $str = ucfirst($str);
+        // $str = $this->cleanString($str);
+        // return $str;
+        // Remove any special characters except letters, numbers, and spaces
+        $str = preg_replace('/[^a-zA-Z0-9\s]/', '', $str);
+        // Convert the first letter of each word to uppercase
+        $str = ucwords($str);
+        // Remove spaces to form PascalCase
+        $str = str_replace(' ', '', $str);
         $str = $this->cleanString($str);
         return $str;
     }
@@ -908,4 +912,14 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         return $cleanStr;
     }
 
+    /**
+     * Retrieves the temp thumbnail directory
+     * @return string
+     */
+    private function getTempThumbnailDirectory()
+    {
+        $melisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');
+        $pluginThumbnailConfig = $melisCoreConfig->getItem('melisdashboardplugincreator/datas/plugin_thumbnail');
+        return $pluginThumbnailConfig['path'];
+    }
 }

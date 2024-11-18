@@ -13,7 +13,7 @@
 	    'tr_melisdashboardplugincreator_fp_msg' => 'In-order to create dashboard plugin using this module, please give the rights to write in the following directories or contact the administrator if the problem persists',
 	    'tr_melisdashboardplugincreator_fp_config' => '<b>/config/melis.module.load.php</b> - this file is required to activate a new module after its creation',
 	 	'tr_melisdashboardplugincreator_fp_module' => '<b>/module</b> - The directory where the created modules are saved',
-        'tr_melisdashboardplugincreator_fp_temp_thumbnail' => '<b>/melis-dashboard-plugin-creator/public/temp-thumbnail</b> - The directory where the uploaded plugin thumbnails are temporarily saved',
+        'tr_melisdashboardplugincreator_fp_temp_thumbnail' => '<b>/public/dpc/temp-thumbnail</b> - The directory where the uploaded plugin thumbnails are temporarily saved',
 
 	     // Error messages
 	    'tr_melisdashboardplugincreator_err_message' => 'Unable to proceed to the next step, please try again',
@@ -36,6 +36,8 @@
         'tr_melisdashboardplugincreator_err_plugin_title_exist' => '"%s" plugin title already exists for the "%s" language of the selected module, please try another one',
         'tr_melisdashboardplugincreator_generate_plugin_error_encountered' => 'Error encountered while generating the dashboard plugin.',
         'tr_melisdashboardplugincreator_upload_too_big' => 'The picture size should not exceed %s',
+        // steps
+        'tr_melisdashboardplugincreator_steps' => 'Étape',
 
 	    // Steps
 	    'tr_melisdashboardplugincreator_plugin' => 'Plugin',
