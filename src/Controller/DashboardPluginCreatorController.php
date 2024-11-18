@@ -376,7 +376,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
                     if ($isValid2ndForm) {
                         //save to session   
-                        $container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'] = '/MelisDashboardPluginCreator/temp-thumbnail/'.$sessionID.'/'.pathinfo($pluginThumbnail, PATHINFO_FILENAME).'.'.pathinfo($pluginThumbnail, PATHINFO_EXTENSION); 
+                        $container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'] = '/dpc/temp-thumbnail/' . $sessionID . '/' . pathinfo($pluginThumbnail, PATHINFO_FILENAME) . '.' . pathinfo($pluginThumbnail, PATHINFO_EXTENSION);  
 
                     } else {         
                         //unset previously uploaded file
@@ -1119,7 +1119,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
 
             if ($isValid2ndForm) {
                 //save to session   
-                $container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'] = '/MelisDashboardPluginCreator/temp-thumbnail/'.$sessionID.'/'.pathinfo($pluginThumbnail, PATHINFO_FILENAME).'.'.pathinfo($pluginThumbnail, PATHINFO_EXTENSION); 
+                $container['melis-dashboardplugincreator']['step_2']['plugin_thumbnail'] = '/dpc/temp-thumbnail/' . $sessionID . '/' . pathinfo($pluginThumbnail, PATHINFO_FILENAME) . '.' . pathinfo($pluginThumbnail, PATHINFO_EXTENSION); 
 
             } else {         
                 //unset previously uploaded file
@@ -1247,12 +1247,9 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
     */
     private function getTempThumbnailDirectory()
     {
-        // Set the user
-        $melisModule = $this->getServiceManager()->get('MelisAssetManagerModulesService');                        
-        $names = explode("\\", __NAMESPACE__);                       
-        $moduleName = $names[0];        
-        $tempThumbnailDirectory = $melisModule->getModulePath($moduleName,true).'/public/temp-thumbnail/';
+        $melisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');
+        $pluginThumbnailConfig = $melisCoreConfig->getItem('melisdashboardplugincreator/datas/plugin_thumbnail');       
 
-        return $tempThumbnailDirectory;
+        return $pluginThumbnailConfig['path'];
     }
 }

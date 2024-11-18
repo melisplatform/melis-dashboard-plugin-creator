@@ -332,11 +332,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $container = new Container('dashboardplugincreator');     
         $sessionID = $container['melis-dashboardplugincreator']['sessionID'];
 
-        //get the dashboard plugin creator's module directory 
-        $melisModule = $this->getServiceManager()->get('MelisAssetManagerModulesService');  
-        $names = explode("\\", __NAMESPACE__);                       
-        $moduleToolName = $names[0];
-        $thumbnailTempPath = $melisModule->getModulePath($moduleToolName,true).'/public/temp-thumbnail/';        
+        $thumbnailTempPath = $this->getTempThumbnailDirectory();        
         
         //append the current session ID to the thumbnail path
         $thumbnailTempPath = $thumbnailTempPath.$sessionID.'/';
@@ -920,4 +916,14 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         return $cleanStr;
     }
 
+    /**
+     * Retrieves the temp thumbnail directory
+     * @return string
+     */
+    private function getTempThumbnailDirectory()
+    {
+        $melisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');
+        $pluginThumbnailConfig = $melisCoreConfig->getItem('melisdashboardplugincreator/datas/plugin_thumbnail');
+        return $pluginThumbnailConfig['path'];
+    }
 }
