@@ -242,7 +242,7 @@ class DashboardPluginCreatorController extends MelisAbstractActionController
                      * Validating the module entered if its already existing on the platform
                      */
                     $modulesSvc = $this->getServiceManager()->get('ModulesService');
-                    $existingModules = array_merge($modulesSvc->getModulePlugins(), \MelisCore\MelisModuleManager::getModules());
+                    $existingModules = array_merge($modulesSvc->getModulePlugins(), $modulesSvc->getAllModules());
                     $existingModules = array_map('strtolower', $existingModules);     
 
                     //set error if the entered module name has duplicate
