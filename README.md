@@ -21,10 +21,11 @@ Run the composer command:
 composer require melisplatform/melis-dashboard-plugin-creator
 ```
 
-Go to /melis-dashboard-plugin-creator/public/ and change the file owner of the 'temp-thumbnail' directory to 'www-data'. This is where the plugin thumbnails are temporarily saved.
+The owner of the 'public' directory in the root of the project folder must be set to 'www-data' and it must be writable.  This is where the plugin thumbnails are temporarily saved.
 
 ```
-chown www-data temp-thumbnail
+chown www-data public
+chmod 775 -R public
 ```
 
 ### Database
