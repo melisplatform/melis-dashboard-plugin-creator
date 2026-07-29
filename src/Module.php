@@ -33,6 +33,10 @@ class Module
             include __DIR__ . '/../config/app.toolstree.php',
             include __DIR__ . '/../config/app.interface.php',
 			include __DIR__ . '/../config/app.tools.php',
+            // Back-office React : routes + invokable du controleur JSON (brique du module).
+            include __DIR__ . '/../config/react-api.php',
+            // Droits avances (cases a cocher de l'onglet Rights) — cf. react.capabilities.php.
+            include __DIR__ . '/../config/react.capabilities.php',
         );
 
         foreach ($configFiles as $file) {

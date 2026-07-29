@@ -114,5 +114,11 @@
         'tr_melisdashboardplugincreator_finalization_success_desc' => 'You can manually activate the plugin by reloading the page',
         'tr_melisdashboardplugincreator_execute_aadtnl_setup' => 'Executing additional setup',
         'tr_melisdashboardplugincreator_please_wait' => 'Please wait',
-        'tr_melisdashboardplugincreator_refreshing' => 'Refreshing'	
+        'tr_melisdashboardplugincreator_refreshing' => 'Refreshing',
+
+        // React back-office — advanced rights (config/react.capabilities.php)
+        'tr_melisdashboardplugincreator_caps_wizard' => 'Configuration steps',
+        'tr_melisdashboardplugincreator_caps_thumbnail' => 'Plugin thumbnail',
+        'tr_melisdashboardplugincreator_caps_summary' => 'Summary',
+        'tr_melisdashboardplugincreator_caps_finalization' => 'Plugin generation',
     ];
