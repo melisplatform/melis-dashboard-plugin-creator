@@ -201,7 +201,10 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $dashboardPluginConfigContent = $this->getTemplateContent('/DashboardPlugin.config.php');
 
         //set the plugin icon
-        $dashboardPluginConfigContent = str_replace('PluginIcon',$this->dpcSteps['step_3']['icon_form']['dpc_plugin_icon'], $dashboardPluginConfigContent);
+        // Icon is a Font-Awesome class list: strip anything that isn't [alnum space _ -] so the value
+        // cannot break out of the generated single-quoted PHP literal ('fa PluginIcon') → PHP code injection.
+        $safeIcon = preg_replace('/[^a-zA-Z0-9 _-]/', '', (string) $this->dpcSteps['step_3']['icon_form']['dpc_plugin_icon']);
+        $dashboardPluginConfigContent = str_replace('PluginIcon', $safeIcon, $dashboardPluginConfigContent);
 
         //set the plugin thumbnail   
         $pluginThumbnail = $this->dpcSteps['step_1']['dpc_plugin_name'].'_pluginThumbnail.'.pathinfo($this->dpcSteps['step_2']['plugin_thumbnail'], PATHINFO_EXTENSION); 
@@ -260,9 +263,12 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
             //set the tab header and content dynamically depending upon the number of tabs set
             for ($i = 1; $i <= $tabCount; $i++) {
-                $pluginTabId = 'tab-'.$i.'-'.str_replace(" ","-",$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i]).'-'.$pluginConfigPluginId;
+                // Sanitize the tab icon (Font-Awesome class list) before injecting it into the generated
+                // view markup so it cannot break out of the class attribute (stored XSS in the plugin view).
+                $safeTabIcon = preg_replace('/[^a-zA-Z0-9 _-]/', '', (string) $this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i]);
+                $pluginTabId = 'tab-'.$i.'-'.str_replace(" ","-",$safeTabIcon).'-'.$pluginConfigPluginId;
 
-                $tabHeader .= '<li class="nav-item '.($i == 1 ? "active" : "").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i].' nav-link'.($i==1?" active":"").'" data-bs-target="#'.$pluginTabId.'" href="#'.$pluginTabId.'" data-bs-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
+                $tabHeader .= '<li class="nav-item '.($i == 1 ? "active" : "").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$safeTabIcon.' nav-link'.($i==1?" active":"").'" data-bs-target="#'.$pluginTabId.'" href="#'.$pluginTabId.'" data-bs-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
                 $defaultContent = "<h3>Tab ".$i."</h3>\r\n\t\t\t\t\t\t<p>".$dummyContent."</p>";
                 $tabContent .= '<div class="tab-pane'.($i==1?" active":"").'" id="'.$pluginTabId.'">'."\r\n\t\t\t\t\t\t".$defaultContent."\r\n\t\t\t\t\t".'</div>'."\r\n\t\t\t\t\t";
             }
