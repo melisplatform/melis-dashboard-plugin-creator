@@ -3,7 +3,8 @@
  * theme de l'hote, i18n FR/EN lue depuis `<html lang>`). La brique ne peut PAS importer les modules
  * de l'hote (Tailwind/shadcn/lucide/i18n) : le bundle n'externalise que React → tout est autonome ici.
  */
-import { type CSSProperties, type ReactNode } from 'react'
+import { useState, type CSSProperties, type ReactNode } from 'react'
+import type { IconOption } from './dpc-api'
 import { FaIcon, iconLabel } from './icons'
 
 /* ── i18n ─────────────────────────────────────────────────────────────────── */
@@ -58,7 +59,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     s5_no_access: 'Vous n’avez pas le droit de générer un plugin.',
     ok_title: 'Le plugin a été créé', ok_module: 'Module : {m}', ok_plugin: 'Plugin : {p}',
     ok_reload: 'La plateforme va se recharger dans {n}…', ok_manual: 'Rechargez la page pour activer le plugin.',
-    ok_new: 'Créer un autre plugin',
+    ok_reload_now: 'Recharger maintenant', ok_new: 'Créer un autre plugin',
     old_resets: 'L’ancienne interface réinitialise l’assistant : le brouillon en cours sera perdu. Continuer ?',
   },
   en: {
@@ -99,7 +100,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     s5_no_access: 'You are not allowed to generate a plugin.',
     ok_title: 'The plugin has been created', ok_module: 'Module: {m}', ok_plugin: 'Plugin: {p}',
     ok_reload: 'The platform will reload in {n}…', ok_manual: 'Reload the page to activate the plugin.',
-    ok_new: 'Create another plugin',
+    ok_reload_now: 'Reload now', ok_new: 'Create another plugin',
     old_resets: 'The old interface resets the wizard: your current draft will be lost. Continue?',
   },
 }
@@ -200,22 +201,63 @@ export function Toggle({ on, onClick, disabled: off }: { on: boolean; onClick: (
   )
 }
 
-/** Selecteur de langue en pastilles (etapes 2 et 3). */
+/**
+ * Drapeau de la langue. Images livrees par MelisCore (`public/images/lang/<locale>.png`, servies
+ * par MelisAssetManager sous /MelisCore/) : les emojis drapeaux ne se rendent pas sous Windows.
+ * Locale inconnue (pas de png) → l'image se masque, la pastille garde juste son libelle.
+ */
+function LangFlag({ locale, dim }: { locale: string; dim?: boolean }) {
+  return (
+    <img
+      src={`/MelisCore/images/lang/${locale}.png`}
+      alt=""
+      width={16}
+      height={11}
+      style={{
+        display: 'block', borderRadius: 2, objectFit: 'cover', flexShrink: 0,
+        // Langue non selectionnee : drapeau desature → la pastille active ressort au premier coup d'oeil.
+        filter: dim ? 'grayscale(1)' : 'none', opacity: dim ? 0.55 : 1, transition: 'filter .15s, opacity .15s',
+      }}
+      onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+    />
+  )
+}
+
+/**
+ * Selecteur de langue en pastilles (etapes 2 et 3).
+ *
+ * L'etat ACTIF doit rester lisible sur une carte blanche : un simple fond `--color-card` ne se
+ * distingue pas du panneau. On cumule donc quatre signaux → teinte primaire, contour primaire,
+ * libelle en gras dans la couleur primaire, drapeau des autres langues desature (+ survol).
+ * `aria-pressed` porte le meme etat pour les lecteurs d'ecran.
+ */
 export function LangTabs({ langs, active, onChange, filled }: {
   langs: { locale: string; name: string }[]; active: string; onChange: (l: string) => void; filled?: (locale: string) => boolean
 }) {
+  const [hover, setHover] = useState<string | null>(null)
   return (
     <div style={{ display: 'inline-flex', gap: 4, padding: 4, borderRadius: 8, border: '1px solid var(--color-border)', background: 'color-mix(in srgb, var(--color-muted,#888) 12%, transparent)' }}>
       {langs.map((l) => {
         const on = l.locale === active
+        const hot = !on && hover === l.locale
         return (
-          <button key={l.locale} type="button" onClick={() => onChange(l.locale)} style={{
-            display: 'inline-flex', alignItems: 'center', gap: 6, height: 28, padding: '0 12px', borderRadius: 6, border: 0,
-            fontSize: 12, fontWeight: 500, cursor: 'pointer',
-            background: on ? 'var(--color-card)' : 'transparent', color: on ? 'var(--color-foreground)' : 'var(--color-muted-foreground)',
-            boxShadow: on ? '0 1px 2px rgba(0,0,0,.06)' : 'none',
-          }}>
+          <button key={l.locale} type="button" aria-pressed={on} title={l.name}
+            onClick={() => onChange(l.locale)}
+            onMouseEnter={() => setHover(l.locale)}
+            onMouseLeave={() => setHover((h) => (h === l.locale ? null : h))}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6, height: 28, padding: '0 12px', borderRadius: 6, border: 0,
+              fontSize: 12, fontWeight: on ? 600 : 500, cursor: 'pointer',
+              background: on
+                ? 'color-mix(in srgb, var(--color-primary) 14%, var(--color-card))'
+                : hot ? 'color-mix(in srgb, var(--color-muted,#888) 18%, transparent)' : 'transparent',
+              color: on ? 'var(--color-primary)' : 'var(--color-foreground)',
+              // `inset` plutot qu'une bordure : pas de decalage de 1px entre pastille active et inactive.
+              boxShadow: on ? 'inset 0 0 0 1px var(--color-primary), 0 1px 2px rgba(0,0,0,.06)' : 'none',
+              transition: 'background .15s, color .15s, box-shadow .15s',
+            }}>
             {filled?.(l.locale) && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e' }} />}
+            <LangFlag locale={l.locale} dim={!on} />
             {l.name}
           </button>
         )
@@ -225,19 +267,23 @@ export function LangTabs({ langs, active, onChange, filled }: {
 }
 
 /**
- * Grille de selection d'icone `fa-...` (icone du plugin + icones d'onglet). La valeur est toujours
- * la classe `fa-...` ; l'affichage est un SVG inline (cf. icons.tsx) car l'hote n'a pas FontAwesome.
+ * Grille de selection d'icone (icone du plugin + icones d'onglet). La valeur emise est celle que le
+ * generateur ecrira : classe `fa-...` pour le plugin, classe Glyphicons pour un onglet. L'apercu est
+ * toujours un SVG inline derive de la classe `fa-...` (cf. icons.tsx : l'hote n'a pas FontAwesome).
+ * Une entree simple (string) vaut `{ value: s, preview: s }`.
  */
 export function IconGrid({ icons, value, onChange, disabled }: {
-  icons: string[]; value: string; onChange: (v: string) => void; disabled?: boolean
+  icons: Array<string | IconOption>; value: string; onChange: (v: string) => void; disabled?: boolean
 }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(84px, 1fr))', gap: 8 }}>
-      {icons.map((icon) => {
-        const on = icon === value
+      {icons.map((opt) => {
+        const item = typeof opt === 'string' ? { value: opt, preview: opt } : opt
+        const icon = item.preview
+        const on = item.value === value
         return (
-          <button key={icon} type="button" title={iconLabel(icon)} disabled={disabled}
-                  onClick={() => onChange(icon)} style={{
+          <button key={item.value} type="button" title={iconLabel(icon)} disabled={disabled}
+                  onClick={() => onChange(item.value)} style={{
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, padding: '10px 6px', borderRadius: 8,
             cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.6 : 1,
             border: `1px solid ${on ? 'var(--color-primary)' : 'var(--color-border)'}`,

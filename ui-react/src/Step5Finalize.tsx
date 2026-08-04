@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { GenerateResult } from './dpc-api'
 import { fetchSummary, generatePlugin } from './dpc-api'
-import { CheckIcon, Notice, SpinIcon, Toggle, btnGhost, btnPrimary, card, hint, useT } from './ui'
+import { CheckIcon, Notice, RotateIcon, SpinIcon, Toggle, btnGhost, btnPrimary, card, hint, useT } from './ui'
 
 /**
  * Etape 5 — finalisation. Le SEUL endroit qui mute la plateforme (ecriture de fichiers PHP,
@@ -14,6 +14,9 @@ import { CheckIcon, Notice, SpinIcon, Toggle, btnGhost, btnPrimary, card, hint, 
  * `restartRequired` (l'utilisateur a demande l'activation) declenche un compte a rebours puis un
  * rechargement complet — la plateforme doit relire ses chemins de modules.
  */
+/** Delai avant le rechargement automatique de la plateforme, en secondes. */
+const RELOAD_DELAY_S = 5
+
 export default function Step5Finalize({ isNewModule, canGenerate, onDone }: {
   isNewModule: boolean
   canGenerate: boolean
@@ -79,17 +82,27 @@ export default function Step5Finalize({ isNewModule, canGenerate, onDone }: {
   )
 }
 
-/** Ecran de succes : avertissements non bloquants + compte a rebours de rechargement. */
+/**
+ * Ecran de succes : avertissements non bloquants + compte a rebours de rechargement.
+ *
+ * ⚠ Le rechargement est commande par UN SEUL minuteur absolu, arme au montage — il ne depend
+ * PAS des 5 rendus du compte a rebours. Une chaine `setTimeout` → `setLeft` → effet suivant
+ * s'arrete des qu'UN maillon saute (onglet en arriere-plan fortement throttle, minuteur avale,
+ * rendu qui ne repart pas) : l'ecran reste alors fige sur « 5 » et la plateforme n'est jamais
+ * rechargee — plantage observe sur dev6 alors que le meme bundle marchait en local.
+ * L'affichage (setInterval) est purement cosmetique, et le bouton « Recharger maintenant »
+ * garantit une sortie manuelle meme si tous les minuteurs sont hors service.
+ */
 function Success({ result, onDone }: { result: GenerateResult; onDone: () => void }) {
   const t = useT()
-  const [left, setLeft] = useState(5)
+  const [left, setLeft] = useState(RELOAD_DELAY_S)
 
   useEffect(() => {
     if (!result.restartRequired) return
-    if (left <= 0) { window.location.reload(); return }
-    const id = window.setTimeout(() => setLeft((n) => n - 1), 1000)
-    return () => window.clearTimeout(id)
-  }, [result.restartRequired, left])
+    const reload = window.setTimeout(() => window.location.reload(), RELOAD_DELAY_S * 1000)
+    const tick = window.setInterval(() => setLeft((n) => (n > 0 ? n - 1 : 0)), 1000)
+    return () => { window.clearTimeout(reload); window.clearInterval(tick) }
+  }, [result.restartRequired])
 
   return (
     <div style={{ ...card, padding: 28, display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'flex-start', maxWidth: 720 }}>
@@ -108,7 +121,11 @@ function Success({ result, onDone }: { result: GenerateResult; onDone: () => voi
         ? <p style={{ margin: 0, fontSize: 14 }}>{t('ok_reload', { n: left })}</p>
         : <p style={{ margin: 0, fontSize: 14, color: 'var(--color-muted-foreground)' }}>{t('ok_manual')}</p>}
 
-      <button style={btnGhost} onClick={onDone}>{t('ok_new')}</button>
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+        {/* Sortie manuelle : le seul chemin qui ne depend d'aucun minuteur. */}
+        <button style={btnPrimary} onClick={() => window.location.reload()}><RotateIcon />{t('ok_reload_now')}</button>
+        <button style={btnGhost} onClick={onDone}>{t('ok_new')}</button>
+      </div>
     </div>
   )
 }
