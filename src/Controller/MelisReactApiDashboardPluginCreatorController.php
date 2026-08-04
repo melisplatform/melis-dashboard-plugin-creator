@@ -109,15 +109,23 @@ class MelisReactApiDashboardPluginCreatorController extends MelisAbstractActionC
             }
 
             // ── Icônes : celles du plugin (formulaire) et celles des onglets (config) ──
+            // Icône du plugin : clé == valeur == classe `fa-...`, écrite telle quelle dans la config
+            // générée (`'icon' => 'fa fa-calendar'`).
             $iconForm    = $this->form('melisdashboardplugincreator_step3_form2');
             $pluginIcons = array_values(array_unique(array_map(
                 'strval',
                 array_keys((array) $iconForm->get('dpc_plugin_icon')->getValueOptions()),
             )));
-            $tabIcons = array_values(array_unique(array_map(
-                'strval',
-                (array) $config->getItem('melisdashboardplugincreator/datas/dashboardTabIcons'),
-            )));
+            // Icônes d'onglet : la config `dashboardTabIcons` est un couple
+            // `<classe Glyphicons> => <classe FontAwesome>`. Le legacy stocke la CLÉ (le radio a pour
+            // valeur `$optKey`) et n'affiche la valeur `fa-...` que dans le sélecteur — car la vue
+            // générée écrit `<a class="glyphicons <clé>">…<i></i></a>`, une icône Glyphicons.
+            // Envoyer `fa-...` comme valeur produirait `class="glyphicons fa-calendar"` → aucun glyphe.
+            // On renvoie donc les deux : `value` (ce qui est stocké/généré) et `preview` (l'aperçu).
+            $tabIcons = [];
+            foreach ((array) $config->getItem('melisdashboardplugincreator/datas/dashboardTabIcons') as $glyph => $fa) {
+                $tabIcons[] = ['value' => (string) $glyph, 'preview' => (string) $fa];
+            }
 
             return $this->ok([
                 'blocking'      => $blocking,   // non vide ⇒ la brique affiche l'erreur et rien d'autre
@@ -782,10 +790,23 @@ class MelisReactApiDashboardPluginCreatorController extends MelisAbstractActionC
         $c[self::SESSION_ROOT] = $state;
     }
 
+    /**
+     * Jeton unique de l'assistant — sert UNIQUEMENT à nommer le dossier temporaire des vignettes
+     * (`/dpc/temp-thumbnail/<jeton>/…`). Volontairement décorrélé de l'ID de session PHP : celui-ci
+     * finirait dans une URL publique, et le contrôleur legacy le régénérait (cf. renderToolAction).
+     */
     private function sessionId(): string
     {
-        $state = (new Container(self::SESSION_NS))[self::SESSION_ROOT] ?? [];
-        return (string) ($state['sessionID'] ?? (new Container(self::SESSION_NS))->getManager()->getId());
+        $c     = new Container(self::SESSION_NS);
+        $state = (array) ($c[self::SESSION_ROOT] ?? []);
+        if (!empty($state['sessionID'])) {
+            return (string) $state['sessionID'];
+        }
+        // Persisté dès la 1ʳᵉ génération : `thumbnailDir()` et l'URL publique de la vignette
+        // doivent tomber sur le MÊME dossier.
+        $state['sessionID']  = bin2hex(random_bytes(16));
+        $c[self::SESSION_ROOT] = $state;
+        return $state['sessionID'];
     }
 
     /**

@@ -9,8 +9,14 @@ import { FaIcon, Notice, SpinIcon, card, iconLabel, td, useT } from './ui'
  * l'etape est retiree du parcours par le parent — ce composant n'est alors jamais monte.
  *
  * Recharge a chaque ENTREE dans l'etape (`active`), pas a chaque rendu.
+ *
+ * `tabIconPreview` : les icones d'onglet sont stockees en classes Glyphicons ; l'apercu passe par
+ * la classe `fa-...` equivalente fournie par le contexte (cf. IconOption).
  */
-export default function Step4Summary({ active }: { active: boolean }) {
+export default function Step4Summary({ active, tabIconPreview = {} }: {
+  active: boolean
+  tabIconPreview?: Record<string, string>
+}) {
   const t = useT()
   const [data, setData] = useState<Summary | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -89,13 +95,16 @@ export default function Step4Summary({ active }: { active: boolean }) {
       {isMulti && Object.keys(tabIcons).length > 0 && (
         <Section title={t('s4_tab_icons')}>
           <div style={{ padding: 14, display: 'flex', flexWrap: 'wrap', gap: 16 }}>
-            {Object.entries(tabIcons).sort((a, b) => Number(a[0]) - Number(b[0])).map(([n, ic]) => (
-              <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 12, color: 'var(--color-muted-foreground)' }}>{t('s3_tab', { n })}</span>
-                <FaIcon icon={ic} size={20} />
-                <span style={{ fontSize: 13 }}>{iconLabel(ic)}</span>
-              </div>
-            ))}
+            {Object.entries(tabIcons).sort((a, b) => Number(a[0]) - Number(b[0])).map(([n, ic]) => {
+              const preview = tabIconPreview[ic] ?? ic
+              return (
+                <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 12, color: 'var(--color-muted-foreground)' }}>{t('s3_tab', { n })}</span>
+                  <FaIcon icon={preview} size={20} />
+                  <span style={{ fontSize: 13 }}>{iconLabel(preview)}</span>
+                </div>
+              )
+            })}
           </div>
         </Section>
       )}

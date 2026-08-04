@@ -36,6 +36,14 @@ const postJson = <T>(path: string, payload: unknown) =>
 export interface Language { id: number; locale: string; name: string }
 export interface StepMeta { key: string; name: string; icon: string }
 
+/**
+ * Icone proposee au choix. `value` = ce qui est STOCKE et ecrit par le generateur ;
+ * `preview` = la classe `fa-...` equivalente, uniquement pour l'apercu du selecteur.
+ * Les deux coincident pour l'icone du plugin ; pour un onglet, `value` est une classe
+ * Glyphicons (la vue generee rend `<a class="glyphicons <value>">`).
+ */
+export interface IconOption { value: string; preview: string }
+
 export interface Context {
   /** Non vide ⇒ l'environnement interdit la generation (droits FS) : on n'affiche que ca. */
   blocking: string[]
@@ -46,8 +54,8 @@ export interface Context {
   siteModules: string[]
   /** Icones proposees pour l'icone du plugin (classes `fa-...`). */
   pluginIcons: string[]
-  /** Icones proposees pour les onglets (classes `fa-...`). */
-  tabIcons: string[]
+  /** Icones proposees pour les onglets : valeur Glyphicons + apercu `fa-...`. */
+  tabIcons: IconOption[]
   minTabs: number
   maxTabs: number
   thumbnail: { minSize: number; maxSize: number; accept: string }
@@ -69,7 +77,7 @@ export interface Step3Data {
   texts: Record<string, DashboardTexts>
   /** Icone du plugin (classe `fa-...`). */
   icon: string
-  /** `<numero d'onglet>` → classe `fa-...` */
+  /** `<numero d'onglet>` → classe Glyphicons (cf. IconOption). */
   tabIcons: Record<string, string>
 }
 

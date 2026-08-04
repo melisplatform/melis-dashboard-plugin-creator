@@ -161,6 +161,9 @@ export default function DpcPage() {
     )
   }
 
+  // Icone d'onglet stockee (classe Glyphicons) → classe `fa-...` d'apercu, pour le recapitulatif.
+  const tabIconPreview = Object.fromEntries(ctx.tabIcons.map((i) => [i.value, i.preview]))
+
   const stepErrors = errors[step] ?? {}
   const flatMessages = Object.values(stepErrors)
     .flatMap((v) => (v && typeof v === 'object' && 'messages' in v ? (v as { messages: string[] }).messages : []))
@@ -207,7 +210,9 @@ export default function DpcPage() {
                           errors={errors[3] ?? {}} readOnly={readOnly} />
         </Pane>
         <Pane show={step === 4}>
-          {canSummary ? <Step4Summary active={step === 4} /> : <Notice tone="warn">{t('s4_no_access')}</Notice>}
+          {canSummary
+            ? <Step4Summary active={step === 4} tabIconPreview={tabIconPreview} />
+            : <Notice tone="warn">{t('s4_no_access')}</Notice>}
         </Pane>
         <Pane show={step === 5}>
           <Step5Finalize isNewModule={isNewModule} canGenerate={canGenerate} onDone={restart} />

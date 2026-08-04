@@ -6,9 +6,12 @@ import { Field, IconGrid, LangTabs, card, inputCss, useT } from './ui'
  * Etape 3 — titre affiche sur la carte du dashboard (par langue) + icone du plugin + icone de
  * chaque onglet (uniquement si le type « multi-onglets » a ete choisi a l'etape 1).
  *
- * La valeur d'une icone est toujours une classe `fa-...` (c'est ce que le generateur ecrit dans la
- * config du plugin ; le dashboard legacy l'affichera). Le selecteur montre un SVG inline + le nom
- * lisible, car le shell React de l'hote n'embarque pas FontAwesome (cf. icons.tsx).
+ * Valeurs stockees (identiques au legacy, car ce sont elles que le generateur ecrit) :
+ *  - icone du plugin : classe `fa-...` → config du plugin (`'icon' => 'fa fa-calendar'`) ;
+ *  - icone d'onglet  : classe GLYPHICONS (`calendar`, `cogwheel`, `chat`…) → la vue generee rend
+ *    `<a class="glyphicons <valeur>">…<i></i></a>`. Y mettre `fa-...` ne produirait aucun glyphe.
+ * Dans les deux cas le selecteur affiche un SVG inline + le nom lisible (derives de la classe
+ * `fa-...` d'apercu fournie par le contexte), car le shell React n'embarque pas FontAwesome.
  *
  * Regle metier reprise du legacy : un titre est valide des qu'UNE langue le renseigne → pastille
  * verte sur l'onglet de langue complet.
