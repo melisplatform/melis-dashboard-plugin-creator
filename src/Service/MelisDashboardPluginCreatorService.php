@@ -48,7 +48,10 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
         //set module name
         if ($this->dpcSteps['step_1']['dpc_plugin_destination'] == self::EXISTING_MODE) {
-            $this->moduleName = $this->dpcSteps['step_1']['dpc_existing_module_name'];
+            // Sécurité : dpc_existing_module_name (POST, non whitelisté par l'input filter) sert de nom
+            // de MODULE et construit le chemin de génération (mkdir/fwrite de .php) → on retire tout
+            // caractère non-identifiant pour empêcher une traversée « ../ » vers un dossier arbitraire.
+            $this->moduleName = preg_replace('/[^A-Za-z0-9_]/', '', (string) $this->dpcSteps['step_1']['dpc_existing_module_name']);
         } else {
             $this->moduleName = $this->generateModuleNameCase($this->dpcSteps['step_1']['dpc_new_module_name']);
             //unset the tools tree section of the newly created module
@@ -304,7 +307,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             } elseif ($asset == 'images') {                
                 //check if target directory exists
                 if (!file_exists($dir)) {
-                    mkdir($dir, 0777, true);
+                    mkdir($dir, 0755, true);
                 }                        
 
                 //get uploaded thumbnail        
@@ -652,7 +655,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
             //create directory if not yet exists
             if (!file_exists($targetDir)) {
-                mkdir($targetDir, 0777, true);
+                mkdir($targetDir, 0755, true);
             }
 
             //add file if not yet exists
