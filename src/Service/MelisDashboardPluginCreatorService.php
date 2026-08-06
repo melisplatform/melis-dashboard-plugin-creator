@@ -369,6 +369,22 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $errorCount = 0;
         $res = false;
 
+        // Ticket 0010880 : si une langue est laissée vide dans l'assistant, on ne doit PAS écrire une
+        // traduction vide (sinon l'arbre des droits affiche la CLÉ brute `tr_..._menu title` au lieu du
+        // nom). On retombe donc sur la 1re langue renseignée (fallback i18n) pour le nom de menu et le
+        // titre du dashboard — le nom du plugin reste lisible dans TOUTES les langues.
+        $menuTitleFallback = '';
+        $dashTitleFallback = '';
+        foreach ($languages as $l) {
+            $loc = $l['lang_locale'];
+            if ($menuTitleFallback === '' && !empty($this->dpcSteps['step_2'][$loc]['dpc_plugin_title'])) {
+                $menuTitleFallback = $this->removeExtraSpace($this->dpcSteps['step_2'][$loc]['dpc_plugin_title']);
+            }
+            if ($dashTitleFallback === '' && !empty($this->dpcSteps['step_3'][$loc]['dpc_plugin_title'])) {
+                $dashTitleFallback = $this->removeExtraSpace($this->dpcSteps['step_3'][$loc]['dpc_plugin_title']);
+            }
+        }
+
         foreach ($languages as $lang) {
             $langFile = $languageDir.$lang['lang_locale'].'.interface.php';
             $langFile = file_exists($langFile) ? $langFile : $languageDir.$lang['lang_locale'].'.php';
@@ -378,16 +394,16 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
                 $translationArr = include $langFile;
                 
                 if ($appendConfig) {
-                    //set the menu title
+                    //set the menu title (fallback to the first filled language so the rights tree never shows the raw key)
                     $translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu title'] = !empty($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_title'])
-                                                        ? $this->removeExtraSpace($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_title']) : "";
+                                                        ? $this->removeExtraSpace($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_title']) : $menuTitleFallback;
                     
                     //set the menu description
                     $translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu description'] = !empty($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_desc'])                                ? $this->removeExtraSpace($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_desc']) : "";
                     
-                    //set the dashboard title
+                    //set the dashboard title (fallback to the first filled language, same rationale as the menu title)
                     $translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).' title'] = !empty($this->dpcSteps['step_3'][$lang['lang_locale']]['dpc_plugin_title'])
-                                                        ? $this->removeExtraSpace($this->dpcSteps['step_3'][$lang['lang_locale']]['dpc_plugin_title']) : "";  
+                                                        ? $this->removeExtraSpace($this->dpcSteps['step_3'][$lang['lang_locale']]['dpc_plugin_title']) : $dashTitleFallback;
 
                     //set the plugin section title
                     $translationArr['tr_PluginSection_'.strtolower($this->moduleName)] = $this->moduleName;
