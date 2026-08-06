@@ -3,8 +3,9 @@ import type { Context, MenuTexts, StepErrors } from './dpc-api'
 import { removeThumbnail, uploadThumbnail } from './dpc-api'
 import {
   Field, Notice, SpinIcon, TrashIcon, btnGhost, card, formatBytes, hint, inputCss, LangTabs,
-  notify, textareaCss, useT,
+  textareaCss, useT,
 } from './ui'
+import { koNotify } from './shared/melis-form-errors'
 
 /**
  * Etape 2 — titre/description par langue (menu deroulant de droite) + vignette du plugin.
@@ -45,7 +46,7 @@ export default function Step2Menu({ ctx, value, onChange, thumbnail, onThumbnail
     try {
       onThumbnail(await uploadThumbnail(file))
     } catch (e) {
-      notify('ko', t('s2_thumb'), e instanceof Error ? e.message : String(e))
+      koNotify(t('s2_thumb'), e instanceof Error ? e.message : String(e))
     } finally {
       setBusy(false)
       if (fileRef.current) fileRef.current.value = ''   // re-choisir le meme fichier doit re-declencher `change`
@@ -58,7 +59,7 @@ export default function Step2Menu({ ctx, value, onChange, thumbnail, onThumbnail
       await removeThumbnail()
       onThumbnail(null)
     } catch (e) {
-      notify('ko', t('s2_thumb'), e instanceof Error ? e.message : String(e))
+      koNotify(t('s2_thumb'), e instanceof Error ? e.message : String(e))
     } finally {
       setBusy(false)
     }

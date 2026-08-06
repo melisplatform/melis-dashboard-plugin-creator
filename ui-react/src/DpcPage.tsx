@@ -7,9 +7,10 @@ import Step5Finalize from './Step5Finalize'
 import { ViewToggle, type ViewMode } from './ViewToggle'
 import { useCaps } from './shared/useCaps'
 import {
-  ArrowLeft, ArrowRight, BrickStyles, CheckIcon, ErrorBanner, Notice, Pane, RotateIcon, SpinIcon,
+  ArrowLeft, ArrowRight, BrickStyles, CheckIcon, Notice, Pane, RotateIcon, SpinIcon,
   btnGhost, btnPrimary, card, useT,
 } from './ui'
+import { FormErrorBanner, type FormIssue } from './shared/melis-form-errors'
 import type {
   Context, DashboardTexts, FieldErrors, MenuTexts, Step1Data, StepErrors, StepResult, WizardState,
 } from './dpc-api'
@@ -164,9 +165,16 @@ export default function DpcPage() {
   // Icone d'onglet stockee (classe Glyphicons) → classe `fa-...` d'apercu, pour le recapitulatif.
   const tabIconPreview = Object.fromEntries(ctx.tabIcons.map((i) => [i.value, i.preview]))
 
+  // Erreurs de l'etape courante → liste plate `{ label, message }` : la banniere unifiee NOMME chaque
+  // champ manquant/invalide (les `Field` restent surlignes en rouge inline en plus de la banniere).
   const stepErrors = errors[step] ?? {}
-  const flatMessages = Object.values(stepErrors)
-    .flatMap((v) => (v && typeof v === 'object' && 'messages' in v ? (v as { messages: string[] }).messages : []))
+  const stepIssues: FormIssue[] = Object.values(stepErrors).flatMap((v) => {
+    if (v && typeof v === 'object' && 'messages' in v) {
+      const e = v as { label?: string; messages: string[] }
+      return e.messages.map((message) => ({ label: e.label || undefined, message }))
+    }
+    return []
+  })
 
   return (
     <Shell
@@ -191,7 +199,7 @@ export default function DpcPage() {
         <Stepper steps={ctx.steps.map((s) => s.name)} current={step} onGo={(n) => n <= step && setStep(n)} />
 
         {readOnly && <Notice tone="warn">{t('readonly_notice')}</Notice>}
-        <ErrorBanner title={t('errors_title')} messages={flatMessages} />
+        {stepIssues.length > 0 && <FormErrorBanner title={t('check_fields')} issues={stepIssues} />}
 
         {/* Volets montes une fois, montres/caches en CSS → aucun remontage, aucun refetch. */}
         <Pane show={step === 1}>

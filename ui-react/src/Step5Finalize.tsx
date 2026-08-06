@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { GenerateResult } from './dpc-api'
 import { fetchSummary, generatePlugin } from './dpc-api'
 import { CheckIcon, Notice, RotateIcon, SpinIcon, Toggle, btnGhost, btnPrimary, card, hint, useT } from './ui'
+import { FormErrorBanner, koNotify, okNotify } from './shared/melis-form-errors'
 
 /**
  * Etape 5 — finalisation. Le SEUL endroit qui mute la plateforme (ecriture de fichiers PHP,
@@ -44,8 +45,11 @@ export default function Step5Finalize({ isNewModule, canGenerate, onDone }: {
     setError(null)
     try {
       setResult(await generatePlugin(activate))
+      okNotify(t('ok_title'))
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e))
+      const message = e instanceof Error ? e.message : String(e)
+      setError(message)
+      koNotify(t('generate_failed'), message)
     } finally {
       setBusy(false)
     }
@@ -58,7 +62,7 @@ export default function Step5Finalize({ isNewModule, canGenerate, onDone }: {
       <p style={{ margin: 0, fontSize: 13, color: 'var(--color-muted-foreground)' }}>{t('s5_desc')}</p>
 
       {!canGenerate && <Notice tone="warn">{t('s5_no_access')}</Notice>}
-      {error && <Notice tone="warn"><span dangerouslySetInnerHTML={{ __html: error }} /></Notice>}
+      {error && <FormErrorBanner title={t('generate_failed')} issues={error} html />}
       {inactiveModule && <Notice tone="warn">{t('s5_module_note', { m: inactiveModule })}</Notice>}
 
       <div style={{ ...card, padding: 20 }}>
