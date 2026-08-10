@@ -36,8 +36,6 @@
 		'tr_melisdashboardplugincreator_err_plugin_title_exist' => 'Le titre du plugin "%s" existe déjà pour la langue "%s" du module sélectionné',
 		'tr_melisdashboardplugincreator_generate_plugin_error_encountered' => 'Erreurs lors de la génération du plugin.',
 		'tr_melisdashboardplugincreator_upload_too_big' => 'La taille de l\'image ne doit pas excéder %s',
-		// steps
-		'tr_melisdashboardplugincreator_steps' => 'Étape',
 
 		// steps
 		'tr_melisdashboardplugincreator_steps' => 'Étape',
