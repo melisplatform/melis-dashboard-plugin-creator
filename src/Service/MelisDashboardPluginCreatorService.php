@@ -48,7 +48,10 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
         //set module name
         if ($this->dpcSteps['step_1']['dpc_plugin_destination'] == self::EXISTING_MODE) {
-            $this->moduleName = $this->dpcSteps['step_1']['dpc_existing_module_name'];
+            // Sécurité : dpc_existing_module_name (POST, non whitelisté par l'input filter) sert de nom
+            // de MODULE et construit le chemin de génération (mkdir/fwrite de .php) → on retire tout
+            // caractère non-identifiant pour empêcher une traversée « ../ » vers un dossier arbitraire.
+            $this->moduleName = preg_replace('/[^A-Za-z0-9_]/', '', (string) $this->dpcSteps['step_1']['dpc_existing_module_name']);
         } else {
             $this->moduleName = $this->generateModuleNameCase($this->dpcSteps['step_1']['dpc_new_module_name']);
             //unset the tools tree section of the newly created module
@@ -201,7 +204,10 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $dashboardPluginConfigContent = $this->getTemplateContent('/DashboardPlugin.config.php');
 
         //set the plugin icon
-        $dashboardPluginConfigContent = str_replace('PluginIcon',$this->dpcSteps['step_3']['icon_form']['dpc_plugin_icon'], $dashboardPluginConfigContent);
+        // Icon is a Font-Awesome class list: strip anything that isn't [alnum space _ -] so the value
+        // cannot break out of the generated single-quoted PHP literal ('fa PluginIcon') → PHP code injection.
+        $safeIcon = preg_replace('/[^a-zA-Z0-9 _-]/', '', (string) $this->dpcSteps['step_3']['icon_form']['dpc_plugin_icon']);
+        $dashboardPluginConfigContent = str_replace('PluginIcon', $safeIcon, $dashboardPluginConfigContent);
 
         //set the plugin thumbnail   
         $pluginThumbnail = $this->dpcSteps['step_1']['dpc_plugin_name'].'_pluginThumbnail.'.pathinfo($this->dpcSteps['step_2']['plugin_thumbnail'], PATHINFO_EXTENSION); 
@@ -260,9 +266,12 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
             //set the tab header and content dynamically depending upon the number of tabs set
             for ($i = 1; $i <= $tabCount; $i++) {
-                $pluginTabId = 'tab-'.$i.'-'.str_replace(" ","-",$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i]).'-'.$pluginConfigPluginId;
+                // Sanitize the tab icon (Font-Awesome class list) before injecting it into the generated
+                // view markup so it cannot break out of the class attribute (stored XSS in the plugin view).
+                $safeTabIcon = preg_replace('/[^a-zA-Z0-9 _-]/', '', (string) $this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i]);
+                $pluginTabId = 'tab-'.$i.'-'.str_replace(" ","-",$safeTabIcon).'-'.$pluginConfigPluginId;
 
-                $tabHeader .= '<li class="nav-item '.($i == 1 ? "active" : "").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i].' nav-link'.($i==1?" active":"").'" data-bs-target="#'.$pluginTabId.'" href="#'.$pluginTabId.'" data-bs-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
+                $tabHeader .= '<li class="nav-item '.($i == 1 ? "active" : "").'">'."\r\n\t\t\t\t\t".'<a class="glyphicons '.$safeTabIcon.' nav-link'.($i==1?" active":"").'" data-bs-target="#'.$pluginTabId.'" href="#'.$pluginTabId.'" data-bs-toggle="tab"><i></i></a>'."\r\n\t\t\t\t"."</li>\r\n\t\t\t\t";
                 $defaultContent = "<h3>Tab ".$i."</h3>\r\n\t\t\t\t\t\t<p>".$dummyContent."</p>";
                 $tabContent .= '<div class="tab-pane'.($i==1?" active":"").'" id="'.$pluginTabId.'">'."\r\n\t\t\t\t\t\t".$defaultContent."\r\n\t\t\t\t\t".'</div>'."\r\n\t\t\t\t\t";
             }
@@ -298,7 +307,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             } elseif ($asset == 'images') {                
                 //check if target directory exists
                 if (!file_exists($dir)) {
-                    mkdir($dir, 0777, true);
+                    mkdir($dir, 0755, true);
                 }                        
 
                 //get uploaded thumbnail        
@@ -360,6 +369,22 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $errorCount = 0;
         $res = false;
 
+        // Ticket 0010880 : si une langue est laissée vide dans l'assistant, on ne doit PAS écrire une
+        // traduction vide (sinon l'arbre des droits affiche la CLÉ brute `tr_..._menu title` au lieu du
+        // nom). On retombe donc sur la 1re langue renseignée (fallback i18n) pour le nom de menu et le
+        // titre du dashboard — le nom du plugin reste lisible dans TOUTES les langues.
+        $menuTitleFallback = '';
+        $dashTitleFallback = '';
+        foreach ($languages as $l) {
+            $loc = $l['lang_locale'];
+            if ($menuTitleFallback === '' && !empty($this->dpcSteps['step_2'][$loc]['dpc_plugin_title'])) {
+                $menuTitleFallback = $this->removeExtraSpace($this->dpcSteps['step_2'][$loc]['dpc_plugin_title']);
+            }
+            if ($dashTitleFallback === '' && !empty($this->dpcSteps['step_3'][$loc]['dpc_plugin_title'])) {
+                $dashTitleFallback = $this->removeExtraSpace($this->dpcSteps['step_3'][$loc]['dpc_plugin_title']);
+            }
+        }
+
         foreach ($languages as $lang) {
             $langFile = $languageDir.$lang['lang_locale'].'.interface.php';
             $langFile = file_exists($langFile) ? $langFile : $languageDir.$lang['lang_locale'].'.php';
@@ -369,16 +394,16 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
                 $translationArr = include $langFile;
                 
                 if ($appendConfig) {
-                    //set the menu title
+                    //set the menu title (fallback to the first filled language so the rights tree never shows the raw key)
                     $translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu title'] = !empty($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_title'])
-                                                        ? $this->removeExtraSpace($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_title']) : "";
+                                                        ? $this->removeExtraSpace($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_title']) : $menuTitleFallback;
                     
                     //set the menu description
                     $translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).'_menu description'] = !empty($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_desc'])                                ? $this->removeExtraSpace($this->dpcSteps['step_2'][$lang['lang_locale']]['dpc_plugin_desc']) : "";
                     
-                    //set the dashboard title
+                    //set the dashboard title (fallback to the first filled language, same rationale as the menu title)
                     $translationArr['tr_'.strtolower($this->moduleName).'_dashboard_'.lcfirst($this->pluginName).' title'] = !empty($this->dpcSteps['step_3'][$lang['lang_locale']]['dpc_plugin_title'])
-                                                        ? $this->removeExtraSpace($this->dpcSteps['step_3'][$lang['lang_locale']]['dpc_plugin_title']) : "";  
+                                                        ? $this->removeExtraSpace($this->dpcSteps['step_3'][$lang['lang_locale']]['dpc_plugin_title']) : $dashTitleFallback;
 
                     //set the plugin section title
                     $translationArr['tr_PluginSection_'.strtolower($this->moduleName)] = $this->moduleName;
@@ -646,7 +671,7 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
             //create directory if not yet exists
             if (!file_exists($targetDir)) {
-                mkdir($targetDir, 0777, true);
+                mkdir($targetDir, 0755, true);
             }
 
             //add file if not yet exists
@@ -849,12 +874,16 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         // $str = ucfirst($str);
         // $str = $this->cleanString($str);
         // return $str;
+
         // Remove any special characters except letters, numbers, and spaces
         $str = preg_replace('/[^a-zA-Z0-9\s]/', '', $str);
+
         // Convert the first letter of each word to uppercase
         $str = ucwords($str);
+
         // Remove spaces to form PascalCase
         $str = str_replace(' ', '', $str);
+        
         $str = $this->cleanString($str);
         return $str;
     }

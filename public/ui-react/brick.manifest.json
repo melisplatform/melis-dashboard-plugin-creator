@@ -1,0 +1,10 @@
+{
+  "id": "dashboard-plugin-creator",
+  "route": "/melis-core/dashboard-plugin-creator",
+  "label": "Dashboard Plugin Creator",
+  "forwardKey": "MelisDashboardPluginCreator/DashboardPluginCreator",
+  "melisKey": "melisdashboardplugincreator_tool",
+  "subTabs": false,
+  "persistent": true,
+  "entry": "brick.js"
+}
