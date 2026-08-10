@@ -38,7 +38,7 @@
         'tr_melisdashboardplugincreator_upload_too_big' => 'The picture size should not exceed %s',
 
         // steps
-        'tr_melisdashboardplugincreator_steps' => 'Étape',
+        'tr_melisdashboardplugincreator_steps' => 'Step',
 
         // Steps
         'tr_melisdashboardplugincreator_plugin' => 'Plugin',
