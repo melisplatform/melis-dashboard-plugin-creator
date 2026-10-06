@@ -71,6 +71,9 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
             //remove temp thumbnail directory of the current session    
             $tempPath = pathinfo($this->getTempThumbnail(), PATHINFO_DIRNAME);            
             $this->removeDir($tempPath);
+
+            //the new plugin's js/css must reach the back-office asset bundle
+            $this->clearAssetBundles();
         } else {
             //this will rollback the steps performed when generating the dashboard plugin
             $this->rollbackPluginGeneration($moduleDir);              
@@ -79,6 +82,34 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $arrayParameters['results'] = $isSuccessful;
         $arrayParameters = $this->sendEvent('melisdashboard_plugin_creator_service_generate_dashboard_plugin_end', $arrayParameters);
         return $arrayParameters['results']; 
+    }
+
+    /**
+     * Deletes the generated asset bundles (etc/bundles), as a Modules tool save does.
+     *
+     * On platforms with build_bundle on, the back-office loads etc/bundles/js/bundle-all.js instead of
+     * each module's ressources, and that file is only rebuilt when it is missing (MelisGenerateBundleListener
+     * on /melis, MelisReactOverride's PlatformAssetsService on /melis-react). Without this, the new plugin's
+     * js never reaches the page and dropping it on the dashboard throws "<PluginName>_init is not defined"
+     * (Mantis #0011087).
+     */
+    protected function clearAssetBundles()
+    {
+        $bundleDir = $_SERVER['DOCUMENT_ROOT'].'/../etc/'.\MelisCore\Controller\ModulesController::BUNDLE_FOLDER_NAME;
+        if (!is_dir($bundleDir)) {
+            return;
+        }
+
+        $items = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($bundleDir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ($items as $item) {
+            // keep the folders (and their rights), only the bundle files go
+            if ($item->isFile()) {
+                @unlink($item->getPathname());
+            }
+        }
     }
 
     /**
