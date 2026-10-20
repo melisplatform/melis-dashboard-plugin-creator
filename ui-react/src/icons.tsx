@@ -55,7 +55,19 @@ export function FaIcon({ icon, size = 20 }: { icon: string; size?: number }) {
   )
 }
 
+/** French names of the icons: they were English in the French back office (Mantis #0011244). */
+const FR_LABELS: Record<string, string> = {
+  'fa-bar-chart-o': 'Graphique', 'fa-calendar': 'Calendrier', 'fa-warning': 'Avertissement', 'fa-table': 'Tableau',
+  'fa-cog': 'Engrenage', 'fa-comment': 'Commentaire', 'fa-chain': 'Lien', 'fa-map-marker': 'Repère',
+  'fa-trash-o': 'Corbeille', 'fa-filter': 'Filtre', 'fa-search': 'Recherche', 'fa-tag': 'Étiquette',
+  'fa-bookmark': 'Signet', 'fa-group': 'Groupe', 'fa-bell': 'Cloche', 'fa-clock-o': 'Horloge',
+  'fa-wrench': 'Clé', 'fa-ban': 'Interdit', 'fa-share': 'Partage', 'fa-file': 'Fichier',
+  'fa-list': 'Liste', 'fa-heart': 'Cœur', 'fa-inbox': 'Boîte de réception', 'fa-envelope': 'Enveloppe',
+}
+
 /** Libelle lisible d'une classe `fa-...` (repli : la classe elle-meme, sans le prefixe `fa-`). */
 export function iconLabel(icon: string): string {
+  // Same language detection as ui.tsx (currentLang), kept local to avoid a circular import
+  if ((document.documentElement.lang || 'en').toLowerCase().startsWith('fr') && FR_LABELS[icon]) return FR_LABELS[icon]
   return ICONS[icon]?.label ?? icon.replace(/^fa-/, '').replace(/-o$/, '').replace(/-/g, ' ')
 }
