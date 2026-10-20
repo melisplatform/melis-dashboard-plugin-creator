@@ -273,7 +273,8 @@ return [
                                     'name' => 'regex',
                                     'break_chain_on_failure' => true,
                                     'options' => [
-                                        'pattern' => '/^[a-zA-Z\x7f-\xff][a-zA-Z\x7f-\xff]*$/',
+                                        // ASCII letters only: accented letters were accepted, then removed from the module name (Mantis #0011242)
+                                        'pattern' => '/^[a-zA-Z]+$/',
                                         'messages' => [\Laminas\Validator\Regex::NOT_MATCH => 'tr_melisdashboardplugincreator_err_invalid_name'],
                                         'encoding' => 'UTF-8',
                                     ],

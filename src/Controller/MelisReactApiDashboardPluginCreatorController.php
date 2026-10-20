@@ -252,8 +252,29 @@ class MelisReactApiDashboardPluginCreatorController extends MelisAbstractActionC
         $translator = $sm->get('translator');
         $errors     = [];
 
+        // Plugin type from the list only: "evil" was accepted (Mantis #0011242). The form's input filter
+        // replaces the Select's own InArray validator.
+        $types = array_map('strval', array_keys((array) $form->get('dpc_plugin_type')->getValueOptions()));
+        if (!in_array($data['dpc_plugin_type'], $types, true)) {
+            $errors['dpc_plugin_type'] = $this->fieldError($form, 'dpc_plugin_type',
+                $translator->translate('tr_melisdashboardplugincreator_err_invalid_option'));
+        }
+
+        // Existing module: one of the modules OFFERED (the module folder), not any module of the platform:
+        // "MelisCore" was accepted, so a plugin could be written into a core or vendor module (Mantis #0011242)
+        if ($data['dpc_plugin_destination'] !== self::NEW_MODULE && $data['dpc_existing_module_name'] !== ''
+            && !in_array($data['dpc_existing_module_name'], $this->existingModules(), true)) {
+            $errors['dpc_existing_module_name'] = $this->fieldError($form, 'dpc_existing_module_name',
+                $translator->translate('tr_melisdashboardplugincreator_err_invalid_option'));
+        }
+
         if ($data['dpc_plugin_destination'] === self::NEW_MODULE && $data['dpc_new_module_name'] !== '') {
-            $newModule = strtolower($data['dpc_new_module_name']);
+            // Checked on the name that will be GENERATED: "éMelisCore" becomes MelisCore, "ééé" becomes empty
+            $newModule = strtolower((string) $this->dpcService()->generateModuleNameCase($data['dpc_new_module_name']));
+            if ($newModule === '') {
+                return ['valid' => false, 'errors' => ['dpc_new_module_name' => $this->fieldError($form, 'dpc_new_module_name',
+                    $translator->translate('tr_melisdashboardplugincreator_err_invalid_name'))]];
+            }
 
             $reserved = (array) $sm->get('MelisCoreConfig')->getItem('melisdashboardplugincreator/datas/reserved_keywords');
             if (in_array($newModule, $reserved, true)) {
@@ -263,10 +284,14 @@ class MelisReactApiDashboardPluginCreatorController extends MelisAbstractActionC
                 ));
             }
 
+            // Site modules ("MultipleLocale" was accepted) and core/loaded modules included
             $modulesSvc = $sm->get('ModulesService');
             $existing   = array_map('strtolower', array_merge(
                 (array) $modulesSvc->getModulePlugins(),
                 (array) $modulesSvc->getAllModules(),
+                (array) $modulesSvc->getCoreModules(),
+                (array) $modulesSvc->getSitesModules(),
+                \MelisCore\MelisModuleManager::getModules(),
             ));
             if (in_array($newModule, $existing, true)) {
                 $errors['dpc_new_module_name'] = $this->fieldError($form, 'dpc_new_module_name', sprintf(
@@ -330,6 +355,7 @@ class MelisReactApiDashboardPluginCreatorController extends MelisAbstractActionC
         $errors = [];
         $saved  = [];
         $valid  = 0;
+        $duplicate = [];   // locales whose title is already used in the module
 
         // Titres déjà utilisés (module existant) → refus de doublon, par langue.
         $existingTitles = [];
@@ -368,6 +394,7 @@ class MelisReactApiDashboardPluginCreatorController extends MelisAbstractActionC
                         $clean['dpc_plugin_title'],
                         $lang['name'],
                     ));
+                    $duplicate[$locale] = true;
                     continue;
                 }
             }
@@ -387,6 +414,12 @@ class MelisReactApiDashboardPluginCreatorController extends MelisAbstractActionC
             ]];
         }
 
+        // A title already used in the module refuses the step, as in the legacy wizard: the language was
+        // dropped silently and the step passed with the other one (Mantis #0011243)
+        // (only the duplicate titles are reported then: the blank optional languages are not errors).
+        if ($duplicate) {
+            return ['valid' => false, 'errors' => array_intersect_key($errors, $duplicate)];
+        }
         if (!$valid) {
             return ['valid' => false, 'errors' => $errors];
         }

@@ -42,6 +42,36 @@ import {
 const MELIS_KEY = 'melisdashboardplugincreator_tool'
 const STEP_COUNT = 5
 
+// ── Errors of the inputs being edited ─────────────────────────────────────────────
+// "Valeur requise" stayed under the title and the icon lists after they were filled, until the step
+// was submitted again (Mantis #0011244): each change now drops the errors of the inputs it touched.
+
+/** Leaf paths whose value differs between two step values (objects of strings). */
+function changedPaths(a: unknown, b: unknown, path: string[] = []): string[][] {
+  if (a === b) return []
+  const isObj = (v: unknown) => v !== null && typeof v === 'object'
+  if (!isObj(a) || !isObj(b)) return [path]
+  const keys = new Set([...Object.keys(a as object), ...Object.keys(b as object)])
+  return [...keys].flatMap((k) => changedPaths((a as Record<string, unknown>)[k], (b as Record<string, unknown>)[k], [...path, k]))
+}
+
+/** Copy of `errors` without the entry at `path` (nor the parents it leaves empty). */
+function withoutError(errors: Record<string, unknown>, path: string[]): Record<string, unknown> {
+  const [head, ...rest] = path
+  if (head === undefined || !(head in errors)) return errors
+  const copy = { ...errors }
+  const child = copy[head]
+  // A leaf error ({ label, messages }) or the end of the path: drop the whole entry.
+  if (!rest.length || child === null || typeof child !== 'object' || 'messages' in (child as object)) {
+    delete copy[head]
+    return copy
+  }
+  const next = withoutError(child as Record<string, unknown>, rest)
+  if (Object.keys(next).length) copy[head] = next
+  else delete copy[head]
+  return copy
+}
+
 export default function DpcPage() {
   const t = useT()
   const { can } = useCaps(MELIS_KEY)   // droits avances (config/react.capabilities.php)
@@ -60,6 +90,15 @@ export default function DpcPage() {
   const [thumbnail, setThumbnail] = useState<string | null>(null)
 
   const [errors, setErrors] = useState<Record<number, StepErrors>>({})
+
+  /** Drops the errors at `paths` of step `n` (Mantis #0011244). */
+  const clearErrors = useCallback((n: number, paths: string[][]) => {
+    if (!paths.length) return
+    setErrors((all) => {
+      if (!all[n]) return all
+      return { ...all, [n]: paths.reduce((e, p) => withoutError(e, p), all[n] as Record<string, unknown>) }
+    })
+  }, [])
 
   const [mode, setMode] = useState<ViewMode>('react')
   const [frameLoaded, setFrameLoaded] = useState(false)
@@ -203,18 +242,22 @@ export default function DpcPage() {
 
         {/* Volets montes une fois, montres/caches en CSS → aucun remontage, aucun refetch. */}
         <Pane show={step === 1}>
-          <Step1Plugin ctx={ctx} value={step1} onChange={setStep1} readOnly={readOnly}
+          <Step1Plugin ctx={ctx} value={step1} onChange={(v) => { clearErrors(1, changedPaths(step1, v)); setStep1(v) }} readOnly={readOnly}
                        errors={(errors[1] ?? {}) as FieldErrors} />
         </Pane>
         <Pane show={step === 2}>
-          <Step2Menu ctx={ctx} value={step2} onChange={setStep2} thumbnail={thumbnail} onThumbnail={setThumbnail}
+          <Step2Menu ctx={ctx} value={step2} onChange={(v) => { clearErrors(2, changedPaths(step2, v)); setStep2(v) }} thumbnail={thumbnail}
+                     onThumbnail={(v) => { clearErrors(2, [['dpc_plugin_upload_thumbnail']]); setThumbnail(v) }}
                      errors={errors[2] ?? {}} readOnly={readOnly}
                      canUpload={can('thumbnail') && can('thumbnail.create')}
                      canDelete={can('thumbnail') && can('thumbnail.delete')} />
         </Pane>
         <Pane show={step === 3}>
-          <Step3Dashboard ctx={ctx} texts={step3} onTexts={setStep3} icon={icon} onIcon={setIcon}
-                          tabIcons={tabIcons} onTabIcons={setTabIcons} step1={step1}
+          <Step3Dashboard ctx={ctx} step1={step1}
+                          texts={step3} onTexts={(v) => { clearErrors(3, changedPaths(step3, v)); setStep3(v) }}
+                          icon={icon} onIcon={(v) => { clearErrors(3, [['icon', 'dpc_plugin_icon']]); setIcon(v) }}
+                          tabIcons={tabIcons}
+                          onTabIcons={(v) => { clearErrors(3, changedPaths(tabIcons, v).map((p) => ['icon', `dpc_plugin_tab_icon_${p[0]}`])); setTabIcons(v) }}
                           errors={errors[3] ?? {}} readOnly={readOnly} />
         </Pane>
         <Pane show={step === 4}>

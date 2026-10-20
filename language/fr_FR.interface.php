@@ -17,7 +17,8 @@
 
 		// Error messages
 		'tr_melisdashboardplugincreator_err_message' => 'Impossible de procéder à l\'étape suivante',
-		'tr_melisdashboardplugincreator_err_invalid_name' => 'Seul les caractères alphabetiques sont autorisés',	
+		'tr_melisdashboardplugincreator_err_invalid_name' => 'Seuls les caractères alphabétiques sont autorisés',	
+		'tr_melisdashboardplugincreator_err_invalid_option' => 'Choisissez une valeur de la liste',
 		'tr_melisdashboardplugincreator_err_long_50' => 'Valeur trop longue, elle doit être de moins de 50 caractères',
 		'tr_melisdashboardplugincreator_err_empty' => 'Valeur requise, ne peut être vide',
 		'tr_melisdashboardplugincreator_value_must_be_between_2_to_25' => 'Seules les valeurs entre 2 et 25 sont autorisées',
