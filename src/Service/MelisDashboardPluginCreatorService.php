@@ -48,9 +48,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
         //set module name
         if ($this->dpcSteps['step_1']['dpc_plugin_destination'] == self::EXISTING_MODE) {
-            // Sécurité : dpc_existing_module_name (POST, non whitelisté par l'input filter) sert de nom
-            // de MODULE et construit le chemin de génération (mkdir/fwrite de .php) → on retire tout
-            // caractère non-identifiant pour empêcher une traversée « ../ » vers un dossier arbitraire.
+            // dpc_existing_module_name (POST) sert de nom de MODULE et construit le chemin de
+            // génération (mkdir/fwrite de .php) → on ne garde que les caractères d'identifiant.
             $this->moduleName = preg_replace('/[^A-Za-z0-9_]/', '', (string) $this->dpcSteps['step_1']['dpc_existing_module_name']);
         } else {
             $this->moduleName = $this->generateModuleNameCase($this->dpcSteps['step_1']['dpc_new_module_name']);
@@ -235,8 +234,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
         $dashboardPluginConfigContent = $this->getTemplateContent('/DashboardPlugin.config.php');
 
         //set the plugin icon
-        // Icon is a Font-Awesome class list: strip anything that isn't [alnum space _ -] so the value
-        // cannot break out of the generated single-quoted PHP literal ('fa PluginIcon') → PHP code injection.
+        // Icon is a Font-Awesome class list: keep only [alnum space _ -], as the value is written
+        // into a single-quoted PHP literal of the generated config ('fa PluginIcon').
         $safeIcon = preg_replace('/[^a-zA-Z0-9 _-]/', '', (string) $this->dpcSteps['step_3']['icon_form']['dpc_plugin_icon']);
         $dashboardPluginConfigContent = str_replace('PluginIcon', $safeIcon, $dashboardPluginConfigContent);
 
@@ -297,8 +296,8 @@ class MelisDashboardPluginCreatorService extends MelisGeneralService
 
             //set the tab header and content dynamically depending upon the number of tabs set
             for ($i = 1; $i <= $tabCount; $i++) {
-                // Sanitize the tab icon (Font-Awesome class list) before injecting it into the generated
-                // view markup so it cannot break out of the class attribute (stored XSS in the plugin view).
+                // Sanitize the tab icon (Font-Awesome class list) before writing it into the class
+                // attribute of the generated view markup.
                 $safeTabIcon = preg_replace('/[^a-zA-Z0-9 _-]/', '', (string) $this->dpcSteps['step_3']['icon_form']['dpc_plugin_tab_icon_'.$i]);
                 $pluginTabId = 'tab-'.$i.'-'.str_replace(" ","-",$safeTabIcon).'-'.$pluginConfigPluginId;
 
